@@ -26,3 +26,7 @@ yarn-error.log*
 
 # OS
 Thumbs.db
+
+# Local server
+.live-server
+dist/
