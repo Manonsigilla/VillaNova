@@ -2,7 +2,7 @@
 
 /**
  * Transforme les événements OpenAgenda réels en événements fictifs de VillaNova
- * Garde les vraies données mais change la localisation
+ * Garde les vraies données mais change la localisation et les descriptions
  */
 
 const VILLANOVA_LOCATIONS = [
@@ -56,6 +56,36 @@ const VILLANOVA_LOCATIONS = [
     }
 ];
 
+// Villes réelles à remplacer par VillaNova
+const REAL_CITIES = ['Lyon', 'Bordeaux', 'Toulouse', 'Marseille', 'Nantes', 'Paris', 'France'];
+
+/**
+ * Remplace les noms de villes réelles dans le texte par "VillaNova"
+ */
+function replaceRealCitiesInText(text) {
+    if (!text) return text;
+
+    let result = text;
+
+    // Remplacer les noms de villes avec respect de la casse
+    for (const city of REAL_CITIES) {
+        // Version avec majuscule
+        const regexCapital = new RegExp(`\\b${city}\\b`, 'gi');
+        result = result.replace(regexCapital, 'VillaNova');
+
+        // Version plurielle si applicable
+        const cityPlural = city + 's';
+        const regexPlural = new RegExp(`\\b${cityPlural}\\b`, 'gi');
+        result = result.replace(regexPlural, 'VillaNova');
+    }
+
+    // Remplacer aussi les références générales à la région
+    result = result.replace(/région[^,]*/gi, 'Région VillaNova');
+    result = result.replace(/département[^,]*/gi, 'Département VillaNova');
+
+    return result;
+}
+
 /**
  * Sélectionne une localisation aléatoire de VillaNova
  */
@@ -69,16 +99,39 @@ function getRandomLocation() {
  * Transforme un événement OpenAgenda en événement VillaNova
  */
 export function transformEventToVillaNova(event, index) {
+    // Transformer le titre
+    let transformedTitle = event.title;
+    if (typeof transformedTitle === 'string') {
+        transformedTitle = replaceRealCitiesInText(transformedTitle);
+    } else if (transformedTitle?.fr) {
+        transformedTitle = {
+            ...transformedTitle,
+            fr: replaceRealCitiesInText(transformedTitle.fr)
+        };
+    }
+
+    // Transformer la description
+    let transformedDescription = event.description;
+    if (typeof transformedDescription === 'string') {
+        transformedDescription = replaceRealCitiesInText(transformedDescription);
+    } else if (transformedDescription?.fr) {
+        transformedDescription = {
+            ...transformedDescription,
+            fr: replaceRealCitiesInText(transformedDescription.fr)
+        };
+    }
+
     return {
         uid: event.uid || index,
-        title: event.title,
-        description: event.description,
+        title: transformedTitle,
+        description: transformedDescription,
         image: event.image,
         dates: event.dates,
         location: getRandomLocation(),
         category: event.category,
         pricing: event.pricing,
-        _agendaTitle: `Agenda VillaNova - ${event.category?.name || 'Événement'}`
+        _agendaTitle: 'Agenda VillaNova',
+        _sourceCity: event._sourceCity
     };
 }
 
