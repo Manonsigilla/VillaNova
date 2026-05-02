@@ -1,33 +1,42 @@
 // src/js/main.js
 
-import { fetchEvents, fetchEventById } from './api.js';
+import { searchEvents, fetchAgendaEvents, fetchEventById } from './api.js';
 
-// Test 1 : Récupérer les événements de Paris
-async function testFetchEvents() {
+// Récupérer et afficher les événements
+async function loadEvents() {
+    const container = document.getElementById('events-container');
+    
     try {
         console.log('Chargement des événements...');
-        const data = await fetchEvents({
-        location: 'Paris',
-        limit: 10
+        container.innerHTML = '<p>Chargement des événements...</p>';
+
+        const data = await searchEvents({
+            city: 'Paris',
+            size: 10,
+            agendaCount: 3
         });
+
         console.log('Événements reçus:', data);
+
+        if (data.events && data.events.length > 0) {
+            container.innerHTML = data.events.map(event => `
+                <article>
+                    <h2>${event.title?.fr || event.title || 'Sans titre'}</h2>
+                    <p>${event.description?.fr || event.description || ''}</p>
+                    <p><strong>Lieu :</strong> ${event.location?.name || 'Non précisé'} - ${event.location?.city || ''}</p>
+                    <p><em>Agenda : ${event._agendaTitle || ''}</em></p>
+                </article>
+            `).join('');
+        } else {
+            container.innerHTML = '<p>Aucun événement trouvé.</p>';
+        }
     } catch (error) {
         console.error('Erreur:', error);
+        container.innerHTML = `<p>Erreur lors du chargement des événements : ${error.message}</p>`;
     }
 }
 
-// Test 2 : Récupérer un événement spécifique (tu devras avoir un ID réel)
-async function testFetchEventById() {
-    try {
-        // Note: Remplace 12345 par un vrai ID d'événement
-        const event = await fetchEventById(12345);
-        console.log('Événement détail:', event);
-    } catch (error) {
-        console.error('Erreur:', error);
-    }
-}
-
-// Lancer les tests quand la page se charge
+// Lancer quand la page se charge
 document.addEventListener('DOMContentLoaded', () => {
-    testFetchEvents();
+    loadEvents();
 });
