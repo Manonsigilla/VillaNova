@@ -1,0 +1,27 @@
+{
+  "name": "villanova",
+  "version": "1.0.0",
+  "description": "VillaNova - Guide de Développement\r Vue d'ensemble du projet",
+  "main": "index.js",
+  "scripts": {
+    "sass": "sass src/scss:src/css",
+    "sass:watch": "sass --watch src/scss:src/css",
+    "dev": "npm run sass:watch",
+    "build": "sass src/scss:src/css --style=compressed"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Manonsigilla/VillaNova.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Manonsigilla/VillaNova/issues"
+  },
+  "homepage": "https://github.com/Manonsigilla/VillaNova#readme",
+  "devDependencies": {
+    "sass": "^1.99.0"
+  }
+}
