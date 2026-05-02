@@ -1,8 +1,8 @@
 // src/js/api.js
 
-// Configuration
-const API_KEY = import.meta.env.VITE_OPENAGENDA_API_KEY;
-const API_BASE_URL = import.meta.env.VITE_OPENAGENDA_API_BASE;
+// Configuration - Remplace par ta vraie clé API OpenAgenda
+const API_KEY = '7227dbebe6d841ebb4d7480902bb51e1';
+const API_BASE_URL = 'https://api.openagenda.com/v1';
 
 /**
  * Récupère la liste des événements
@@ -24,7 +24,7 @@ export async function fetchEvents(options = {}) {
 
     try {
         const url = `${API_BASE_URL}/events?${params}`;
-        console.log('Appel API:', url.replace(API_KEY, '***'));
+        console.log('Appel API vers:', url.replace(API_KEY, '***'));
 
         const response = await fetch(url);
 
@@ -53,7 +53,8 @@ export async function fetchEventById(eventId) {
     });
 
     try {
-        const response = await fetch(`${API_BASE_URL}/events/${eventId}?${params}`);
+        const url = `${API_BASE_URL}/events/${eventId}?${params}`;
+        const response = await fetch(url);
 
         if (!response.ok) {
             throw new Error(`Événement non trouvé: ${response.status}`);
