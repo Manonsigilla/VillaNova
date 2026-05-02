@@ -8,7 +8,7 @@ const API_BASE_URL = 'https://api.openagenda.com/v2';
  * Recherche des agendas sur OpenAgenda
  * @param {Object} options - Paramètres de recherche
  * @param {string} options.search - Terme de recherche
- * @param {number} options.size - Nombre de résultats (défaut 20)
+ * @param {number} options.size - Nombre de résultats (défaut 5)
  * @returns {Promise<Object>} Réponse avec agendas et total
  */
 export async function fetchAgendas(options = {}) {
@@ -21,14 +21,13 @@ export async function fetchAgendas(options = {}) {
 
     try {
         const apiUrl = `${API_BASE_URL}/agendas?${params}`;
-
         console.log('Appel API agendas:', apiUrl.replace(API_KEY, '***'));
 
         const response = await fetch(apiUrl);
 
         if (!response.ok) {
             const errorBody = await response.text();
-            throw new Error(`Erreur API: ${response.status} - ${errorBody}`);
+            throw new Error(`Erreur API agendas: ${response.status} - ${errorBody}`);
         }
 
         const data = await response.json();
@@ -45,10 +44,8 @@ export async function fetchAgendas(options = {}) {
  * Récupère les événements d'un agenda spécifique
  * @param {number} agendaUid - UID de l'agenda
  * @param {Object} options - Paramètres de recherche
- * @param {string} options.search - Terme de recherche libre
- * @param {string[]} options.city - Ville(s) à filtrer (adminLevel4)
- * @param {string[]} options.region - Région(s) à filtrer (adminLevel1)
- * @param {number} options.size - Nombre de résultats (max 300, défaut 20)
+ * @param {string} options.search - Terme de recherche
+ * @param {number} options.size - Nombre de résultats (max 300)
  * @param {string[]} options.relative - Filtre temporel: 'current', 'upcoming', 'passed'
  * @returns {Promise<Object>} Réponse avec events et total
  */
@@ -59,27 +56,19 @@ export async function fetchAgendaEvents(agendaUid, options = {}) {
 
     if (options.size) params.append('size', options.size);
     if (options.search) params.append('search', options.search);
-    if (options.city) {
-        const cities = Array.isArray(options.city) ? options.city : [options.city];
-        cities.forEach(c => params.append('adminLevel4[]', c));
-    }
-    if (options.region) {
-        const regions = Array.isArray(options.region) ? options.region : [options.region];
-        regions.forEach(r => params.append('adminLevel1[]', r));
-    }
+
     const relatives = options.relative || ['current', 'upcoming'];
     relatives.forEach(r => params.append('relative[]', r));
 
     try {
         const apiUrl = `${API_BASE_URL}/agendas/${agendaUid}/events?${params}`;
-
         console.log('Appel API événements:', apiUrl.replace(API_KEY, '***'));
 
         const response = await fetch(apiUrl);
 
         if (!response.ok) {
             const errorBody = await response.text();
-            throw new Error(`Erreur API: ${response.status} - ${errorBody}`);
+            throw new Error(`Erreur API events: ${response.status} - ${errorBody}`);
         }
 
         const data = await response.json();
@@ -101,7 +90,6 @@ export async function fetchAgendaEvents(agendaUid, options = {}) {
 export async function fetchEventById(agendaUid, eventUid) {
     try {
         const apiUrl = `${API_BASE_URL}/agendas/${agendaUid}/events/${eventUid}?key=${API_KEY}`;
-
         const response = await fetch(apiUrl);
 
         if (!response.ok) {
@@ -119,53 +107,85 @@ export async function fetchEventById(agendaUid, eventUid) {
 }
 
 /**
- * Recherche des événements sur plusieurs agendas pertinents
- * Combine la recherche d'agendas + récupération d'événements
- * @param {Object} options - Paramètres de recherche
- * @param {string} options.search - Terme de recherche
- * @param {string} options.city - Ville à filtrer
- * @param {number} options.size - Nombre d'événements par agenda
- * @param {number} options.agendaCount - Nombre d'agendas à consulter (défaut 3)
- * @returns {Promise<Object>} Événements agrégés
+ * Recherche intelligente multi-villes
+ * Cherche des agendas dans plusieurs villes, récupère leurs événements
+ * et filtre les contenus religieux pour diversifier
+ * @param {Object} options
+ * @param {number} options.size - Nombre total d'événements souhaités (défaut 20)
+ * @returns {Promise<Object>} Événements agrégés et filtrés
  */
-export async function searchEvents(options = {}) {
-    const agendaCount = options.agendaCount || 3;
+export async function searchModernEvents(options = {}) {
+    // Villes avec plus d'événements culturels variés
+    const cities = ['Lyon', 'Bordeaux', 'Toulouse', 'Marseille', 'Nantes'];
 
-    // Étape 1 : Trouver des agendas pertinents
-    const agendaSearch = options.city || options.search || 'Paris';
-    const agendasData = await fetchAgendas({
-        search: agendaSearch,
-        size: agendaCount
-    });
+    // Mots-clés religieux à filtrer
+    const religiousKeywords = [
+        'messe', 'prière', 'catholique', 'église', 'culte',
+        'religieux', 'évêque', 'cardinal', 'paroisse', 'diocèse',
+        'chapelet', 'sacrement', 'liturgie', 'eucharistie'
+    ];
 
-    if (!agendasData.agendas || agendasData.agendas.length === 0) {
-        return { events: [], total: 0 };
-    }
+    let allEvents = [];
 
-    // Étape 2 : Récupérer les événements de chaque agenda
-    const allEvents = [];
-    for (const agenda of agendasData.agendas) {
+    // Pour chaque ville, chercher des agendas puis récupérer leurs événements
+    for (const city of cities) {
         try {
-            const eventsData = await fetchAgendaEvents(agenda.uid, {
-                size: options.size || 10,
-                city: options.city,
-                search: options.search
+            console.log(`Recherche d'agendas dans ${city}...`);
+
+            // Étape 1 : Trouver des agendas pour cette ville
+            const agendasData = await fetchAgendas({
+                search: city,
+                size: 2
             });
-            if (eventsData.events) {
-                // Ajouter le nom de l'agenda à chaque événement
-                eventsData.events.forEach(event => {
-                    event._agendaTitle = agenda.title;
-                    event._agendaUid = agenda.uid;
-                });
-                allEvents.push(...eventsData.events);
+
+            if (!agendasData.agendas || agendasData.agendas.length === 0) {
+                console.warn(`Aucun agenda trouvé pour ${city}`);
+                continue;
             }
-        } catch (err) {
-            console.warn(`Impossible de récupérer les événements de l'agenda ${agenda.title}:`, err);
+
+            // Étape 2 : Récupérer les événements de chaque agenda
+            for (const agenda of agendasData.agendas) {
+                try {
+                    const eventsData = await fetchAgendaEvents(agenda.uid, {
+                        size: 5
+                    });
+
+                    if (eventsData.events && Array.isArray(eventsData.events)) {
+                        // Filtrer les événements religieux
+                        const filtered = eventsData.events.filter(event => {
+                            const title = (event.title?.fr || '').toLowerCase();
+                            const description = (event.description?.fr || '').toLowerCase();
+
+                            return !religiousKeywords.some(keyword =>
+                                title.includes(keyword) || description.includes(keyword)
+                            );
+                        });
+
+                        console.log(`${city} / ${agenda.title}: ${eventsData.events.length} événements, ${filtered.length} après filtrage`);
+
+                        // Ajouter infos d'origine à chaque événement
+                        filtered.forEach(event => {
+                            event._sourceCity = city;
+                            event._agendaTitle = agenda.title;
+                            event._agendaUid = agenda.uid;
+                        });
+
+                        allEvents.push(...filtered);
+                    }
+                } catch (err) {
+                    console.warn(`Erreur événements agenda ${agenda.title}:`, err.message);
+                }
+            }
+        } catch (error) {
+            console.warn(`Erreur pour ville ${city}:`, error.message);
+            continue;
         }
     }
 
+    console.log(`Total d'événements modernes trouvés: ${allEvents.length}`);
+
     return {
-        events: allEvents,
+        events: allEvents.slice(0, options.size || 20),
         total: allEvents.length
     };
 }

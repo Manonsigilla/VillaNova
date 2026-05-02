@@ -1,30 +1,42 @@
 // src/js/main.js
 
-import { searchEvents, fetchAgendaEvents, fetchEventById } from './api.js';
+import { searchModernEvents } from './api.js';
+import { transformEventsToVillaNova } from './eventTransformer.js';
 
-// Récupérer et afficher les événements
+/**
+ * Récupère et affiche les événements
+ */
 async function loadEvents() {
     const container = document.getElementById('events-container');
-    
+
     try {
-        console.log('Chargement des événements...');
+        console.log('Chargement des événements modernes...');
         container.innerHTML = '<p>Chargement des événements...</p>';
 
-        const data = await searchEvents({
-            city: 'Paris',
-            size: 10,
-            agendaCount: 3
+        // Utiliser la recherche intelligente multi-villes
+        const data = await searchModernEvents({
+            size: 15
         });
 
-        console.log('Événements reçus:', data);
+        console.log('Événements bruts OpenAgenda:', data);
 
-        if (data.events && data.events.length > 0) {
-            container.innerHTML = data.events.map(event => `
-                <article>
-                    <h2>${event.title?.fr || event.title || 'Sans titre'}</h2>
-                    <p>${event.description?.fr || event.description || ''}</p>
-                    <p><strong>Lieu :</strong> ${event.location?.name || 'Non précisé'} - ${event.location?.city || ''}</p>
-                    <p><em>Agenda : ${event._agendaTitle || ''}</em></p>
+        // Transformer les événements pour VillaNova
+        const villanovaEvents = transformEventsToVillaNova(data.events);
+        console.log('Événements transformés pour VillaNova:', villanovaEvents);
+
+        if (villanovaEvents && villanovaEvents.length > 0) {
+            container.innerHTML = villanovaEvents.map(event => `
+                <article class="event-card">
+                    <img src="${event.image?.url || 'https://via.placeholder.com/300x200'}" alt="${event.title?.fr}" loading="lazy">
+                    <h2>${event.title?.fr || 'Sans titre'}</h2>
+                    <p class="event-category">${event.category?.name || 'Événement'}</p>
+                    <p class="event-description">${event.description?.fr || ''}</p>
+                    <p><strong>Lieu :</strong> ${event.location?.name || 'Non précisé'}</p>
+                    <p><strong>Adresse :</strong> ${event.location?.address || ''}</p>
+                    <p><strong>Ville :</strong> ${event.location?.city || ''}</p>
+                    ${event.pricing && event.pricing.length > 0 ? `
+                        <p><strong>À partir de :</strong> ${event.pricing[0].price}€</p>
+                    ` : ''}
                 </article>
             `).join('');
         } else {
