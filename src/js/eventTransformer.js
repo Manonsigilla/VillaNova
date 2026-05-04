@@ -130,7 +130,8 @@ export function transformEventToVillaNova(event, index) {
         location: getRandomLocation(),
         category: event.category,
         pricing: event.pricing,
-        _agendaTitle: 'Agenda VillaNova',
+        _agendaTitle: event._agendaTitle || 'Agenda VillaNova',
+        _agendaUid: event._agendaUid,
         _sourceCity: event._sourceCity
     };
 }
