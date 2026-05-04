@@ -1,0 +1,247 @@
+/**
+ * Mixins SCSS - VillaNova
+ * Fonctions réutilisables pour responsive, accessibilité, etc.
+ */
+
+/* ===============================
+   RESPONSIVE MIXINS (Mobile First)
+   ============================== */
+
+/**
+ * Mixin pour breakpoints tablet et plus
+ * Usage: @include tablet { }
+ */
+@mixin tablet {
+    @media (min-width: 768px) {
+        @content;
+    }
+}
+
+/**
+ * Mixin pour breakpoints desktop et plus
+ * Usage: @include desktop { }
+ */
+@mixin desktop {
+    @media (min-width: 1024px) {
+        @content;
+    }
+}
+
+/**
+ * Mixin pour breakpoints larges écrans
+ * Usage: @include wide { }
+ */
+@mixin wide {
+    @media (min-width: 1440px) {
+        @content;
+    }
+}
+
+/**
+ * Mixin pour supporter le prefers-reduced-motion (accessibilité)
+ * Désactive les animations pour les utilisateurs qui le demandent
+ * Usage: @include no-motion { transition: none; }
+ */
+@mixin no-motion {
+    @media (prefers-reduced-motion: reduce) {
+        @content;
+    }
+}
+
+/**
+ * Mixin pour support du mode sombre
+ * Usage: @include dark-mode { }
+ */
+@mixin dark-mode {
+    @media (prefers-color-scheme: dark) {
+        @content;
+    }
+}
+
+/* ===============================
+   ACCESSIBILITÉ WCAG
+   ============================== */
+
+/**
+ * Mixin pour masquer visuellement mais garder le texte pour les lecteurs d'écran
+ * Usage: @include sr-only;
+ */
+@mixin sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/**
+ * Mixin pour les états focus visibles (accessibilité clavier)
+ * Crée un outline visible pour la navigation au clavier
+ * Usage: @include focus-visible;
+ */
+@mixin focus-visible {
+    &:focus-visible {
+        outline: 3px solid var(--color-primary);
+        outline-offset: 2px;
+    }
+    
+    &:focus:not(:focus-visible) {
+        outline: none;
+    }
+}
+
+/**
+ * Mixin pour contraste de couleur WCAG AA (4.5:1 minimum)
+ * Utile pour les couleurs de texte sur fond
+ */
+@mixin wcag-contrast {
+    color: var(--color-text);
+    background-color: var(--color-bg);
+}
+
+/* ===============================
+   FLEXBOX UTILITIES
+   ============================== */
+
+/**
+ * Mixin pour centrer le contenu en flexbox
+ * Usage: @include flex-center;
+ */
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/**
+ * Mixin pour aligner le contenu horizontalement
+ * Usage: @include flex-row;
+ */
+@mixin flex-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing, 1rem);
+}
+
+/**
+ * Mixin pour aligner le contenu verticalement
+ * Usage: @include flex-column;
+ */
+@mixin flex-column {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing, 1rem);
+}
+
+/* ===============================
+   TYPOGRAPHIE FLUIDE
+   ============================== */
+
+/**
+ * Mixin pour créer une taille de police fluide qui s'adapte
+ * Usage: @include fluid-type(14px, 16px);
+ */
+@mixin fluid-type($min-size, $max-size) {
+    font-size: $min-size;
+    
+    @include tablet {
+        font-size: clamp(
+            $min-size,
+            calc($min-size + (#{stripUnits($max-size)} - #{stripUnits($min-size)}) * ((100vw - 768px) / (1024 - 768))),
+            $max-size
+        );
+    }
+}
+
+/* ===============================
+   IMAGES ECO-CONCEPTION
+   ============================== */
+
+/**
+ * Mixin pour les images avec lazy loading
+ * Prépare le conteneur pour les images responsives
+ * Usage: @include img-container;
+ */
+@mixin img-container {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--color-bg-secondary);
+    
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+}
+
+/* ===============================
+   BOUTONS
+   ============================== */
+
+/**
+ * Mixin pour les états de boutons (hover, active, disabled)
+ * Usage: @include button-states;
+ */
+@mixin button-states {
+    transition: all $transition-normal;
+    
+    &:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: $shadow-md;
+    }
+    
+    &:active:not(:disabled) {
+        transform: translateY(0);
+    }
+    
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    
+    @include no-motion {
+        transition: none;
+        transform: none !important;
+    }
+}
+
+/* ===============================
+   CONTENEURS
+   ============================== */
+
+/**
+ * Mixin pour les conteneurs avec max-width
+ * Usage: @include container;
+ */
+@mixin container {
+    width: 100%;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--spacing-md);
+    padding-right: var(--spacing-md);
+    
+    @include tablet {
+        padding-left: var(--spacing-lg);
+        padding-right: var(--spacing-lg);
+    }
+}
+
+/* ===============================
+   GRILLE CSS
+   ============================== */
+
+/**
+ * Mixin pour créer une grille responsive
+ * Usage: @include grid-auto(300px);
+ */
+@mixin grid-auto($min-size: 300px) {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax($min-size, 1fr));
+    gap: var(--spacing-lg);
+}

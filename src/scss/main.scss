@@ -1,4 +1,27 @@
-body {
-    background: #f5f5f3;
-    color: #1a1a18;
-}
+/**
+ * Main SCSS - VillaNova
+ * Combine tous les modules SCSS
+ * Compile en CSS unique et optimisé
+ */
+
+/* Variables et fonctions */
+@import 'variables';
+@import 'mixins';
+
+/* Reset et base */
+@import 'reset';
+
+/* Composants */
+@import 'components';
+
+/* Layout */
+@import 'layout';
+
+/* Accessibilité */
+@import 'accessibility';
+
+/* Responsive */
+@import 'responsive';
+
+/* Éco-conception */
+@import 'eco-design';

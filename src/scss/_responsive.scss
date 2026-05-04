@@ -1,0 +1,86 @@
+/**
+ * Responsive Design - VillaNova
+ * Adaptation mobile first
+ */
+
+/* ===============================
+   MOBILE FIRST (par défaut)
+   ============================== */
+
+/* Les styles de base sont déjà mobile */
+
+/* ===============================
+   TABLETTES (768px et +)
+   ============================== */
+
+@include tablet {
+    html {
+        font-size: 16px;
+    }
+}
+
+/* ===============================
+   DESKTOP (1024px et +)
+   ============================== */
+
+@include desktop {
+    html {
+        font-size: 17px;
+    }
+}
+
+/* ===============================
+   GRANDS ÉCRANS (1440px et +)
+   ============================== */
+
+@include wide {
+    html {
+        font-size: 18px;
+    }
+}
+
+/* ===============================
+   ORIENTATIONS
+   ============================== */
+
+/* Portrait : hauteur > largeur */
+@media (orientation: portrait) {
+    /* Optimisations spécifiques portrait */
+}
+
+/* Paysage : largeur > hauteur */
+@media (orientation: landscape) {
+    /* Optimisations spécifiques paysage */
+}
+
+/* ===============================
+   DENSITÉ PIXEL (Retina)
+   ============================== */
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    /* Images et bordures peuvent être plus fines */
+}
+
+/* ===============================
+   TACTILE VS SOURIS
+   ============================== */
+
+/**
+ * Targets tactiles plus grandes (min 44x44px)
+ */
+@media (hover: none) and (pointer: coarse) {
+    button, a, input[type="button"] {
+        min-width: 44px;
+        min-height: 44px;
+        padding: $spacing-md;
+    }
+}
+
+/**
+ * Hover disponible (souris)
+ */
+@media (hover: hover) and (pointer: fine) {
+    a:hover {
+        text-decoration: underline;
+    }
+}

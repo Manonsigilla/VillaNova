@@ -1,0 +1,227 @@
+/**
+ * Accessibilité WCAG AA - VillaNova
+ * Styles dédiés à l'accessibilité
+ */
+
+/* ===============================
+   NAVIGATION CLAVIER
+   ============================== */
+
+/**
+ * Focus visible pour tous les éléments interactifs
+ * Plus visible que le focus par défaut
+ */
+:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/**
+ * Masquer le focus outline pour les souris
+ * mais le garder pour le clavier
+ */
+:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* ===============================
+   LECTEUR D'ÉCRAN
+   ============================== */
+
+/**
+ * Classe pour masquer visuellement mais garder pour lecteurs d'écran
+ */
+.sr-only {
+    @include sr-only;
+}
+
+/**
+ * Classe pour les région live (mise à jour dynamique)
+ * Annonce les changements aux lecteurs d'écran
+ */
+.sr-live {
+    @include sr-only;
+    position: static;
+    width: auto;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+}
+
+/* ===============================
+   CONTRASTE WCAG AA
+   ============================== */
+
+/**
+ * Assure un contraste minimum 4.5:1 pour le texte normal
+ * 3:1 pour le texte grand
+ */
+
+/* Texte sur fond primaire */
+.text-on-primary {
+    color: white;
+    background-color: var(--color-primary);
+    
+    a {
+        color: white;
+        text-decoration: underline;
+    }
+}
+
+/* Texte sur fond secondaire */
+.text-on-secondary {
+    color: var(--color-neutral-dark-text);
+    background-color: var(--color-bg-secondary);
+}
+
+/* ===============================
+   VISIBILITÉ DES ERREURS
+   ============================== */
+
+/**
+ * Messages d'erreur clairs et accessibles
+ */
+.error-message {
+    color: var(--color-error);
+    font-weight: $font-weight-semibold;
+    margin: $spacing-md 0;
+    padding: $spacing-md;
+    background-color: #FADBD8;
+    border-left: 4px solid var(--color-error);
+    border-radius: $border-radius-md;
+}
+
+/* Champs en erreur */
+.form-group__input:invalid {
+    border-color: var(--color-error);
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+}
+
+/* ===============================
+   IMAGES ACCESSIBLES
+   ============================== */
+
+/**
+ * Les images doivent avoir un alt texte descriptif
+ * Utiliser aria-label ou aria-labelledby pour les images décoratives
+ */
+
+/* ===============================
+BOUTONS ACCESSIBLES
+============================== */
+
+button {
+    /* Texte descriptif, pas "Cliquez ici" */
+    min-width: 44px;
+    min-height: 44px;
+}
+
+/* États aria-pressed pour les boutons toggle */
+[aria-pressed="true"],
+[aria-pressed="false"] {
+    cursor: pointer;
+}
+
+/* ===============================
+   FORMULAIRES ACCESSIBLES
+   ============================== */
+
+label {
+    font-weight: $font-weight-medium;
+    display: block;
+    margin-bottom: $spacing-sm;
+}
+
+/**
+ * Associer les labels aux inputs
+ * <label for="email">Email</label>
+ * <input id="email" type="email">
+ */
+
+input[required]::after {
+    content: " *";
+    color: var(--color-error);
+}
+
+/* ===============================
+   ANIMATIONS RESPECTUEUSES
+   ============================== */
+
+/**
+ * Respecter prefers-reduced-motion
+ * Désactiver les animations complexes
+ */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ===============================
+   TEXTE LISIBLE
+   ============================== */
+
+/**
+ * Assurer une lisibilité WCAG
+ * Taille minimale 12px, line-height 1.5
+ */
+
+body {
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+p, li, td {
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+}
+
+/* ===============================
+   SKIP LINKS
+   ============================== */
+
+/**
+ * Permettre de sauter aux sections principales
+ */
+.skip-link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: var(--color-primary);
+    color: white;
+    padding: $spacing-md;
+    z-index: 9999;
+    transform: translateY(-100%);
+    text-decoration: none;
+    font-weight: $font-weight-semibold;
+    
+    @include focus-visible;
+    
+    &:focus {
+        transform: translateY(0);
+    }
+}
+
+/* ===============================
+   COULEURS DE MODE SOMBRE
+   ============================== */
+
+/**
+ * Mode sombre respecte les contrastes WCAG
+ */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-bg: #{$color-dark-bg-primary};
+        --color-bg-secondary: #{$color-dark-bg-secondary};
+        --color-text: #{$color-dark-text-primary};
+        --color-text-secondary: #C0C0C0;
+    }
+}

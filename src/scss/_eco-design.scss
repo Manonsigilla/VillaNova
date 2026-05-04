@@ -1,0 +1,146 @@
+/**
+ * Éco-conception - VillaNova
+ * Optimisation pour réduire la consommation énergétique
+ */
+
+/* ===============================
+IMAGES OPTIMISÉES
+============================== */
+
+/**
+ * Lazy loading : images chargées au scroll
+ * <img loading="lazy" src="..." alt="...">
+ */
+
+
+/* Le navigateur gère le lazy loading nativement */
+
+
+/* ===============================
+FORMATS MODERNES
+============================== */
+
+/**
+ * Utiliser <picture> pour servir des formats WebP/AVIF
+ * <picture>
+ *     <source type="image/avif" srcset="image.avif">
+ *     <source type="image/webp" srcset="image.webp">
+ *     <img src="image.jpg" alt="">
+ * </picture>
+ */
+
+picture {
+    display: block;
+}
+
+/* ===============================
+RÉDUCTION DES ANIMATIONS
+============================== */
+
+/**
+ * Réduire les animations consommatrices
+ * pour préserver la batterie
+ */
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* ===============================
+DARK MODE ECO
+============================== */
+
+/**
+ * Mode sombre consomme moins d'énergie sur OLED
+ * Utiliser des noirs purs (#000000) plutôt que gris
+ */
+
+@media (prefers-color-scheme: dark) {
+    /* Utiliser les couleurs sombres optimisées */
+}
+
+/* ===============================
+RÉDUCTION DE LA LARGEUR DE BANDE
+============================== */
+
+/**
+ * Réduire les demandes de ressources
+ * Combiner les fichiers CSS et JS
+ * Minifier le CSS (sass --style=compressed)
+ */
+
+/* ===============================
+TYPOGRAPHIE EFFICACE
+============================== */
+
+/**
+ * Utiliser des polices système
+ * Éviter les polices web multiples
+ * font-display: swap pour charger rapidement
+ */
+
+@font-face {
+    font-family: 'Inter';
+    src: local('Inter');
+    font-display: swap;
+    /* Les polices système (font-family-primary) sont utilisées par défaut */
+}
+
+/* ===============================
+GRID CSS VS FLEXBOX
+============================== */
+
+/**
+ * CSS Grid et Flexbox sont efficaces
+ * Éviter les positions absolues multiples
+ */
+
+/* ===============================
+VIDÉOS ECO
+============================== */
+
+/**
+ * Désactiver autoplay
+ * Charger uniquement les métadonnées
+ * <video preload="metadata" poster="image.jpg" controls>
+ *     <source src="video.mp4" type="video/mp4">
+ *     <source src="video.webm" type="video/webm">
+ * </video>
+ */
+
+video {
+    max-width: 100%;
+    height: auto;
+}
+
+/* ===============================
+RESSOURCES CONDITIONNELLES
+============================== */
+
+/**
+ * Charger les ressources selon les capacités
+ */
+
+@media (max-width: 768px) {
+    /* Réduire les ressources sur mobile */
+}
+
+@media (save-data: on) {
+    /* Réduire davantage si l'utilisateur demande save-data */
+    img {
+        display: none; /* Ou charger des images plus légères */
+    }
+}
+
+/* ===============================
+CSS MINIMAL
+============================== */
+
+/**
+ * Pas de styles CSS inutilisés
+ * Chaque classe SCSS a un but
+ * Utiliser PurgeCSS ou similar en production
+ */

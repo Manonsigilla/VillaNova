@@ -1,0 +1,339 @@
+/**
+ * Composants - VillaNova
+ * Styles pour les composants réutilisables (boutons, cartes, etc.)
+ */
+
+/* ===============================
+   BOUTONS
+   ============================== */
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: $spacing-sm $spacing-lg;
+    font-size: $font-size-small;
+    font-weight: $font-weight-semibold;
+    border-radius: $border-radius-lg;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all $transition-normal;
+    
+    /* Accessibility : Focus visible */
+    @include focus-visible;
+    
+    /* États des boutons */
+    @include button-states;
+    
+    /* Mode sombre */
+    @include dark-mode {
+        opacity: 0.9;
+    }
+}
+
+/* Bouton primaire (couleur principale) */
+.button--primary {
+    background-color: var(--color-primary);
+    color: white;
+    
+    &:hover:not(:disabled) {
+        background-color: darken($color-primary-light, 5%);
+    }
+}
+
+/* Bouton secondaire (bordure) */
+.button--secondary {
+    background-color: transparent;
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+    
+    &:hover:not(:disabled) {
+        background-color: var(--color-bg-secondary);
+    }
+}
+
+/* Bouton petit */
+.button--small {
+    padding: $spacing-xs $spacing-md;
+    font-size: $font-size-xs;
+}
+
+/* Bouton large */
+.button--large {
+    padding: $spacing-md $spacing-2xl;
+    font-size: $font-size-base;
+}
+
+/* Bouton désactivé */
+.button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ===============================
+   CARTES D'ÉVÉNEMENT
+   ============================== */
+
+.event-card {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-bg);
+    border-radius: $border-radius-lg;
+    overflow: hidden;
+    box-shadow: $shadow-md;
+    transition: all $transition-normal;
+    cursor: pointer;
+    
+    /* Accessibilité: focus visible sur la carte */
+    @include focus-visible;
+    
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: $shadow-lg;
+    }
+    
+    @include no-motion {
+        transform: none !important;
+    }
+}
+
+/* Image de la carte */
+.event-card__image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    background-color: var(--color-bg-secondary);
+    display: block;
+}
+
+/* Contenu de la carte */
+.event-card__content {
+    padding: $spacing-lg;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+/* Catégorie */
+.event-card__category {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: var(--color-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: $spacing-sm;
+}
+
+/* Titre */
+.event-card__title {
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    color: var(--color-text);
+    margin-bottom: $spacing-sm;
+    line-height: $line-height-tight;
+}
+
+/* Description courte */
+.event-card__description {
+    font-size: $font-size-small;
+    color: var(--color-text-secondary);
+    margin-bottom: $spacing-md;
+    flex: 1;
+    line-height: $line-height-normal;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Lieu */
+.event-card__location {
+    font-size: $font-size-small;
+    color: var(--color-text-secondary);
+    margin-bottom: $spacing-sm;
+}
+
+/* Prix */
+.event-card__pricing {
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    color: var(--color-primary);
+    margin-bottom: $spacing-md;
+}
+
+/* Bouton d'action */
+.event-card__button {
+    align-self: flex-start;
+    margin-top: auto;
+}
+
+/* ===============================
+   BADGES
+   ============================== */
+
+.badge {
+    display: inline-block;
+    padding: $spacing-xs $spacing-md;
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text);
+    border-radius: $border-radius-full;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    white-space: nowrap;
+}
+
+.badge--primary {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.badge--success {
+    background-color: var(--color-success);
+    color: white;
+}
+
+/* ===============================
+   TAGS / FILTRES
+   ============================== */
+
+.filter-tag {
+    display: inline-block;
+    padding: $spacing-sm $spacing-md;
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text);
+    border-radius: $border-radius-lg;
+    font-size: $font-size-small;
+    cursor: pointer;
+    transition: all $transition-fast;
+    border: 2px solid transparent;
+    
+    @include focus-visible;
+    
+    &:hover {
+        border-color: var(--color-primary);
+    }
+    
+    &.active {
+        background-color: var(--color-primary);
+        color: white;
+    }
+}
+
+/* ===============================
+   FORMULAIRES
+   ============================== */
+
+.form-group {
+    margin-bottom: $spacing-lg;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group__label {
+    font-weight: $font-weight-medium;
+    margin-bottom: $spacing-sm;
+    color: var(--color-text);
+}
+
+.form-group__input {
+    padding: $spacing-md;
+    font-size: $font-size-base;
+    border: 1px solid var(--color-border);
+    border-radius: $border-radius-md;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    transition: all $transition-fast;
+    
+    @include focus-visible;
+    
+    &:focus {
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(245, 123, 111, 0.1);
+    }
+}
+
+.form-group__error {
+    color: var(--color-error);
+    font-size: $font-size-small;
+    margin-top: $spacing-xs;
+    display: none;
+    
+    &.show {
+        display: block;
+    }
+}
+
+/* ===============================
+   MESSAGES / ALERTES
+   ============================== */
+
+.alert {
+    padding: $spacing-lg;
+    border-radius: $border-radius-md;
+    margin-bottom: $spacing-lg;
+    font-size: $font-size-small;
+    line-height: $line-height-normal;
+}
+
+.alert--success {
+    background-color: #D5F4E6;
+    color: #1D9E75;
+    border-left: 4px solid var(--color-success);
+}
+
+.alert--error {
+    background-color: #FADBD8;
+    color: #C0392B;
+    border-left: 4px solid var(--color-error);
+}
+
+.alert--warning {
+    background-color: #FCF3CF;
+    color: #E67E22;
+    border-left: 4px solid var(--color-warning);
+}
+
+.alert--info {
+    background-color: #D6EAF8;
+    color: #3498DB;
+    border-left: 4px solid #3498DB;
+}
+
+/* ===============================
+   SKELETON LOADING (Éco-conception)
+   ============================== */
+
+.skeleton {
+    background: linear-gradient(90deg, var(--color-bg-secondary) 25%, var(--color-neutral-medium) 50%, var(--color-bg-secondary) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+    
+    @include no-motion {
+        animation: none;
+        background: var(--color-bg-secondary);
+    }
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-position: 200% 0;
+    }
+    
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.skeleton-card {
+    border-radius: $border-radius-lg;
+    height: 300px;
+    margin-bottom: $spacing-lg;
+}
+
+.skeleton-line {
+    height: 1rem;
+    margin-bottom: $spacing-md;
+    border-radius: $border-radius-sm;
+}

@@ -1,0 +1,225 @@
+/**
+ * Reset CSS - VillaNova
+ * Réinitialise les styles par défaut du navigateur
+ * Prépare une base cohérente pour tous les éléments
+ */
+
+/* ===============================
+   RÉINITIALISATION GLOBALE
+   ============================== */
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    /* Hauteur minimale pour que le footer reste bas */
+    scroll-behavior: smooth;
+    /* Contrôle la taille de base de la police (16px = 100%) */
+    font-size: 16px;
+}
+
+body {
+    font-family: $font-family-primary;
+    font-size: $font-size-base;
+    line-height: $line-height-normal;
+    color: var(--color-text);
+    background-color: var(--color-bg);
+    transition: background-color $transition-normal, color $transition-normal;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+/* ===============================
+   TYPOGRAPHIE DE BASE
+   ============================== */
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: $font-weight-semibold;
+    line-height: $line-height-tight;
+    margin-bottom: $spacing-md;
+}
+
+h1 {
+    font-size: $font-size-h1;
+    
+    @include tablet {
+        font-size: 2rem;
+    }
+    
+    @include desktop {
+        font-size: 2.5rem;
+    }
+}
+
+h2 {
+    font-size: $font-size-h2;
+    
+    @include tablet {
+        font-size: 1.75rem;
+    }
+    
+    @include desktop {
+        font-size: 2rem;
+    }
+}
+
+h3 {
+    font-size: $font-size-h3;
+    
+    @include tablet {
+        font-size: 1.5rem;
+    }
+}
+
+p {
+    margin-bottom: $spacing-md;
+}
+
+/* ===============================
+   LIENS
+   ============================== */
+
+a {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: color $transition-fast;
+    
+    &:visited {
+        color: var(--color-primary);
+    }
+    
+    &:hover {
+        text-decoration: underline;
+    }
+    
+    /* Accessibilité : focus visible */
+    @include focus-visible;
+}
+
+/* ===============================
+   LISTES
+   ============================== */
+
+ul, ol {
+    list-style: none;
+}
+
+/* ===============================
+   FORMULAIRES
+   ============================== */
+
+button, input, textarea, select {
+    font-family: inherit;
+    font-size: inherit;
+    border: none;
+    background: none;
+}
+
+button {
+    cursor: pointer;
+}
+
+input, textarea, select {
+    border: 1px solid var(--color-border);
+    padding: $spacing-sm $spacing-md;
+    border-radius: $border-radius-md;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    transition: border-color $transition-fast, box-shadow $transition-fast;
+    
+    &:focus {
+        outline: none;
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(245, 123, 111, 0.1);
+    }
+    
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+}
+
+textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* ===============================
+   IMAGES
+   ============================== */
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+picture {
+    display: block;
+}
+
+/* ===============================
+   TABLEAUX
+   ============================== */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    text-align: left;
+    padding: $spacing-md;
+    border-bottom: 1px solid var(--color-border);
+}
+
+th {
+    font-weight: $font-weight-semibold;
+    background-color: var(--color-bg-secondary);
+}
+
+/* ===============================
+   ACCESSIBILITÉ
+   ============================== */
+
+.sr-only {
+    @include sr-only;
+}
+
+/* Sautez le contenu pour aller au contenu principal (visible au focus) */
+.skip-link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: var(--color-primary);
+    color: white;
+    padding: $spacing-md;
+    z-index: 9999;
+    transform: translateY(-100%);
+    
+    &:focus {
+        transform: translateY(0);
+    }
+}
+
+/* Désactiver les animations si préférence utilisateur */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}

@@ -1,6 +1,1671 @@
-body {
-  background: #f5f5f3;
-  color: #1a1a18;
+@charset "UTF-8";
+/**
+ * Main SCSS - VillaNova
+ * Combine tous les modules SCSS
+ * Compile en CSS unique et optimisé
+ */
+/* Variables et fonctions */
+/**
+ * Variables SCSS - VillaNova
+ * Gestion centralisée des couleurs, espacements, typographies
+ */
+/* ===============================
+   COULEURS
+   ============================== */
+/* Mode clair */
+/* Mode sombre */
+/* Thème actuel (défini en variable CSS pour faciliter les modes sombre/clair) */
+:root {
+  --color-primary: #F57B6F;
+  --color-primary-coral: #EF9F27;
+  --color-secondary: #F5C5BD;
+  --color-bg: #FFFFFF;
+  --color-bg-secondary: #F5F5F5;
+  --color-text: #333333;
+  --color-text-secondary: #666666;
+  --color-border: #E8E8E8;
+  --color-success: #1D9E75;
+  --color-error: #E74C3C;
+  --color-warning: #F39C12;
 }
+
+/* Mode sombre */
+[data-theme=dark] {
+  --color-primary: #F57B6F;
+  --color-primary-coral: #EF9F27;
+  --color-secondary: #F5C5BD;
+  --color-bg: #2C2C2A;
+  --color-bg-secondary: #3A3A38;
+  --color-text: #F5F5F5;
+  --color-text-secondary: #C0C0C0;
+  --color-border: #4A4A48;
+}
+
+/* ===============================
+   TYPOGRAPHIE
+   ============================== */
+/* Échelle typographique (fluide) */
+/* 16px */
+/* 14px */
+/* 12px */
+/* 18px mobile, 20px desktop */
+/* 20px mobile, 24px desktop */
+/* 24px mobile, 32px desktop */
+/* ===============================
+   ESPACEMENTS (système 4px)
+   ============================== */
+/* 4px */
+/* 8px */
+/* 16px */
+/* 24px */
+/* 32px */
+/* 48px */
+/* ===============================
+   BREAKPOINTS (Mobile First)
+   ============================== */
+/* ===============================
+   OMBRES ET EFFETS
+   ============================== */
+/* ===============================
+   RAYONS DE BORDURE
+   ============================== */
+/* 6px */
+/* 8px */
+/* 12px */
+/* ===============================
+   TRANSITIONS
+   ============================== */
+/**
+ * Mixins SCSS - VillaNova
+ * Fonctions réutilisables pour responsive, accessibilité, etc.
+ */
+/* ===============================
+   RESPONSIVE MIXINS (Mobile First)
+   ============================== */
+/**
+ * Mixin pour breakpoints tablet et plus
+ * Usage: @include tablet { }
+ */
+/**
+ * Mixin pour breakpoints desktop et plus
+ * Usage: @include desktop { }
+ */
+/**
+ * Mixin pour breakpoints larges écrans
+ * Usage: @include wide { }
+ */
+/**
+ * Mixin pour supporter le prefers-reduced-motion (accessibilité)
+ * Désactive les animations pour les utilisateurs qui le demandent
+ * Usage: @include no-motion { transition: none; }
+ */
+/**
+ * Mixin pour support du mode sombre
+ * Usage: @include dark-mode { }
+ */
+/* ===============================
+   ACCESSIBILITÉ WCAG
+   ============================== */
+/**
+ * Mixin pour masquer visuellement mais garder le texte pour les lecteurs d'écran
+ * Usage: @include sr-only;
+ */
+/**
+ * Mixin pour les états focus visibles (accessibilité clavier)
+ * Crée un outline visible pour la navigation au clavier
+ * Usage: @include focus-visible;
+ */
+/**
+ * Mixin pour contraste de couleur WCAG AA (4.5:1 minimum)
+ * Utile pour les couleurs de texte sur fond
+ */
+/* ===============================
+   FLEXBOX UTILITIES
+   ============================== */
+/**
+ * Mixin pour centrer le contenu en flexbox
+ * Usage: @include flex-center;
+ */
+/**
+ * Mixin pour aligner le contenu horizontalement
+ * Usage: @include flex-row;
+ */
+/**
+ * Mixin pour aligner le contenu verticalement
+ * Usage: @include flex-column;
+ */
+/* ===============================
+   TYPOGRAPHIE FLUIDE
+   ============================== */
+/**
+ * Mixin pour créer une taille de police fluide qui s'adapte
+ * Usage: @include fluid-type(14px, 16px);
+ */
+/* ===============================
+   IMAGES ECO-CONCEPTION
+   ============================== */
+/**
+ * Mixin pour les images avec lazy loading
+ * Prépare le conteneur pour les images responsives
+ * Usage: @include img-container;
+ */
+/* ===============================
+   BOUTONS
+   ============================== */
+/**
+ * Mixin pour les états de boutons (hover, active, disabled)
+ * Usage: @include button-states;
+ */
+/* ===============================
+   CONTENEURS
+   ============================== */
+/**
+ * Mixin pour les conteneurs avec max-width
+ * Usage: @include container;
+ */
+/* ===============================
+   GRILLE CSS
+   ============================== */
+/**
+ * Mixin pour créer une grille responsive
+ * Usage: @include grid-auto(300px);
+ */
+/* Reset et base */
+/**
+ * Reset CSS - VillaNova
+ * Réinitialise les styles par défaut du navigateur
+ * Prépare une base cohérente pour tous les éléments
+ */
+/* ===============================
+   RÉINITIALISATION GLOBALE
+   ============================== */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  /* Hauteur minimale pour que le footer reste bas */
+  scroll-behavior: smooth;
+  /* Contrôle la taille de base de la police (16px = 100%) */
+  font-size: 16px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  transition: background-color 250ms ease, color 250ms ease;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+/* ===============================
+   TYPOGRAPHIE DE BASE
+   ============================== */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: 1.3;
+  margin-bottom: 1rem;
+}
+
+h1 {
+  font-size: 1.5rem;
+}
+@media (min-width: 768px) {
+  h1 {
+    font-size: 2rem;
+  }
+}
+@media (min-width: 1024px) {
+  h1 {
+    font-size: 2.5rem;
+  }
+}
+
+h2 {
+  font-size: 1.25rem;
+}
+@media (min-width: 768px) {
+  h2 {
+    font-size: 1.75rem;
+  }
+}
+@media (min-width: 1024px) {
+  h2 {
+    font-size: 2rem;
+  }
+}
+
+h3 {
+  font-size: 1.125rem;
+}
+@media (min-width: 768px) {
+  h3 {
+    font-size: 1.5rem;
+  }
+}
+
+p {
+  margin-bottom: 1rem;
+}
+
+/* ===============================
+   LIENS
+   ============================== */
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+a:visited {
+  color: var(--color-primary);
+}
+a:hover {
+  text-decoration: underline;
+}
+a {
+  /* Accessibilité : focus visible */
+}
+a:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+a:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ===============================
+   LISTES
+   ============================== */
+ul, ol {
+  list-style: none;
+}
+
+li {
+  /* Hérité du parent */
+}
+
+/* ===============================
+   FORMULAIRES
+   ============================== */
+button, input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+  border: none;
+  background: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+input, textarea, select {
+  border: 1px solid var(--color-border);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(245, 123, 111, 0.1);
+}
+input:disabled, textarea:disabled, select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* ===============================
+   IMAGES
+   ============================== */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+picture {
+  display: block;
+}
+
+/* ===============================
+   TABLEAUX
+   ============================== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  text-align: left;
+  padding: 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+th {
+  font-weight: 600;
+  background-color: var(--color-bg-secondary);
+}
+
+/* ===============================
+   ACCESSIBILITÉ
+   ============================== */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Sautez le contenu pour aller au contenu principal (visible au focus) */
+.skip-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: var(--color-primary);
+  color: white;
+  padding: 1rem;
+  z-index: 9999;
+  transform: translateY(-100%);
+}
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* Désactiver les animations si préférence utilisateur */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+/* Composants */
+/**
+ * Composants - VillaNova
+ * Styles pour les composants réutilisables (boutons, cartes, etc.)
+ */
+/* ===============================
+   BOUTONS
+   ============================== */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 250ms ease;
+  /* Accessibility : Focus visible */
+}
+.button:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+.button:focus:not(:focus-visible) {
+  outline: none;
+}
+.button {
+  /* États des boutons */
+  transition: all 250ms ease;
+}
+.button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+.button:active:not(:disabled) {
+  transform: translateY(0);
+}
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    transition: none;
+    transform: none !important;
+  }
+}
+.button {
+  /* Mode sombre */
+}
+@media (prefers-color-scheme: dark) {
+  .button {
+    opacity: 0.9;
+  }
+}
+
+/* Bouton primaire (couleur principale) */
+.button--primary {
+  background-color: var(--color-primary);
+  color: white;
+}
+.button--primary:hover:not(:disabled) {
+  background-color: rgb(243.3441558442, 101.1428571429, 87.1558441558);
+}
+
+/* Bouton secondaire (bordure) */
+.button--secondary {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+}
+.button--secondary:hover:not(:disabled) {
+  background-color: var(--color-bg-secondary);
+}
+
+/* Bouton petit */
+.button--small {
+  padding: 0.25rem 1rem;
+  font-size: 0.75rem;
+}
+
+/* Bouton large */
+.button--large {
+  padding: 1rem 3rem;
+  font-size: 1rem;
+}
+
+/* Bouton désactivé */
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===============================
+   CARTES D'ÉVÉNEMENT
+   ============================== */
+.event-card {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+  transition: all 250ms ease;
+  cursor: pointer;
+  /* Accessibilité: focus visible sur la carte */
+}
+.event-card:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+.event-card:focus:not(:focus-visible) {
+  outline: none;
+}
+.event-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+@media (prefers-reduced-motion: reduce) {
+  .event-card {
+    transform: none !important;
+  }
+}
+
+/* Image de la carte */
+.event-card__image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  background-color: var(--color-bg-secondary);
+  display: block;
+}
+
+/* Contenu de la carte */
+.event-card__content {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* Catégorie */
+.event-card__category {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+}
+
+/* Titre */
+.event-card__title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+
+/* Description courte */
+.event-card__description {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 1rem;
+  flex: 1;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Lieu */
+.event-card__location {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+/* Prix */
+.event-card__pricing {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+}
+
+/* Bouton d'action */
+.event-card__button {
+  align-self: flex-start;
+  margin-top: auto;
+}
+
+/* ===============================
+   BADGES
+   ============================== */
+.badge {
+  display: inline-block;
+  padding: 0.25rem 1rem;
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text);
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.badge--primary {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.badge--success {
+  background-color: var(--color-success);
+  color: white;
+}
+
+/* ===============================
+   TAGS / FILTRES
+   ============================== */
+.filter-tag {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text);
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 150ms ease;
+  border: 2px solid transparent;
+}
+.filter-tag:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+.filter-tag:focus:not(:focus-visible) {
+  outline: none;
+}
+.filter-tag:hover {
+  border-color: var(--color-primary);
+}
+.filter-tag.active {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+/* ===============================
+   FORMULAIRES
+   ============================== */
+.form-group {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group__label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: var(--color-text);
+}
+
+.form-group__input {
+  padding: 1rem;
+  font-size: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  transition: all 150ms ease;
+}
+.form-group__input:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+.form-group__input:focus:not(:focus-visible) {
+  outline: none;
+}
+.form-group__input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(245, 123, 111, 0.1);
+}
+
+.form-group__error {
+  color: var(--color-error);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: none;
+}
+.form-group__error.show {
+  display: block;
+}
+
+/* ===============================
+   MESSAGES / ALERTES
+   ============================== */
+.alert {
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.alert--success {
+  background-color: #D5F4E6;
+  color: #1D9E75;
+  border-left: 4px solid var(--color-success);
+}
+
+.alert--error {
+  background-color: #FADBD8;
+  color: #C0392B;
+  border-left: 4px solid var(--color-error);
+}
+
+.alert--warning {
+  background-color: #FCF3CF;
+  color: #E67E22;
+  border-left: 4px solid var(--color-warning);
+}
+
+.alert--info {
+  background-color: #D6EAF8;
+  color: #3498DB;
+  border-left: 4px solid #3498DB;
+}
+
+/* ===============================
+   SKELETON LOADING (Éco-conception)
+   ============================== */
+.skeleton {
+  background: linear-gradient(90deg, var(--color-bg-secondary) 25%, var(--color-neutral-medium) 50%, var(--color-bg-secondary) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+    background: var(--color-bg-secondary);
+  }
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+.skeleton-card {
+  border-radius: 0.75rem;
+  height: 300px;
+  margin-bottom: 1.5rem;
+}
+
+.skeleton-line {
+  height: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 0.375rem;
+}
+
+/* Layout */
+/**
+ * Layout - VillaNova
+ * Structure de la mise en page
+ */
+/* ===============================
+   EN-TÊTE
+   ============================== */
+.header {
+  background-color: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border);
+  padding: 1rem 0;
+  sticky: top;
+  z-index: 100;
+  position: sticky;
+  top: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: background-color 250ms ease;
+}
+
+.header__container {
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--spacing-md);
+  padding-right: var(--spacing-md);
+}
+@media (min-width: 768px) {
+  .header__container {
+    padding-left: var(--spacing-lg);
+    padding-right: var(--spacing-lg);
+  }
+}
+
+.header__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.header__title {
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.header__logo {
+  color: var(--color-primary);
+  font-weight: 700;
+  transition: color 150ms ease;
+}
+.header__logo:hover {
+  text-decoration: none;
+  color: rgb(241.6883116883, 79.2857142857, 63.3116883117);
+}
+.header__logo:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+.header__logo:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.header__theme-toggle {
+  width: 44px;
+  height: 24px;
+  background-color: var(--color-bg);
+  border: 2px solid var(--color-border);
+  border-radius: 9999px;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 250ms ease;
+}
+.header__theme-toggle:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+.header__theme-toggle:focus:not(:focus-visible) {
+  outline: none;
+}
+.header__theme-toggle .theme-toggle__icon {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  background-color: var(--color-primary);
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: left 150ms ease;
+}
+.header__theme-toggle[aria-pressed=true] .theme-toggle__icon {
+  left: 22px;
+}
+
+/* ===============================
+   NAVIGATION
+   ============================== */
+.nav {
+  position: relative;
+}
+
+/* Bouton toggle mobile */
+.nav__toggle {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+@media (min-width: 768px) {
+  .nav__toggle {
+    display: none;
+  }
+}
+.nav__toggle:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+.nav__toggle:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.nav__toggle-icon {
+  width: 24px;
+  height: 2px;
+  background-color: var(--color-text);
+  transition: all 150ms ease;
+  display: block;
+}
+
+/* Afficher le menu mobile au click */
+.nav__toggle[aria-expanded=true] ~ .nav__list {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: var(--color-bg-secondary);
+  border-radius: 0 0 0.75rem 0.75rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+  padding: 1.5rem;
+  margin-top: 1rem;
+}
+
+/* Menu navigation */
+.nav__list {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+}
+@media (min-width: 768px) {
+  .nav__list {
+    flex-direction: row;
+  }
+}
+
+.nav__item {
+  /* */
+}
+
+.nav__link {
+  display: block;
+  padding: 0.5rem 1rem;
+  color: var(--color-text);
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 2px solid transparent;
+  transition: all 150ms ease;
+}
+.nav__link:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+.nav__link:focus:not(:focus-visible) {
+  outline: none;
+}
+.nav__link:hover {
+  border-bottom-color: var(--color-primary);
+  color: var(--color-primary);
+}
+.nav__link--active {
+  border-bottom-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* ===============================
+   CONTENU PRINCIPAL
+   ============================== */
+.main {
+  flex: 1;
+}
+
+/* ===============================
+   SECTIONS
+   ============================== */
+.filters-section {
+  padding: 2rem 1rem;
+  background-color: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border);
+}
+@media (min-width: 768px) {
+  .filters-section {
+    padding: 3rem 1.5rem;
+  }
+}
+
+.filters-section__container {
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--spacing-md);
+  padding-right: var(--spacing-md);
+}
+@media (min-width: 768px) {
+  .filters-section__container {
+    padding-left: var(--spacing-lg);
+    padding-right: var(--spacing-lg);
+  }
+}
+
+.filters-section__title {
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+  color: var(--color-text);
+}
+
+.events-section {
+  padding: 2rem 1rem;
+}
+@media (min-width: 768px) {
+  .events-section {
+    padding: 3rem 1.5rem;
+  }
+}
+
+.events-section__container {
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--spacing-md);
+  padding-right: var(--spacing-md);
+}
+@media (min-width: 768px) {
+  .events-section__container {
+    padding-left: var(--spacing-lg);
+    padding-right: var(--spacing-lg);
+  }
+}
+
+/* ===============================
+   GRILLE D'ÉVÉNEMENTS
+   ============================== */
+.events-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+@media (min-width: 768px) {
+  .events-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+}
+@media (min-width: 1024px) {
+  .events-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (min-width: 1440px) {
+  .events-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.events-grid__empty {
+  grid-column: 1/-1;
+  text-align: center;
+  padding: 3rem;
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+}
+
+/* ===============================
+   DÉTAIL D'ÉVÉNEMENT
+   ============================== */
+.event-detail {
+  padding: 2rem 1rem;
+}
+@media (min-width: 768px) {
+  .event-detail {
+    padding: 3rem 1.5rem;
+  }
+}
+
+.event-detail__header {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 3rem;
+}
+@media (min-width: 768px) {
+  .event-detail__header {
+    flex-direction: row;
+    gap: 2rem;
+  }
+}
+
+.event-detail__image {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+@media (min-width: 768px) {
+  .event-detail__image {
+    width: 50%;
+    height: 400px;
+    margin-bottom: 0;
+  }
+}
+
+.event-detail__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.event-detail__title {
+  font-size: 1.5rem;
+  color: var(--color-text);
+  margin-bottom: 1rem;
+}
+
+.event-detail__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+}
+
+.event-detail__meta-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.event-detail__meta-label {
+  font-weight: 600;
+  color: var(--color-primary);
+  min-width: 100px;
+}
+
+.event-detail__meta-value {
+  color: var(--color-text);
+}
+
+.event-detail__description {
+  margin: 3rem 0;
+  line-height: 1.75;
+  color: var(--color-text);
+}
+
+.event-detail__actions {
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+}
+@media (min-width: 768px) {
+  .event-detail__actions {
+    flex-direction: row;
+  }
+}
+
+/* ===============================
+   PIED DE PAGE
+   ============================== */
+.footer {
+  background-color: var(--color-bg-secondary);
+  border-top: 1px solid var(--color-border);
+  padding: 2rem 1rem;
+  margin-top: auto;
+}
+@media (min-width: 768px) {
+  .footer {
+    padding: 3rem 1.5rem;
+  }
+}
+
+.footer__container {
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--spacing-md);
+  padding-right: var(--spacing-md);
+}
+@media (min-width: 768px) {
+  .footer__container {
+    padding-left: var(--spacing-lg);
+    padding-right: var(--spacing-lg);
+  }
+}
+
+.footer__content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+@media (min-width: 768px) {
+  .footer__content {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.footer__text {
+  color: var(--color-text);
+  font-weight: 500;
+  margin: 0;
+}
+
+.footer__links {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+}
+
+.footer__link {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: color 150ms ease;
+}
+.footer__link:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+.footer__link:focus:not(:focus-visible) {
+  outline: none;
+}
+.footer__link:hover {
+  color: var(--color-primary);
+}
+
+.footer__copyright {
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  margin: 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border);
+}
+
+/* Accessibilité */
+/**
+ * Accessibilité WCAG AA - VillaNova
+ * Styles dédiés à l'accessibilité
+ */
+/* ===============================
+   NAVIGATION CLAVIER
+   ============================== */
+/**
+ * Focus visible pour tous les éléments interactifs
+ * Plus visible que le focus par défaut
+ */
+:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/**
+ * Masquer le focus outline pour les souris
+ * mais le garder pour le clavier
+ */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ===============================
+   LECTEUR D'ÉCRAN
+   ============================== */
+/**
+ * Classe pour masquer visuellement mais garder pour lecteurs d'écran
+ */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/**
+ * Classe pour les région live (mise à jour dynamique)
+ * Annonce les changements aux lecteurs d'écran
+ */
+.sr-live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+  position: static;
+  width: auto;
+  height: auto;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* ===============================
+   CONTRASTE WCAG AA
+   ============================== */
+/**
+ * Assure un contraste minimum 4.5:1 pour le texte normal
+ * 3:1 pour le texte grand
+ */
+/* Texte sur fond primaire */
+.text-on-primary {
+  color: white;
+  background-color: var(--color-primary);
+}
+.text-on-primary a {
+  color: white;
+  text-decoration: underline;
+}
+
+/* Texte sur fond secondaire */
+.text-on-secondary {
+  color: var(--color-neutral-dark-text);
+  background-color: var(--color-bg-secondary);
+}
+
+/* ===============================
+   VISIBILITÉ DES ERREURS
+   ============================== */
+/**
+ * Messages d'erreur clairs et accessibles
+ */
+.error-message {
+  color: var(--color-error);
+  font-weight: 600;
+  margin: 1rem 0;
+  padding: 1rem;
+  background-color: #FADBD8;
+  border-left: 4px solid var(--color-error);
+  border-radius: 0.5rem;
+}
+
+/* Champs en erreur */
+.form-group__input:invalid {
+  border-color: var(--color-error);
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+}
+
+/* ===============================
+   IMAGES ACCESSIBLES
+   ============================== */
+/**
+ * Les images doivent avoir un alt texte descriptif
+ * Utiliser aria-label ou aria-labelledby pour les images décoratives
+ */
+img[alt] {
+  /* Alt text non vide */
+}
+
+/**
+ * Décoratif : aria-hidden="true"
+ */
+img[aria-hidden=true] {
+  /* Ignoré par les lecteurs d'écran */
+}
+
+/* ===============================
+   BOUTONS ACCESSIBLES
+   ============================== */
+button {
+  /* Texte descriptif, pas "Cliquez ici" */
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* États aria-pressed pour les boutons toggle */
+[aria-pressed=true],
+[aria-pressed=false] {
+  cursor: pointer;
+}
+
+/* ===============================
+   FORMULAIRES ACCESSIBLES
+   ============================== */
+label {
+  font-weight: 500;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+/**
+ * Associer les labels aux inputs
+ * <label for="email">Email</label>
+ * <input id="email" type="email">
+ */
+input:required::after {
+  content: " *";
+  color: var(--color-error);
+}
+
+/* ===============================
+   ANIMATIONS RESPECTUEUSES
+   ============================== */
+/**
+ * Respecter prefers-reduced-motion
+ * Désactiver les animations complexes
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+/* ===============================
+   TEXTE LISIBLE
+   ============================== */
+/**
+ * Assurer une lisibilité WCAG
+ * Taille minimale 12px, line-height 1.5
+ */
+body {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+p, li, td {
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+}
+
+/* ===============================
+   SKIP LINKS
+   ============================== */
+/**
+ * Permettre de sauter aux sections principales
+ */
+.skip-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: var(--color-primary);
+  color: white;
+  padding: 1rem;
+  z-index: 9999;
+  transform: translateY(-100%);
+  text-decoration: none;
+  font-weight: 600;
+}
+.skip-link:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+.skip-link:focus:not(:focus-visible) {
+  outline: none;
+}
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* ===============================
+   COULEURS DE MODE SOMBRE
+   ============================== */
+/**
+ * Mode sombre respecte les contrastes WCAG
+ */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #2C2C2A;
+    --color-bg-secondary: #3A3A38;
+    --color-text: #F5F5F5;
+    --color-text-secondary: #C0C0C0;
+  }
+}
+/* Responsive */
+/**
+ * Responsive Design - VillaNova
+ * Adaptation mobile first
+ */
+/* ===============================
+   MOBILE FIRST (par défaut)
+   ============================== */
+/* Les styles de base sont déjà mobile */
+/* ===============================
+   TABLETTES (768px et +)
+   ============================== */
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+/* ===============================
+   DESKTOP (1024px et +)
+   ============================== */
+@media (min-width: 1024px) {
+  html {
+    font-size: 17px;
+  }
+}
+/* ===============================
+   GRANDS ÉCRANS (1440px et +)
+   ============================== */
+@media (min-width: 1440px) {
+  html {
+    font-size: 18px;
+  }
+}
+/* ===============================
+   ORIENTATIONS
+   ============================== */
+/* Portrait : hauteur > largeur */
+@media (orientation: portrait) {
+  /* Optimisations spécifiques portrait */
+}
+/* Paysage : largeur > hauteur */
+@media (orientation: landscape) {
+  /* Optimisations spécifiques paysage */
+}
+/* ===============================
+   DENSITÉ PIXEL (Retina)
+   ============================== */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  /* Images et bordures peuvent être plus fines */
+}
+/* ===============================
+   TACTILE VS SOURIS
+   ============================== */
+/**
+ * Targets tactiles plus grandes (min 44x44px)
+ */
+@media (hover: none) and (pointer: coarse) {
+  button, a, input[type=button] {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 1rem;
+  }
+}
+/**
+ * Hover disponible (souris)
+ */
+@media (hover: hover) and (pointer: fine) {
+  a:hover {
+    text-decoration: underline;
+  }
+}
+/* Éco-conception */
+/**
+ * Éco-conception - VillaNova
+ * Optimisation pour réduire la consommation énergétique
+ */
+/* ===============================
+   IMAGES OPTIMISÉES
+   ============================== */
+/**
+ * Lazy loading : images chargées au scroll
+ * <img loading="lazy" src="..." alt="...">
+ */
+img {
+  /* Le navigateur gère le lazy loading nativement */
+}
+
+/* ===============================
+   FORMATS MODERNES
+   ============================== */
+/**
+ * Utiliser <picture> pour servir des formats WebP/AVIF
+ * <picture>
+ *     <source type="image/avif" srcset="image.avif">
+ *     <source type="image/webp" srcset="image.webp">
+ *     <img src="image.jpg" alt="">
+ * </picture>
+ */
+picture {
+  display: block;
+}
+
+/* ===============================
+   RÉDUCTION DES ANIMATIONS
+   ============================== */
+/**
+ * Réduire les animations consommatrices
+ * pour préserver la batterie
+ */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+/* ===============================
+   DARK MODE ECO
+   ============================== */
+/**
+ * Mode sombre consomme moins d'énergie sur OLED
+ * Utiliser des noirs purs (#000000) plutôt que gris
+ */
+@media (prefers-color-scheme: dark) {
+  /* Utiliser les couleurs sombres optimisées */
+}
+/* ===============================
+   RÉDUCTION DE LA LARGEUR DE BANDE
+   ============================== */
+/**
+ * Réduire les demandes de ressources
+ * Combiner les fichiers CSS et JS
+ * Minifier le CSS (sass --style=compressed)
+ */
+/* ===============================
+   TYPOGRAPHIE EFFICACE
+   ============================== */
+/**
+ * Utiliser des polices système
+ * Éviter les polices web multiples
+ * font-display: swap pour charger rapidement
+ */
+@font-face {
+  font-family: "Inter";
+  font-display: swap;
+  /* Les polices système (font-family-primary) sont utilisées par défaut */
+}
+/* ===============================
+   GRID CSS VS FLEXBOX
+   ============================== */
+/**
+ * CSS Grid et Flexbox sont efficaces
+ * Éviter les positions absolues multiples
+ */
+/* ===============================
+   VIDÉOS ECO
+   ============================== */
+/**
+ * Désactiver autoplay
+ * Charger uniquement les métadonnées
+ * <video preload="metadata" poster="image.jpg" controls>
+ *     <source src="video.mp4" type="video/mp4">
+ *     <source src="video.webm" type="video/webm">
+ * </video>
+ */
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ===============================
+   RESSOURCES CONDITIONNELLES
+   ============================== */
+/**
+ * Charger les ressources selon les capacités
+ */
+@media (max-width: 768px) {
+  /* Réduire les ressources sur mobile */
+}
+@media (save-data: on) {
+  /* Réduire davantage si l'utilisateur demande save-data */
+  img {
+    /* Réduire la qualité des images */
+  }
+}
+/* ===============================
+   CSS MINIMAL
+   ============================== */
+/**
+ * Pas de styles CSS inutilisés
+ * Chaque classe SCSS a un but
+ * Utiliser PurgeCSS ou similar en production
+ */
 
 /*# sourceMappingURL=main.css.map */
