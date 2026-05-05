@@ -4,37 +4,43 @@
  */
 
 /* ===============================
-   COULEURS
-   ============================== */
+COULEURS
+============================== */
 
-/* Mode clair */
-$color-primary-light: #F57B6F;
-$color-primary-coral: #EF9F27;
-$color-secondary-light: #F5C5BD;
-$color-neutral-white: #FFFFFF;
-$color-neutral-light-bg: #F5F5F5;
-$color-neutral-light-border: #E8E8E8;
-$color-neutral-medium: #CCCCCC;
-$color-neutral-gray: #999999;
-$color-neutral-dark-gray: #666666;
-$color-neutral-dark-text: #333333;
+/* Mode clair - Palette Light (Corail & Beige clair) */
+$color-light-1: rgb(212, 124, 111); /* #D47C6F - Primary Coral */
+$color-light-2: rgb(226, 168, 162); /* #E2A8A2 - Secondary Pink */
+$color-light-3: rgb(239, 207, 201); /* #EFCFC9 - Tertiary Pale */
+$color-light-4: rgb(252, 247, 245); /* #FCF7F5 - Background Light */
+$color-light-5: rgb(248, 205, 200); /* #F8CDC8 - Border Pink */
 
-/* Mode sombre */
-$color-dark-bg-primary: #2C2C2A;
-$color-dark-bg-secondary: #3A3A38;
-$color-dark-text-primary: #F5F5F5;
-$color-dark-accent: #F57B6F;
+/* Mode sombre - Palette Dark (Gris chaud & Pêche) */
+$color-dark-1: rgb(70, 63, 58);     /* #463F3A - Background Dark */
+$color-dark-2: rgb(138, 129, 124);  /* #8A817C - Secondary Gray */
+$color-dark-3: rgb(188, 184, 177);  /* #BCB8B1 - Light Gray */
+$color-dark-4: rgb(244, 243, 238);  /* #F4F3EE - Off-white Text */
+$color-dark-5: rgb(224, 175, 160);  /* #E0AFA0 - Accent Peach */
 
 /* Thème actuel (défini en variable CSS pour faciliter les modes sombre/clair) */
 :root {
-    --color-primary: #{$color-primary-light};
-    --color-primary-coral: #{$color-primary-coral};
-    --color-secondary: #{$color-secondary-light};
-    --color-bg: #{$color-neutral-white};
-    --color-bg-secondary: #{$color-neutral-light-bg};
-    --color-text: #{$color-neutral-dark-text};
-    --color-text-secondary: #{$color-neutral-dark-gray};
-    --color-border: #{$color-neutral-light-border};
+    /* Couleurs primaires */
+    --color-primary: #{$color-light-1};
+    --color-secondary: #{$color-light-2};
+    --color-tertiary: #{$color-light-3};
+    
+    /* Fonds */
+    --color-bg: #{$color-light-4};
+    --color-bg-secondary: #ffffff;
+    --color-bg-toggle: #{$color-light-3};
+    
+    /* Texte */
+    --color-text: #{$color-dark-1};
+    --color-text-secondary: #{$color-dark-2};
+    
+    /* Bordures */
+    --color-border: #{$color-light-5};
+    
+    /* États */
     --color-success: #1D9E75;
     --color-error: #E74C3C;
     --color-warning: #F39C12;
@@ -42,19 +48,27 @@ $color-dark-accent: #F57B6F;
 
 /* Mode sombre */
 [data-theme="dark"] {
-    --color-primary: #{$color-dark-accent};
-    --color-primary-coral: #{$color-primary-coral};
-    --color-secondary: #{$color-secondary-light};
-    --color-bg: #{$color-dark-bg-primary};
-    --color-bg-secondary: #{$color-dark-bg-secondary};
-    --color-text: #{$color-dark-text-primary};
-    --color-text-secondary: #C0C0C0;
-    --color-border: #4A4A48;
+    /* Couleurs primaires */
+    --color-primary: #{$color-dark-5};
+    --color-secondary: #{$color-dark-3};
+    --color-tertiary: #{$color-dark-2};
+    
+    /* Fonds */
+    --color-bg: #{$color-dark-1};
+    --color-bg-secondary: #352F2B; /* Fond légèrement plus sombre pour le contraste (cartes, header) */
+    --color-bg-toggle: #{$color-dark-2};
+    
+    /* Texte */
+    --color-text: #{$color-dark-4};
+    --color-text-secondary: #{$color-dark-3};
+    
+    /* Bordures */
+    --color-border: #5A524C; /* Bordure subtile adaptée au fond sombre */
 }
 
 /* ===============================
-   TYPOGRAPHIE
-   ============================== */
+TYPOGRAPHIE
+============================== */
 
 $font-family-system: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
 $font-family-primary: $font-family-system;
@@ -77,8 +91,8 @@ $line-height-normal: 1.5;
 $line-height-relaxed: 1.75;
 
 /* ===============================
-   ESPACEMENTS (système 4px)
-   ============================== */
+ESPACEMENTS (système 4px)
+============================== */
 
 $spacing-xs: 0.25rem;  /* 4px */
 $spacing-sm: 0.5rem;   /* 8px */
@@ -88,8 +102,8 @@ $spacing-xl: 2rem;     /* 32px */
 $spacing-2xl: 3rem;    /* 48px */
 
 /* ===============================
-   BREAKPOINTS (Mobile First)
-   ============================== */
+BREAKPOINTS (Mobile First)
+============================== */
 
 $bp-mobile: 320px;
 $bp-tablet: 768px;
@@ -97,8 +111,8 @@ $bp-desktop: 1024px;
 $bp-wide: 1440px;
 
 /* ===============================
-   OMBRES ET EFFETS
-   ============================== */
+OMBRES ET EFFETS
+============================== */
 
 $shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
 $shadow-md: 0 4px 6px rgba(0, 0, 0, 0.15);
@@ -106,8 +120,8 @@ $shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.2);
 $shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.25);
 
 /* ===============================
-   RAYONS DE BORDURE
-   ============================== */
+RAYONS DE BORDURE
+============================== */
 
 $border-radius-sm: 0.375rem;  /* 6px */
 $border-radius-md: 0.5rem;    /* 8px */
@@ -115,8 +129,8 @@ $border-radius-lg: 0.75rem;   /* 12px */
 $border-radius-full: 9999px;
 
 /* ===============================
-   TRANSITIONS
-   ============================== */
+TRANSITIONS
+============================== */
 
 $transition-fast: 150ms ease;
 $transition-normal: 250ms ease;

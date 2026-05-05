@@ -41,7 +41,7 @@
     
     &:hover {
         text-decoration: none;
-        color: darken($color-primary-light, 10%);
+        color: var(--color-secondary);
     }
     
     @include focus-visible;
@@ -85,7 +85,7 @@
 
 /* Bouton toggle mobile */
 .nav__toggle {
-    display: none;
+    display: flex;
     flex-direction: column;
     gap: 4px;
     background: none;

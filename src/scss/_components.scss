@@ -24,20 +24,21 @@
     
     /* États des boutons */
     @include button-states;
-    
-    /* Mode sombre */
-    @include dark-mode {
-        opacity: 0.9;
-    }
 }
 
 /* Bouton primaire (couleur principale) */
 .button--primary {
     background-color: var(--color-primary);
     color: white;
+    border: none;
     
     &:hover:not(:disabled) {
-        background-color: darken($color-primary-light, 5%);
+        background-color: var(--color-secondary);
+        box-shadow: $shadow-md;
+    }
+    
+    &:active:not(:disabled) {
+        background-color: var(--color-tertiary);
     }
 }
 
@@ -49,6 +50,8 @@
     
     &:hover:not(:disabled) {
         background-color: var(--color-bg-secondary);
+        border-color: var(--color-secondary);
+        color: var(--color-secondary);
     }
 }
 
@@ -83,6 +86,7 @@
     box-shadow: $shadow-md;
     transition: all $transition-normal;
     cursor: pointer;
+    border: 1px solid var(--color-border);
     
     /* Accessibilité: focus visible sur la carte */
     @include focus-visible;
@@ -90,6 +94,7 @@
     &:hover {
         transform: translateY(-4px);
         box-shadow: $shadow-lg;
+        border-color: var(--color-primary);
     }
     
     @include no-motion {
@@ -198,26 +203,32 @@
    TAGS / FILTRES
    ============================== */
 
-.filter-tag {
+.filters__button {
     display: inline-block;
-    padding: $spacing-sm $spacing-md;
+    padding: $spacing-sm $spacing-lg;
     background-color: var(--color-bg-secondary);
-    color: var(--color-text);
+    color: var(--color-text-secondary);
+    border: 2px solid transparent;
     border-radius: $border-radius-lg;
     font-size: $font-size-small;
+    font-weight: $font-weight-medium;
     cursor: pointer;
-    transition: all $transition-fast;
-    border: 2px solid transparent;
+    transition: all $transition-normal;
     
     @include focus-visible;
     
-    &:hover {
+    &:hover:not([aria-pressed="true"]) {
         border-color: var(--color-primary);
+        color: var(--color-primary);
     }
     
-    &.active {
+    /* Bouton actif (filtre sélectionné) */
+    &[aria-pressed="true"],
+    &--active {
         background-color: var(--color-primary);
         color: white;
+        border-color: var(--color-primary);
+        font-weight: $font-weight-semibold;
     }
 }
 
@@ -250,7 +261,7 @@
     
     &:focus {
         border-color: var(--color-primary);
-        box-shadow: 0 0 0 3px rgba(245, 123, 111, 0.1);
+        box-shadow: 0 0 0 3px rgba(210, 28, 17, 0.1);
     }
 }
 
@@ -306,7 +317,7 @@
    ============================== */
 
 .skeleton {
-    background: linear-gradient(90deg, var(--color-bg-secondary) 25%, var(--color-neutral-medium) 50%, var(--color-bg-secondary) 75%);
+    background: linear-gradient(90deg, var(--color-bg-secondary) 25%, var(--color-border) 50%, var(--color-bg-secondary) 75%);
     background-size: 200% 100%;
     animation: skeleton-loading 1.5s infinite;
     

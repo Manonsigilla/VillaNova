@@ -216,12 +216,6 @@ p, li, td {
 
 /**
  * Mode sombre respecte les contrastes WCAG
+ * Nous utilisons data-theme="dark" au lieu de prefers-color-scheme
+ * pour laisser le choix à l'utilisateur via le toggle.
  */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --color-bg: #{$color-dark-bg-primary};
-        --color-bg-secondary: #{$color-dark-bg-secondary};
-        --color-text: #{$color-dark-text-primary};
-        --color-text-secondary: #C0C0C0;
-    }
-}
