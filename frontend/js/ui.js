@@ -234,36 +234,97 @@ export function initializeNavigation() {
 }
 
 /**
- * Gère les filtres d'événements
+ * Gère les filtres d'événements et la recherche intelligente
  * @param {Array} events - Liste complète des événements
  */
 export function initializeFilters(events) {
     const filterButtons = document.querySelectorAll('.filters__button');
+    const searchInput = document.getElementById('category-search');
     const container = document.getElementById('events-container');
-    let filteredEvents = events;
     
-    filterButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const filter = button.getAttribute('data-filter');
+    // Fonction centrale de filtrage
+    const applyFilters = () => {
+        const searchTerm = (searchInput?.value || '').toLowerCase().trim();
+        const activeBtn = document.querySelector('.filters__button[aria-pressed="true"]');
+        const activeFilter = activeBtn ? activeBtn.getAttribute('data-filter') : 'all';
+        
+        const filteredEvents = events.filter(event => {
+            // 1. Filtre par texte (recherche intelligente sur titre, description, mots-clés)
+            const titleFr = (event.title?.fr || '').toLowerCase();
+            const descFr = (event.description?.fr || '').toLowerCase();
+            const keywords = Array.isArray(event.keywords?.fr) ? event.keywords.fr.join(' ').toLowerCase() : '';
             
-            /* Mettre à jour l'état des boutons */
-            filterButtons.forEach(btn => {
-                btn.setAttribute('aria-pressed', 'false');
-            });
-            button.setAttribute('aria-pressed', 'true');
+            const searchString = `${titleFr} ${descFr} ${keywords}`;
+            const matchesSearch = searchTerm === '' || searchString.includes(searchTerm);
             
-            /* Filtrer les événements */
-            if (filter === 'all') {
-                filteredEvents = events;
-            } else {
-                filteredEvents = events.filter(event => {
-                    const category = (event.category?.name || '').toLowerCase();
-                    return category.includes(filter.toLowerCase());
-                });
+            // 2. Filtre par bouton rapide (tag)
+            let matchesTag = true;
+            if (activeFilter !== 'all') {
+                matchesTag = searchString.includes(activeFilter.toLowerCase());
             }
             
-            /* Afficher les événements filtrés */
-            renderEventCards(filteredEvents, container);
+            return matchesSearch && matchesTag;
+        });
+        
+        renderEventCards(filteredEvents, container);
+    };
+
+    // Écouteur pour la barre de recherche intelligente
+    if (searchInput) {
+        searchInput.addEventListener('input', applyFilters);
+    }
+    
+    // Écouteurs pour les boutons rapides
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Mettre à jour l'état visuel des boutons
+            filterButtons.forEach(btn => btn.setAttribute('aria-pressed', 'false'));
+            button.setAttribute('aria-pressed', 'true');
+            
+            // Appliquer les filtres
+            applyFilters();
         });
     });
+}
+
+/**
+ * Gère la navigation SPA (Single Page Application)
+ */
+export function initializeSPATabs() {
+    const navLinks = document.querySelectorAll('.nav__link[data-target]');
+    const views = document.querySelectorAll('.view-section');
+    
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            // Si c'est juste un lien de défilement vers une ancre, on le laisse faire son comportement natif
+            if (link.getAttribute('data-scroll') === 'true') {
+                // S'assurer qu'on est sur la vue événement d'abord
+                const targetId = link.getAttribute('data-target');
+                switchToView(targetId);
+                return; // Laisse le href="#filters" fonctionner naturellement
+            }
+            
+            e.preventDefault();
+            const targetId = link.getAttribute('data-target');
+            
+            // Mettre à jour les liens actifs
+            document.querySelectorAll('.nav__link').forEach(nav => nav.classList.remove('nav__link--active'));
+            link.classList.add('nav__link--active');
+            
+            // Basculer les vues
+            switchToView(targetId);
+        });
+    });
+    
+    function switchToView(targetId) {
+        views.forEach(view => {
+            if (view.id === targetId) {
+                view.classList.remove('hidden');
+                view.classList.add('active');
+            } else {
+                view.classList.add('hidden');
+                view.classList.remove('active');
+            }
+        });
+    }
 }

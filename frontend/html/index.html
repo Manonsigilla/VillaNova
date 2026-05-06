@@ -40,16 +40,16 @@
                 
                 <ul class="nav__list" id="nav-menu" aria-hidden="true">
                     <li class="nav__item">
-                        <a href="#" class="nav__link nav__link--active">Événements</a>
+                        <a href="#" class="nav__link nav__link--active" data-target="view-events">Événements</a>
                     </li>
                     <li class="nav__item">
-                        <a href="#" class="nav__link">Par catégories</a>
+                        <a href="#filters" class="nav__link" data-target="view-events" data-scroll="true">Par catégories</a>
                     </li>
                     <li class="nav__item">
-                        <a href="#" class="nav__link">Mes réservations</a>
+                        <a href="#" class="nav__link" data-target="view-reservations">Mes réservations</a>
                     </li>
                     <li class="nav__item">
-                        <a href="#" class="nav__link">Contact</a>
+                        <a href="#" class="nav__link" data-target="view-contact">Contact</a>
                     </li>
                     <li>
                         <button id="btn-logout" class="nav__link nav__link--button">Déconnexion</button>
@@ -61,12 +61,19 @@
     
     <!-- Contenu principal -->
     <main id="main-content" class="main">
+        <!-- VUE: ÉVÉNEMENTS -->
+        <div id="view-events" class="view-section">
         <!-- Section des filtres et actions -->
-        <section class="filters-section">
+        <section class="filters-section" id="filters">
             <div class="filters-section__container">
                 <h2 class="filters-section__title">Explorez les événements</h2>
                 
-                <!-- Groupe de filtres -->
+                <!-- Barre de recherche intelligente -->
+                <div class="search-bar">
+                    <input type="text" id="category-search" class="search-input" placeholder="Rechercher un événement, une catégorie, un lieu..." aria-label="Rechercher">
+                </div>
+                
+                <!-- Groupe de filtres rapides -->
                 <div class="filters" role="region" aria-label="Filtres d'événements">
                     <button class="filters__button filters__button--active" data-filter="all" aria-pressed="true">
                         Voir tout
@@ -121,6 +128,48 @@
                 </div>
             </div>
         </section>
+        </div> <!-- Fin VUE ÉVÉNEMENTS -->
+        
+        <!-- VUE: RÉSERVATIONS -->
+        <div id="view-reservations" class="view-section hidden">
+            <section class="page-section">
+                <div class="page-section__container">
+                    <h2 class="page-section__title">Mes Réservations</h2>
+                    <div class="empty-state">
+                        <svg class="empty-state__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                        <h3 class="empty-state__title">Aucune réservation</h3>
+                        <p class="empty-state__text">Vous n'avez pas encore réservé d'événement. Explorez notre catalogue pour trouver votre prochaine sortie !</p>
+                        <button class="btn-primary" onclick="document.querySelector('[data-target=\'view-events\']').click()">Découvrir les événements</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <!-- VUE: CONTACT -->
+        <div id="view-contact" class="view-section hidden">
+            <section class="page-section">
+                <div class="page-section__container">
+                    <h2 class="page-section__title">Nous Contacter</h2>
+                    <div class="contact-card auth-card" style="margin: 0 auto;">
+                        <form id="contact-form" onsubmit="event.preventDefault(); alert('Message envoyé avec succès !');">
+                            <div class="form-group">
+                                <label for="contact-name">Nom complet</label>
+                                <input type="text" id="contact-name" placeholder="Votre nom" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-email">Adresse e-mail</label>
+                                <input type="email" id="contact-email" placeholder="votre@email.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-message">Message</label>
+                                <textarea id="contact-message" rows="5" placeholder="Comment pouvons-nous vous aider ?" style="width: 100%; padding: 14px; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 10px; background-color: rgba(255, 255, 255, 0.1); color: #ffffff;" required></textarea>
+                            </div>
+                            <button type="submit" class="btn-primary">Envoyer le message</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </div>
     </main>
     
     <!-- Pied de page -->

@@ -14,7 +14,8 @@ import {
     initializeTheme,
     toggleTheme,
     initializeNavigation,
-    initializeFilters
+    initializeFilters,
+    initializeSPATabs
 } from './ui.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -98,6 +99,9 @@ function initializeUI() {
     
     /* Initialiser la navigation mobile */
     initializeNavigation();
+    
+    /* Initialiser la navigation SPA (onglets) */
+    initializeSPATabs();
 }
 
 /**

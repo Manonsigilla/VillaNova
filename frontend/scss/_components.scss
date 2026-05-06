@@ -348,3 +348,101 @@
     margin-bottom: $spacing-md;
     border-radius: $border-radius-sm;
 }
+
+/* ===============================
+   RECHERCHE INTELLIGENTE
+   ============================== */
+
+.search-bar {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto $spacing-xl;
+    position: relative;
+}
+
+.search-input {
+    width: 100%;
+    padding: $spacing-md $spacing-xl;
+    padding-left: 45px;
+    font-size: $font-size-base;
+    border: 2px solid var(--color-border);
+    border-radius: $border-radius-full;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    transition: all $transition-fast;
+    box-shadow: $shadow-sm;
+    
+    &:focus {
+        outline: none;
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 4px rgba(55, 138, 221, 0.15);
+    }
+}
+
+.search-bar::before {
+    content: "";
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23378ADD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+    pointer-events: none;
+}
+
+/* ===============================
+   SECTIONS SPA (Réservations, Contact)
+   ============================== */
+
+.page-section {
+    padding: $spacing-2xl $spacing-md;
+    min-height: calc(100vh - 200px);
+}
+
+.page-section__container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.page-section__title {
+    font-size: $font-size-h1;
+    color: var(--color-text);
+    margin-bottom: $spacing-xl;
+    text-align: center;
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: $spacing-3xl $spacing-lg;
+    background-color: var(--color-bg-secondary);
+    border-radius: $border-radius-lg;
+    border: 1px dashed var(--color-border);
+    text-align: center;
+}
+
+.empty-state__icon {
+    width: 64px;
+    height: 64px;
+    color: var(--color-primary);
+    margin-bottom: $spacing-lg;
+    opacity: 0.8;
+}
+
+.empty-state__title {
+    font-size: $font-size-h2;
+    color: var(--color-text);
+    margin-bottom: $spacing-md;
+}
+
+.empty-state__text {
+    font-size: $font-size-base;
+    color: var(--color-text-secondary);
+    margin-bottom: $spacing-xl;
+    max-width: 400px;
+}
