@@ -4,12 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact - VillaNova</title>
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="../css/main.css">
 </head>
 <body class="theme-light">
     <!-- Le script de thème (auth.js ou un script global) devrait être chargé pour appliquer le thème stocké -->
-    <header class="landing-header">
-        <div class="logo"><a href="index.html">VillaNova</a></div>
+    <header class="header">
+        <div class="header__container header__top">
+            <h1 class="header__title">
+                <a href="index.html" class="header__logo">VillaNova</a>
+            </h1>
+            
+            <!-- Structure conforme à votre _theme-toggle.scss -->
+            <button class="header__theme-toggle" id="theme-toggle" aria-pressed="false" aria-label="Basculer le thème clair/sombre">
+                <!-- Icônes SVG simulées ou réelles -->
+                <span class="theme-toggle__icon icon-sun">☀️</span>
+                <span class="theme-toggle__icon icon-moon">🌙</span>
+                <span class="theme-toggle__thumb"></span>
+            </button>
+        </div>
     </header>
 
     <main class="static-content">
@@ -33,13 +45,16 @@
         </form>
     </main>
 
-    <footer class="landing-footer">
-        <nav>
-            <ul>
-                <li><a href="index.html">Retour à l'accueil</a></li>
-                <li><a href="politique.html">Politique & Confidentialité</a></li>
-            </ul>
-        </nav>
+    <footer class="footer">
+        <div class="footer__container">
+            <div class="footer__content">
+                <p class="footer__text">© 2026 VillaNova. Tous droits réservés.</p>
+                <ul class="footer__links">
+                    <li><a href="contact.html" class="footer__link">Contact</a></li>
+                    <li><a href="politique.html" class="footer__link">Politique & Confidentialité</a></li>
+                </ul>
+            </div>
+        </div>
     </footer>
 </body>
 </html>

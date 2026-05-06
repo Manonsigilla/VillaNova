@@ -23,11 +23,20 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (!isAuthenticated) {
         // Redirection vers la page de connexion si non authentifié
-        window.location.href = 'index.html';
+        window.location.href = 'login.html';
         return;
     }
 
-    // Le reste de votre code d'initialisation des événements suit ici...
+    // Gestion de la déconnexion
+    const btnLogout = document.getElementById('btn-logout');
+    if (btnLogout) {
+        btnLogout.addEventListener('click', () => {
+            // Suppression de la clé d'authentification
+            localStorage.removeItem('vn_authenticated');
+            // Redirection vers la page de connexion
+            window.location.href = 'login.html';
+        });
+    }
 });
 
 /* Stockage global des événements pour les filtres */

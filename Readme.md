@@ -27,14 +27,16 @@ VillaNova/
 ├── .gitignore
 ├── package.json
 ├── package-lock.json
-├── src/
-│   ├── index.html
-│   ├── event-detail.html
-│   ├── admin.html
+├── frontend/
+│   ├── html/
+│   │   ├── index.html
+│   │   ├── event-detail.html
+│   │   ├── login.html
+│   │   ├── contact.html
+│   │   └── politique.html
 │   ├── css/
-│   │   ├── style.css (généré par SASS)
-│   │   ├── style.css.map
-│   │   └── style.scss
+│   │   ├── main.css
+│   │   └── main.css.map
 │   ├── scss/
 │   │   ├── main.scss
 │   │   ├── _variables.scss
@@ -49,16 +51,19 @@ VillaNova/
 │   ├── js/
 │   │   ├── main.js
 │   │   ├── api.js
+│   │   ├── auth.js
 │   │   ├── event-list.js
 │   │   ├── event-detail.js
-│   │   ├── admin.js
 │   │   ├── ui.js
 │   │   ├── accessibility.js
 │   │   └── utils.js
-│   ├── images/
-│   │   ├── logo/
-│   │   ├── icons/
-│   │   └── placeholders/
+│   └── images/
+│       ├── logo/
+│       ├── icons/
+│       └── placeholders/
+├── backend/
+│   ├── backend.py
+│   ├── villanova.db
 │   └── data/
 │       └── categories.json
 ├── docs/
@@ -99,13 +104,13 @@ npm run sass:watch
   "name": "villanova",
   "version": "1.0.0",
   "description": "Plateforme de gestion et consultation d'événements locaux",
-  "main": "src/js/main.js",
+  "main": "frontend/js/main.js",
   "scripts": {
-    "sass": "sass src/scss:src/css",
-    "sass:watch": "sass --watch src/scss:src/css",
+    "sass": "sass frontend/scss:frontend/css",
+    "sass:watch": "sass --watch frontend/scss:frontend/css",
     "dev": "npm run sass:watch",
-    "build": "sass src/scss:src/css --style=compressed",
-    "serve": "http-server src -p 8000",
+    "build": "sass frontend/scss:frontend/css --style=compressed",
+    "serve": "http-server frontend -p 8000",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": ["events", "openagenda", "accessibility"],
@@ -147,14 +152,16 @@ VillaNova/
 ├── .gitignore
 ├── package.json
 ├── package-lock.json
-├── src/
-│   ├── index.html
-│   ├── event-detail.html
-│   ├── admin.html
+├── frontend/
+│   ├── html/
+│   │   ├── index.html
+│   │   ├── event-detail.html
+│   │   ├── login.html
+│   │   ├── contact.html
+│   │   └── politique.html
 │   ├── css/
-│   │   ├── style.css (généré par SASS)
-│   │   ├── style.css.map
-│   │   └── style.scss
+│   │   ├── main.css
+│   │   └── main.css.map
 │   ├── scss/
 │   │   ├── main.scss
 │   │   ├── _variables.scss
@@ -169,16 +176,19 @@ VillaNova/
 │   ├── js/
 │   │   ├── main.js
 │   │   ├── api.js
+│   │   ├── auth.js
 │   │   ├── event-list.js
 │   │   ├── event-detail.js
-│   │   ├── admin.js
 │   │   ├── ui.js
 │   │   ├── accessibility.js
 │   │   └── utils.js
-│   ├── images/
-│   │   ├── logo/
-│   │   ├── icons/
-│   │   └── placeholders/
+│   └── images/
+│       ├── logo/
+│       ├── icons/
+│       └── placeholders/
+├── backend/
+│   ├── backend.py
+│   ├── villanova.db
 │   └── data/
 │       └── categories.json
 ├── docs/
@@ -188,39 +198,57 @@ VillaNova/
 │   └── DEPLOYMENT.md
 └── .editorconfig
 
-Installation et configuration
-Prérequis
+## Installation et configuration
 
-    Node.js 16+ et npm (pour le compilateur SASS)
-    Un navigateur moderne (Chrome, Firefox, Safari, Edge)
-    Git pour le versioning
-    Un éditeur de code (VS Code recommandé)
+### Prérequis
+- **Node.js 16+** et npm (pour le frontend et la compilation SASS)
+- **Python 3.8+** (pour le serveur back-end API)
+- Un navigateur moderne (Chrome, Firefox, Safari, Edge)
+- Git pour le versioning
 
-Étapes d'installation
+### 1. Cloner le repository
 
-    Cloner le repository
-
-bash
-
-git clone https://github.com/Manonsilgilla/VillaNova.git
+```bash
+git clone https://github.com/Manonsigilla/VillaNova.git
 cd VillaNova
+```
 
-    Installer les dépendances
+### 2. Configuration du Front-end (Client)
 
-bash
-
+Installer les dépendances NPM :
+```bash
 npm install
+```
 
-    Compiler SASS en CSS
-
-bash
-
+Compiler les fichiers SASS en CSS :
+```bash
 npm run sass
+```
 
-Pour le développement avec compilation automatique :
-bash
+Pour le développement en direct :
+- Compiler SASS automatiquement : `npm run dev`
+- Lancer le serveur local (sur le port 8000) : `npm run serve`
 
-npm run sass:watch
+### 3. Configuration du Back-end (Serveur API)
+
+Créer un environnement virtuel Python pour isoler les dépendances :
+```bash
+python -m venv .venv
+```
+
+Activer l'environnement virtuel :
+- Sur **Windows** : `.\.venv\Scripts\Activate.ps1` (ou `.venv\Scripts\activate.bat` via l'invite de commande)
+- Sur **macOS / Linux** : `source .venv/bin/activate`
+
+Installer les librairies requises (Flask, etc.) :
+```bash
+pip install -r requirements.txt
+```
+
+Lancer l'API Back-end (sur le port 5000) :
+```bash
+python backend/backend.py
+```
 
 Configuration du package.json
 JSON
@@ -229,13 +257,13 @@ JSON
   "name": "villanova",
   "version": "1.0.0",
   "description": "Plateforme de gestion et consultation d'événements locaux",
-  "main": "src/js/main.js",
+  "main": "frontend/js/main.js",
   "scripts": {
-    "sass": "sass src/scss:src/css",
-    "sass:watch": "sass --watch src/scss:src/css",
+    "sass": "sass frontend/scss:frontend/css",
+    "sass:watch": "sass --watch frontend/scss:frontend/css",
     "dev": "npm run sass:watch",
-    "build": "sass src/scss:src/css --style=compressed",
-    "serve": "http-server src -p 8000",
+    "build": "sass frontend/scss:frontend/css --style=compressed",
+    "serve": "http-server frontend -p 8000",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": ["events", "openagenda", "accessibility"],

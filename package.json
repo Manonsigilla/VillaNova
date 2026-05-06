@@ -2,13 +2,13 @@
     "name": "villanova",
     "version": "1.0.0",
     "description": "VillaNova - Event App",
-    "main": "src/js/main.js",
+    "main": "frontend/js/main.js",
     "type": "module",
     "scripts": {
-        "sass": "sass src/scss:src/css",
-        "sass:watch": "sass --watch src/scss:src/css",
+        "sass": "sass frontend/scss:frontend/css",
+        "sass:watch": "sass --watch frontend/scss:frontend/css",
         "dev": "npm run sass:watch",
-        "build": "sass src/scss:src/css --style=compressed"
+        "build": "sass frontend/scss:frontend/css --style=compressed"
     },
     "repository": {
         "type": "git",

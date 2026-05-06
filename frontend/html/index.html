@@ -7,7 +7,7 @@
     <title>VillaNova - Événements locaux</title>
     
     <!-- Lien vers le CSS compilé depuis SASS -->
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="../css/main.css">
 </head>
 <body>
     <!-- Conteneur principal avec skip link pour l'accessibilité -->
@@ -51,6 +51,9 @@
                     <li class="nav__item">
                         <a href="#" class="nav__link">Contact</a>
                     </li>
+                    <li>
+                        <button id="btn-logout" class="nav__link nav__link--button">Déconnexion</button>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -89,6 +92,22 @@
             Chargement des événements...
         </div>
         
+        <!-- Section Vidéo de présentation éco-conçue -->
+        <section class="video-section" style="padding: 2rem 1rem;">
+            <div class="video-section__container" style="max-width: 800px; margin: 0 auto; text-align: center;">
+                <h2 style="margin-bottom: 1rem; font-size: 1.5rem;">Découvrez notre région</h2>
+                <!-- Vidéo éco-conçue : pas d'autoplay, preload="metadata", poster présent -->
+                <video 
+                    preload="metadata" 
+                    poster="https://via.placeholder.com/800x450?text=Vid%C3%A9o+de+pr%C3%A9sentation" 
+                    controls 
+                    style="width: 100%; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                    Votre navigateur ne supporte pas la balise vidéo.
+                </video>
+            </div>
+        </section>
+        
         <!-- Conteneur principal des événements -->
         <section class="events-section">
             <div class="events-section__container">
@@ -117,6 +136,6 @@
     </footer>
     
     <!-- Script module principal -->
-    <script type="module" src="js/main.js"></script>
+    <script type="module" src="../js/main.js"></script>
 </body>
 </html>

@@ -16,38 +16,70 @@ export function createEventCard(event) {
     article.setAttribute('tabindex', '0');
     article.setAttribute('aria-label', `${event.title?.fr || 'Événement'}, ${event.location?.city || 'VillaNova'}`);
     
-    /* Image avec lazy loading et format responsif */
+    /* Image avec lazy loading et format responsif (Éco-conception) */
     const imageUrl = event.image?.url || 'https://via.placeholder.com/400x250?text=Événement';
-    const imgHTML = `
-        <img 
-            class="event-card__image" 
-            src="${imageUrl}" 
-            alt="${event.title?.fr || 'Image de l\'événement'}"
-            loading="lazy"
-            width="400"
-            height="250"
-        >
-    `;
+    const picture = document.createElement('picture');
+    
+    const sourceWebP = document.createElement('source');
+    sourceWebP.type = 'image/webp';
+    // Remplacement simple de l'extension pour simuler le fallback WebP
+    sourceWebP.srcset = imageUrl.replace(/\.(jpe?g|png)$/i, '.webp');
+    
+    const img = document.createElement('img');
+    img.className = 'event-card__image';
+    img.src = imageUrl;
+    img.alt = event.title?.fr || 'Image de l\'événement';
+    img.loading = 'lazy';
+    img.width = 400;
+    img.height = 250;
+    
+    picture.appendChild(sourceWebP);
+    picture.appendChild(img);
+    article.appendChild(picture);
     
     /* Contenu de la carte */
-    const contentHTML = `
-        <div class="event-card__content">
-            <span class="event-card__category">${event.category?.name || 'Événement'}</span>
-            <h2 class="event-card__title">${event.title?.fr || 'Sans titre'}</h2>
-            <p class="event-card__description">${event.description?.fr || 'Pas de description disponible'}</p>
-            <p class="event-card__location">
-                <strong>Lieu :</strong> ${event.location?.name || 'Non précisé'}
-            </p>
-            ${event.pricing && event.pricing.length > 0 ? `
-                <p class="event-card__pricing">À partir de ${event.pricing[0].price}€</p>
-            ` : '<p class="event-card__pricing">Tarif à confirmer</p>'}
-            <button class="button button--primary button--small event-card__button">
-                Voir détails
-            </button>
-        </div>
-    `;
+    const content = document.createElement('div');
+    content.className = 'event-card__content';
     
-    article.innerHTML = imgHTML + contentHTML;
+    const category = document.createElement('span');
+    category.className = 'event-card__category';
+    category.textContent = event.category?.name || 'Événement';
+    
+    const title = document.createElement('h2');
+    title.className = 'event-card__title';
+    title.textContent = event.title?.fr || 'Sans titre';
+    
+    const description = document.createElement('p');
+    description.className = 'event-card__description';
+    description.textContent = event.description?.fr || 'Pas de description disponible';
+    
+    const location = document.createElement('p');
+    location.className = 'event-card__location';
+    const locationStrong = document.createElement('strong');
+    locationStrong.textContent = 'Lieu : ';
+    location.appendChild(locationStrong);
+    location.appendChild(document.createTextNode(event.location?.name || 'Non précisé'));
+    
+    const pricing = document.createElement('p');
+    pricing.className = 'event-card__pricing';
+    if (event.pricing && event.pricing.length > 0) {
+        pricing.textContent = `À partir de ${event.pricing[0].price}€`;
+    } else {
+        pricing.textContent = 'Tarif à confirmer';
+    }
+    
+    const button = document.createElement('button');
+    button.className = 'button button--primary button--small event-card__button';
+    button.textContent = 'Voir détails';
+    
+    content.appendChild(category);
+    content.appendChild(title);
+    content.appendChild(description);
+    content.appendChild(location);
+    content.appendChild(pricing);
+    content.appendChild(button);
+    
+    article.appendChild(content);
     
     /* Récupérer l'ID de l'agenda depuis l'événement */
     const agendaUid = event._agendaUid || event.agendaUid;

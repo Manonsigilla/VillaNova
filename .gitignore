@@ -1,6 +1,9 @@
 # Dependencies
 node_modules/
 package-lock.json
+.venv/
+venv/
+__pycache__/
 
 # Environment variables
 .env
@@ -16,8 +19,8 @@ package-lock.json
 .DS_Store
 
 # Build outputs
-src/css/
-src/css.map
+frontend/css/
+frontend/css/*.map
 
 # Logs
 npm-debug.log*

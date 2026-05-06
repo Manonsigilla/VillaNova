@@ -4,8 +4,8 @@
  */
 
 /* ===============================
-   EN-TÊTE
-   ============================== */
+EN-TÊTE
+============================== */
 
 .header {
     background-color: var(--color-bg-secondary);
@@ -76,8 +76,8 @@
 }
 
 /* ===============================
-   NAVIGATION
-   ============================== */
+NAVIGATION
+============================== */
 
 .nav {
     position: relative;
@@ -156,17 +156,33 @@
     }
 }
 
+/* Permet d'utiliser un <button> avec l'apparence d'un lien de navigation */
+button.nav__link--button {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent; /* Conserve l'espace pour le hover défini dans .nav__link */
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+    color: var(--color-error);
+    
+    &:hover {
+        border-bottom-color: var(--color-error);
+        color: var(--color-error);
+    }
+}
+
 /* ===============================
-   CONTENU PRINCIPAL
-   ============================== */
+CONTENU PRINCIPAL
+============================== */
 
 .main {
     flex: 1;
 }
 
 /* ===============================
-   SECTIONS
-   ============================== */
+SECTIONS
+============================== */
 
 .filters-section {
     padding: $spacing-xl $spacing-md;
@@ -201,8 +217,8 @@
 }
 
 /* ===============================
-   GRILLE D'ÉVÉNEMENTS
-   ============================== */
+GRILLE D'ÉVÉNEMENTS
+============================== */
 
 .events-grid {
     display: grid;
@@ -232,8 +248,8 @@
 }
 
 /* ===============================
-   DÉTAIL D'ÉVÉNEMENT
-   ============================== */
+DÉTAIL D'ÉVÉNEMENT
+============================== */
 
 .event-detail {
     padding: $spacing-xl $spacing-md;
@@ -322,8 +338,8 @@
 }
 
 /* ===============================
-   PIED DE PAGE
-   ============================== */
+PIED DE PAGE
+============================== */
 
 .footer {
     background-color: var(--color-bg-secondary);

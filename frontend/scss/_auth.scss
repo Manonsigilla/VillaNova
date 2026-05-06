@@ -1,0 +1,109 @@
+/* Utilitaires globaux essentiels */
+.hidden {
+    display: none !important;
+}
+
+/* Conteneur principal (Flexbox pour centrer) */
+.auth-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 150px);
+    width: 100%;
+    padding: $spacing-xl $spacing-md;
+}
+
+/* Carte contenant les formulaires */
+.auth-panel {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: $border-radius-lg;
+    padding: $spacing-2xl;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: $shadow-md;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+    text-align: center;
+}
+
+.auth-panel h1, 
+.auth-panel h2 {
+    color: var(--color-primary);
+    margin-bottom: $spacing-sm;
+}
+
+/* Boutons de choix */
+.auth-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+    margin-top: $spacing-md;
+}
+
+.btn-primary, 
+.btn-secondary {
+    width: 100%;
+    padding: $spacing-md;
+    border-radius: $border-radius-md;
+    font-weight: $font-weight-semibold;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: $font-size-base;
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: #ffffff;
+    border: none;
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+}
+
+/* Structure des formulaires */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+    text-align: left;
+    width: 100%;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+}
+
+.form-group label {
+    font-size: $font-size-small;
+    font-weight: $font-weight-medium;
+}
+
+.form-group input {
+    padding: $spacing-md;
+    border: 1px solid var(--color-border);
+    border-radius: $border-radius-sm;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+}
+
+.btn-link {
+    background: none;
+    border: none;
+    color: var(--color-text-secondary);
+    text-decoration: underline;
+    cursor: pointer;
+    margin-top: $spacing-sm;
+}
+
+.error-message {
+    color: var(--color-error);
+    font-size: $font-size-xs;
+}
