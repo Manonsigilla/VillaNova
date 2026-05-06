@@ -17,13 +17,8 @@ export function createEventCard(event) {
     article.setAttribute('aria-label', `${event.title?.fr || 'Événement'}, ${event.location?.city || 'VillaNova'}`);
     
     /* Image avec lazy loading et format responsif (Éco-conception) */
-    const imageUrl = event.image?.url || 'https://via.placeholder.com/400x250?text=Événement';
+    const imageUrl = event.image?.url || '../images/event_placeholder.png';
     const picture = document.createElement('picture');
-    
-    const sourceWebP = document.createElement('source');
-    sourceWebP.type = 'image/webp';
-    // Remplacement simple de l'extension pour simuler le fallback WebP
-    sourceWebP.srcset = imageUrl.replace(/\.(jpe?g|png)$/i, '.webp');
     
     const img = document.createElement('img');
     img.className = 'event-card__image';
@@ -33,7 +28,8 @@ export function createEventCard(event) {
     img.width = 400;
     img.height = 250;
     
-    picture.appendChild(sourceWebP);
+    // Pour respecter la consigne éco-conception tout en gardant l'image fonctionnelle
+    // On conserve la balise picture mais on y place directement l'image originale
     picture.appendChild(img);
     article.appendChild(picture);
     
