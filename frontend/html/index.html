@@ -24,8 +24,6 @@
                 
                 <!-- Toggle jour/nuit moderne et intuitif -->
                 <button class="header__theme-toggle" aria-label="Basculer le mode sombre" aria-pressed="false" id="theme-toggle">
-                    <svg class="theme-toggle__icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-                    <svg class="theme-toggle__icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                     <span class="theme-toggle__thumb" aria-hidden="true"></span>
                 </button>
             </div>
@@ -166,6 +164,60 @@
                     </div>
                 </div>
             </section>
+            <!-- Vue : Conditions d'Utilisation -->
+            <section id="view-cgu" class="view-section hidden">
+                <div class="auth-container">
+                    <div class="auth-card" style="max-width: 800px; margin: 0 auto; text-align: left;">
+                        <h2 class="auth-title">Conditions d'Utilisation</h2>
+                        <div class="legal-content" style="line-height: 1.6; color: var(--color-text-secondary);">
+                            <p>Bienvenue sur VillaNova. En utilisant notre plateforme, vous acceptez les conditions suivantes :</p>
+                            <h3 style="color: var(--color-text); margin-top: 20px;">1. Objet du Service</h3>
+                            <p>VillaNova est un agrégateur d'événements locaux. Nous facilitons la découverte d'activités culturelles, sportives et sociales dans votre région.</p>
+                            <h3 style="color: var(--color-text); margin-top: 20px;">2. Responsabilité</h3>
+                            <p>Les informations sur les événements proviennent de sources tierces (OpenAgenda). VillaNova ne peut être tenu responsable des modifications d'horaires ou d'annulations décidées par les organisateurs.</p>
+                            <h3 style="color: var(--color-text); margin-top: 20px;">3. Utilisation loyale</h3>
+                            <p>Toute tentative d'extraction massive de données ou de perturbation du service est strictement interdite.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Vue : Politique de Confidentialité -->
+            <section id="view-privacy" class="view-section hidden">
+                <div class="auth-container">
+                    <div class="auth-card" style="max-width: 800px; margin: 0 auto; text-align: left;">
+                        <h2 class="auth-title">Politique de Confidentialité</h2>
+                        <div class="legal-content" style="line-height: 1.6; color: var(--color-text-secondary);">
+                            <p>La protection de vos données est une priorité pour VillaNova.</p>
+                            <h3 style="color: var(--color-text); margin-top: 20px;">1. Données collectées</h3>
+                            <p>Nous ne collectons aucune donnée personnelle sans votre consentement. Les formulaires de contact ne sont utilisés que pour répondre à vos demandes.</p>
+                            <h3 style="color: var(--color-text); margin-top: 20px;">2. Cookies</h3>
+                            <p>Nous utilisons uniquement des cookies techniques nécessaires au bon fonctionnement du site (par exemple, pour mémoriser votre choix de thème sombre/clair).</p>
+                            <h3 style="color: var(--color-text); margin-top: 20px;">3. Vos droits</h3>
+                            <p>Conformément au RGPD, vous disposez d'un droit d'accès et de rectification de vos données. Pour toute demande, utilisez notre formulaire de contact.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Vue : Accessibilité -->
+            <section id="view-accessibility" class="view-section hidden">
+                <div class="auth-container">
+                    <div class="auth-card" style="max-width: 800px; margin: 0 auto; text-align: left;">
+                        <h2 class="auth-title">Accessibilité</h2>
+                        <div class="legal-content" style="line-height: 1.6; color: var(--color-text-secondary);">
+                            <p>VillaNova s'engage à rendre son site web accessible à tous les utilisateurs, quelles que soient leurs capacités physiques ou cognitives.</p>
+                            <h3 style="color: var(--color-text); margin-top: 20px;">Nos engagements :</h3>
+                            <ul style="margin-left: 20px; margin-top: 10px;">
+                                <li>Respect des contrastes de couleurs pour une meilleure lisibilité.</li>
+                                <li>Navigation possible au clavier uniquement.</li>
+                                <li>Prise en charge des lecteurs d'écran (ARIA labels).</li>
+                                <li>Option de réduction des animations (Prefers-reduced-motion).</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
     </main>
     
@@ -175,9 +227,9 @@
             <div class="footer__content">
                 <p class="footer__text">VillaNova - Plateforme de gestion d'événements locaux</p>
                 <ul class="footer__links">
-                    <li><a href="#" class="footer__link">Conditions d'utilisation</a></li>
-                    <li><a href="#" class="footer__link">Politique de confidentialité</a></li>
-                    <li><a href="#" class="footer__link">Accessibilité</a></li>
+                    <li><a href="#" class="footer__link" data-target="view-cgu">Conditions d'utilisation</a></li>
+                    <li><a href="#" class="footer__link" data-target="view-privacy">Politique de confidentialité</a></li>
+                    <li><a href="#" class="footer__link" data-target="view-accessibility">Accessibilité</a></li>
                 </ul>
             </div>
             <p class="footer__copyright">Copyright 2026 - VillaNova. Tous droits réservés.</p>

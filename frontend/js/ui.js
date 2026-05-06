@@ -432,7 +432,7 @@ export function initializeContactForm() {
  * Gère la navigation SPA (Single Page Application)
  */
 export function initializeSPATabs() {
-    const navLinks = document.querySelectorAll('.nav__link[data-target]');
+    const navLinks = document.querySelectorAll('.nav__link[data-target], .footer__link[data-target]');
     const views = document.querySelectorAll('.view-section');
     
     navLinks.forEach(link => {

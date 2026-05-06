@@ -22,31 +22,6 @@
     @include focus-visible;
 }
 
-/* Icônes SVG à l'intérieur du track (toujours au-dessus du "pouce") */
-.theme-toggle__icon {
-    position: absolute;
-    top: 7px; /* Centrage vertical (28px - 14px) / 2 */
-    width: 14px;
-    height: 14px;
-    z-index: 3;
-    pointer-events: none;
-    transition: color 0.4s ease, opacity 0.4s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.icon-sun {
-    left: 7px; /* Centrage horizontal dans le pouce (22px - 14px)/2 + 3px */
-    color: #E67E22; /* Orange vif sur le fond blanc du pouce */
-    opacity: 1;
-    transform: rotate(0deg) scale(1);
-}
-
-.icon-moon {
-    right: 7px;
-    color: #8A817C; /* Gris subtil sur le fond du track */
-    opacity: 0.7;
-    transform: rotate(0deg) scale(1);
-}
-
 /* Le "pouce" glissant (cercle de sélection blanc) */
 .theme-toggle__thumb {
     position: absolute;
@@ -67,16 +42,6 @@
 
     .theme-toggle__thumb {
         transform: translateX(28px);
-    }
-
-    .icon-sun {
-        color: #F4F3EE; /* Devient off-white sur le fond Peach du track */
-        opacity: 0.7;
-    }
-
-    .icon-moon {
-        color: #463F3A; /* Devient dark gray intense sur le fond blanc du pouce */
-        opacity: 1;
     }
 }
 
