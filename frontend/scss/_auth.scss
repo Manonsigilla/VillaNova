@@ -12,20 +12,80 @@
     min-height: calc(100vh - 150px);
     width: 100%;
     padding: $spacing-xl $spacing-md;
+    
+    /* Image de fond avec overlay assombri */
+    background-image: linear-gradient(rgba(18, 24, 38, 0.6), rgba(18, 24, 38, 0.8)), url('../images/video_poster.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 /* Nouvelle Carte d'authentification moderne (Glassmorphism / Soft shadow) */
 .auth-card {
-    background-color: var(--color-bg-secondary);
-    border: 1px solid var(--color-border);
+    /* Glassmorphism */
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    
     border-radius: 20px;
     padding: $spacing-2xl;
     width: 100%;
     max-width: 480px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
     position: relative;
     overflow: hidden;
     transition: all 0.3s ease;
+    
+    /* Forcer le texte en blanc/clair pour le contraste sur le fond sombre */
+    color: #ffffff;
+}
+
+[data-theme="dark"] .auth-card {
+    background: rgba(18, 24, 38, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Redéfinir la couleur des titres pour le glassmorphism */
+.auth-form-container h2 {
+    color: #ffffff;
+    margin-bottom: $spacing-xs;
+    font-size: 1.75rem;
+    text-align: center;
+}
+
+.auth-subtitle {
+    color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    margin-bottom: $spacing-xl;
+    font-size: $font-size-small;
+}
+
+.form-group label {
+    font-size: $font-size-small;
+    font-weight: $font-weight-medium;
+    color: #ffffff;
+}
+
+.form-group input {
+    padding: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    font-size: $font-size-base;
+    transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+}
+
+.form-group input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.form-group input:focus {
+    outline: none;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(55, 138, 221, 0.25);
 }
 
 /* Toggle Tabs - Container */
