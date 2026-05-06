@@ -42,8 +42,14 @@
                     <li class="nav__item">
                         <a href="#" class="nav__link nav__link--active" data-target="view-events">Événements</a>
                     </li>
-                    <li class="nav__item">
-                        <a href="#filters" class="nav__link" data-target="view-events" data-scroll="true">Par catégories</a>
+                    <li class="nav__item nav__item--has-dropdown">
+                        <a href="#filters" class="nav__link" data-target="view-events" data-scroll="true" id="nav-categories-link">
+                            Par catégories 
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </a>
+                        <ul class="nav__dropdown" id="nav-categories-dropdown">
+                            <!-- Rempli dynamiquement -->
+                        </ul>
                     </li>
                     <li class="nav__item">
                         <a href="#" class="nav__link" data-target="view-reservations">Mes réservations</a>
@@ -68,28 +74,19 @@
             <div class="filters-section__container">
                 <h2 class="filters-section__title">Explorez les événements</h2>
                 
-                <!-- Barre de recherche intelligente -->
-                <div class="search-bar">
-                    <input type="text" id="category-search" class="search-input" placeholder="Rechercher un événement, une catégorie, un lieu..." aria-label="Rechercher">
-                </div>
-                
-                <!-- Groupe de filtres rapides -->
-                <div class="filters" role="region" aria-label="Filtres d'événements">
-                    <button class="filters__button filters__button--active" data-filter="all" aria-pressed="true">
-                        Voir tout
-                    </button>
-                    <button class="filters__button" data-filter="concert" aria-pressed="false">
-                        Concert
-                    </button>
-                    <button class="filters__button" data-filter="theatre" aria-pressed="false">
-                        Théâtre
-                    </button>
-                    <button class="filters__button" data-filter="cinema" aria-pressed="false">
-                        Cinéma
-                    </button>
-                    <button class="filters__button" data-filter="randonnee" aria-pressed="false">
-                        Randonnées
-                    </button>
+                <div class="search-filters-wrapper">
+                    <!-- Barre de recherche intelligente -->
+                    <div class="search-bar">
+                        <input type="text" id="category-search" class="search-input" placeholder="Rechercher un événement, une catégorie, un lieu..." aria-label="Rechercher">
+                    </div>
+                    
+                    <!-- Groupe de filtres rapides (historique) -->
+                    <div class="filters" id="recent-filters" role="region" aria-label="Filtres d'événements">
+                        <button class="filters__button filters__button--active" data-filter="all" aria-pressed="true">
+                            Voir tout
+                        </button>
+                        <!-- Boutons générés dynamiquement par l'historique -->
+                    </div>
                 </div>
             </div>
         </section>

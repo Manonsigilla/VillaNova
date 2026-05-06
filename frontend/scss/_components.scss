@@ -350,14 +350,29 @@
 }
 
 /* ===============================
-   RECHERCHE INTELLIGENTE
+   RECHERCHE INTELLIGENTE ET FILTRES
    ============================== */
+
+.search-filters-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+    margin-bottom: $spacing-xl;
+    
+    @include tablet {
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+    }
+}
 
 .search-bar {
     width: 100%;
-    max-width: 600px;
-    margin: 0 auto $spacing-xl;
     position: relative;
+    
+    @include tablet {
+        max-width: 400px;
+    }
 }
 
 .search-input {

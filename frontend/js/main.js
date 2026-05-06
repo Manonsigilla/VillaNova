@@ -15,7 +15,9 @@ import {
     toggleTheme,
     initializeNavigation,
     initializeFilters,
-    initializeSPATabs
+    initializeSPATabs,
+    initializeDynamicCategories,
+    initializeContactForm
 } from './ui.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -72,6 +74,9 @@ async function loadEvents() {
         /* Afficher les cartes */
         renderEventCards(villanovaEvents, container);
         
+        /* Initialiser le menu des catégories dynamiques */
+        initializeDynamicCategories(allEvents);
+        
         /* Initialiser les filtres */
         initializeFilters(allEvents);
         
@@ -102,6 +107,9 @@ function initializeUI() {
     
     /* Initialiser la navigation SPA (onglets) */
     initializeSPATabs();
+    
+    /* Initialiser le formulaire de contact */
+    initializeContactForm();
 }
 
 /**

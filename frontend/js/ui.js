@@ -234,14 +234,67 @@ export function initializeNavigation() {
 }
 
 /**
- * Gère les filtres d'événements et la recherche intelligente
+ * Gère les filtres d'événements, la recherche intelligente et l'historique
  * @param {Array} events - Liste complète des événements
  */
 export function initializeFilters(events) {
-    const filterButtons = document.querySelectorAll('.filters__button');
     const searchInput = document.getElementById('category-search');
     const container = document.getElementById('events-container');
+    const recentFiltersContainer = document.getElementById('recent-filters');
     
+    let recentSearches = JSON.parse(localStorage.getItem('vn_recent_searches') || '[]');
+    
+    // Rendre les filtres récents
+    const renderRecentFilters = () => {
+        if (!recentFiltersContainer) return;
+        
+        // Toujours garder le bouton "Voir tout"
+        let html = `<button class="filters__button filters__button--active" data-filter="all" aria-pressed="true">Voir tout</button>`;
+        
+        recentSearches.forEach(term => {
+            html += `<button class="filters__button" data-filter="${term}" aria-pressed="false">${term}</button>`;
+        });
+        
+        recentFiltersContainer.innerHTML = html;
+        
+        // Réattacher les événements
+        const filterButtons = document.querySelectorAll('.filters__button');
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                filterButtons.forEach(btn => btn.setAttribute('aria-pressed', 'false'));
+                button.setAttribute('aria-pressed', 'true');
+                
+                if (button.getAttribute('data-filter') !== 'all') {
+                    if (searchInput) searchInput.value = button.getAttribute('data-filter');
+                } else {
+                    if (searchInput) searchInput.value = '';
+                }
+                applyFilters();
+            });
+        });
+    };
+    
+    // Enregistrer une nouvelle recherche
+    const saveSearch = (term) => {
+        if (!term || term.trim() === '') return;
+        const normalized = term.trim().toLowerCase();
+        
+        // Retirer si existe déjà pour le remettre au début
+        recentSearches = recentSearches.filter(s => s.toLowerCase() !== normalized);
+        
+        // Capitaliser la première lettre pour l'affichage
+        const displayTerm = normalized.charAt(0).toUpperCase() + normalized.slice(1);
+        recentSearches.unshift(displayTerm);
+        
+        // Limiter à 4
+        if (recentSearches.length > 4) {
+            recentSearches = recentSearches.slice(0, 4);
+        }
+        
+        localStorage.setItem('vn_recent_searches', JSON.stringify(recentSearches));
+        renderRecentFilters();
+    };
+
     // Fonction centrale de filtrage
     const applyFilters = () => {
         const searchTerm = (searchInput?.value || '').toLowerCase().trim();
@@ -249,7 +302,6 @@ export function initializeFilters(events) {
         const activeFilter = activeBtn ? activeBtn.getAttribute('data-filter') : 'all';
         
         const filteredEvents = events.filter(event => {
-            // 1. Filtre par texte (recherche intelligente sur titre, description, mots-clés)
             const titleFr = (event.title?.fr || '').toLowerCase();
             const descFr = (event.description?.fr || '').toLowerCase();
             const keywords = Array.isArray(event.keywords?.fr) ? event.keywords.fr.join(' ').toLowerCase() : '';
@@ -257,7 +309,6 @@ export function initializeFilters(events) {
             const searchString = `${titleFr} ${descFr} ${keywords}`;
             const matchesSearch = searchTerm === '' || searchString.includes(searchTerm);
             
-            // 2. Filtre par bouton rapide (tag)
             let matchesTag = true;
             if (activeFilter !== 'all') {
                 matchesTag = searchString.includes(activeFilter.toLowerCase());
@@ -269,22 +320,110 @@ export function initializeFilters(events) {
         renderEventCards(filteredEvents, container);
     };
 
-    // Écouteur pour la barre de recherche intelligente
+    // Initialiser l'affichage
+    renderRecentFilters();
+
+    // Écouteur pour la recherche en temps réel
     if (searchInput) {
         searchInput.addEventListener('input', applyFilters);
-    }
-    
-    // Écouteurs pour les boutons rapides
-    filterButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            // Mettre à jour l'état visuel des boutons
+        
+        // Sauvegarder la recherche quand l'utilisateur appuie sur Entrée ou quitte le champ
+        searchInput.addEventListener('change', () => {
+            saveSearch(searchInput.value);
+            // Remettre le bouton actif sur "Voir tout" car on fait une recherche manuelle
+            const filterButtons = document.querySelectorAll('.filters__button');
             filterButtons.forEach(btn => btn.setAttribute('aria-pressed', 'false'));
-            button.setAttribute('aria-pressed', 'true');
+            const allBtn = document.querySelector('.filters__button[data-filter="all"]');
+            if (allBtn) allBtn.setAttribute('aria-pressed', 'true');
+        });
+        
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                searchInput.blur(); // Déclenche l'événement change
+            }
+        });
+    }
+}
+
+/**
+ * Génère dynamiquement le menu des catégories
+ */
+export function initializeDynamicCategories(events) {
+    const dropdownList = document.getElementById('nav-categories-dropdown');
+    const dropdownToggle = document.getElementById('nav-categories-link');
+    const searchInput = document.getElementById('category-search');
+    if (!dropdownList || !events.length) return;
+    
+    // Extraire les mots-clés uniques
+    const allKeywords = new Set();
+    events.forEach(e => {
+        if (Array.isArray(e.keywords?.fr)) {
+            e.keywords.fr.forEach(k => {
+                if (k && k.trim() !== '') {
+                    // Capitaliser
+                    allKeywords.add(k.trim().charAt(0).toUpperCase() + k.trim().slice(1).toLowerCase());
+                }
+            });
+        }
+    });
+    
+    const sortedCategories = Array.from(allKeywords).sort().slice(0, 15); // Limiter pour l'affichage
+    
+    let html = '';
+    sortedCategories.forEach(cat => {
+        html += `<li><a href="#filters" class="nav__dropdown-link" data-category="${cat}">${cat}</a></li>`;
+    });
+    dropdownList.innerHTML = html;
+    
+    // Événements sur les liens du dropdown
+    dropdownList.querySelectorAll('.nav__dropdown-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+            const cat = link.getAttribute('data-category');
+            if (searchInput) {
+                searchInput.value = cat;
+                // Déclencher la recherche et la sauvegarde
+                searchInput.dispatchEvent(new Event('input'));
+                searchInput.dispatchEvent(new Event('change'));
+            }
             
-            // Appliquer les filtres
-            applyFilters();
+            // Fermer le menu sur mobile
+            dropdownList.classList.remove('active');
+            if (dropdownToggle) dropdownToggle.classList.remove('expanded');
         });
     });
+    
+    // Gestion du menu sur mobile (clic)
+    if (dropdownToggle) {
+        dropdownToggle.addEventListener('click', (e) => {
+            // Uniquement si on est sur mobile (sinon c'est géré par CSS hover)
+            if (window.innerWidth < 768) {
+                e.preventDefault();
+                dropdownList.classList.toggle('active');
+                dropdownToggle.classList.toggle('expanded');
+            }
+        });
+    }
+}
+
+/**
+ * Gère le formulaire de contact
+ */
+export function initializeContactForm() {
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('contact-name').value;
+            const email = document.getElementById('contact-email').value;
+            const message = document.getElementById('contact-message').value;
+            
+            const contactData = { name, email, message, date: new Date().toISOString() };
+            localStorage.setItem('vn_last_contact_message', JSON.stringify(contactData));
+            
+            alert('Message envoyé avec succès et enregistré en local !');
+            contactForm.reset();
+        });
+    }
 }
 
 /**
@@ -296,23 +435,27 @@ export function initializeSPATabs() {
     
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
-            // Si c'est juste un lien de défilement vers une ancre, on le laisse faire son comportement natif
             if (link.getAttribute('data-scroll') === 'true') {
-                // S'assurer qu'on est sur la vue événement d'abord
                 const targetId = link.getAttribute('data-target');
                 switchToView(targetId);
-                return; // Laisse le href="#filters" fonctionner naturellement
+                return;
             }
             
             e.preventDefault();
             const targetId = link.getAttribute('data-target');
             
-            // Mettre à jour les liens actifs
             document.querySelectorAll('.nav__link').forEach(nav => nav.classList.remove('nav__link--active'));
             link.classList.add('nav__link--active');
             
-            // Basculer les vues
             switchToView(targetId);
+            
+            // Fermer le menu mobile si ouvert
+            const navToggle = document.getElementById('nav-toggle');
+            const navMenu = document.getElementById('nav-menu');
+            if (window.innerWidth < 768 && navToggle && navToggle.getAttribute('aria-expanded') === 'true') {
+                navToggle.setAttribute('aria-expanded', 'false');
+                navMenu.setAttribute('aria-hidden', 'true');
+            }
         });
     });
     

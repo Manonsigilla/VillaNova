@@ -125,11 +125,12 @@ NAVIGATION
 
 /* Menu navigation */
 .nav__list {
-    display: flex;
+    display: none; /* Masqué sur mobile par défaut */
     gap: $spacing-lg;
     list-style: none;
     
     @include tablet {
+        display: flex; /* Visible sur desktop */
         flex-direction: row;
     }
 }
@@ -181,8 +182,102 @@ CONTENU PRINCIPAL
 }
 
 /* ===============================
-SECTIONS
-============================== */
+   MENU DÉROULANT (Catégories)
+   ============================== */
+
+.nav__item--has-dropdown {
+    position: relative;
+    
+    @include tablet {
+        &:hover .nav__dropdown {
+            display: flex;
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+    }
+}
+
+/* Position sticky pour l'entête du menu en mobile */
+.nav__item--has-dropdown > .nav__link {
+    position: sticky;
+    top: 0;
+    background-color: var(--color-bg-secondary);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+    svg {
+        transition: transform $transition-fast;
+    }
+    
+    &.expanded svg {
+        transform: rotate(180deg);
+    }
+    
+    @include tablet {
+        position: static;
+        background-color: transparent;
+        justify-content: flex-start;
+        gap: $spacing-xs;
+    }
+}
+
+.nav__dropdown {
+    display: none;
+    flex-direction: column;
+    list-style: none;
+    padding: $spacing-sm 0;
+    margin-left: $spacing-md; /* Indentation sur mobile */
+    border-left: 1px solid var(--color-border);
+    max-height: 40vh; /* Limite de hauteur sur mobile */
+    overflow-y: auto;
+    
+    &.active {
+        display: flex; /* Pour mobile quand cliqué */
+    }
+    
+    @include tablet {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        margin-left: 0;
+        border-left: none;
+        background-color: var(--color-bg-secondary);
+        border-radius: $border-radius-md;
+        box-shadow: $shadow-md;
+        min-width: 220px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(10px);
+        transition: all $transition-fast;
+        z-index: 20;
+        display: flex; /* Toujours flex sur desktop, géré par opacity/visibility */
+        max-height: 60vh;
+    }
+}
+
+.nav__dropdown-link {
+    display: block;
+    padding: $spacing-sm $spacing-lg;
+    color: var(--color-text);
+    text-decoration: none;
+    transition: all $transition-fast;
+    font-size: $font-size-small;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    
+    &:hover {
+        background-color: var(--color-bg);
+        color: var(--color-primary);
+    }
+}
+
+/* ===============================
+   HERO SECTION
+   ============================== */
 
 .filters-section {
     padding: $spacing-xl $spacing-md;
