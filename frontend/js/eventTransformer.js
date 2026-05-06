@@ -129,6 +129,7 @@ export function transformEventToVillaNova(event, index) {
         dates: event.dates,
         location: getRandomLocation(),
         category: event.category,
+        keywords: event.keywords, // Ajout crucial pour les filtres et le dropdown
         pricing: event.pricing,
         _agendaTitle: event._agendaTitle || 'Agenda VillaNova',
         _agendaUid: event._agendaUid,
