@@ -99,15 +99,13 @@
             <div class="video-section__container">
                 <h2 class="video-section__title">Découvrez notre région</h2>
                 <!-- Vidéo YouTube intégrée -->
-                <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <div class="video-container">
                     <iframe 
-                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-                        src="https://www.youtube.com/embed/LXb3EKWsInQ?rel=0" 
-                        title="Vidéo de présentation VillaNova" 
-                        frameborder="0" 
+                        class="video-iframe" 
+                        src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+                        title="YouTube video player" 
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                        allowfullscreen
-                        loading="lazy">
+                        allowfullscreen>
                     </iframe>
                 </div>
             </div>
@@ -145,7 +143,7 @@
             <section class="page-section">
                 <div class="page-section__container">
                     <h2 class="page-section__title">Nous Contacter</h2>
-                    <div class="contact-card auth-card" style="margin: 0 auto;">
+                    <div class="contact-card auth-card legal-card">
                         <form id="contact-form" onsubmit="event.preventDefault(); alert('Message envoyé avec succès !');">
                             <div class="form-group">
                                 <label for="contact-name">Nom complet</label>
@@ -157,7 +155,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="contact-message">Message</label>
-                                <textarea id="contact-message" rows="5" placeholder="Comment pouvons-nous vous aider ?" style="width: 100%; padding: 14px; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 10px; background-color: rgba(255, 255, 255, 0.1); color: #ffffff;" required></textarea>
+                                <textarea id="contact-message" rows="5" placeholder="Comment pouvons-nous vous aider ?" class="form-textarea" required></textarea>
                             </div>
                             <button type="submit" class="btn-primary">Envoyer le message</button>
                         </form>
@@ -167,21 +165,21 @@
             <!-- Vue : Conditions d'Utilisation -->
             <section id="view-cgu" class="view-section hidden">
                 <div class="auth-container">
-                    <div class="auth-card" style="max-width: 900px; margin: 0 auto; text-align: left;">
+                    <div class="auth-card legal-card">
                         <h2 class="auth-title">Conditions Générales d'Utilisation</h2>
-                        <div class="legal-content" style="line-height: 1.8; color: var(--color-text-secondary); font-size: 0.95rem;">
+                        <div class="legal-content">
                             <p>Dernière mise à jour : 6 mai 2026</p>
                             
-                            <h3 style="color: var(--color-text); margin-top: 25px; font-size: 1.2rem;">1. Présentation de la plateforme</h3>
+                            <h3 class="legal-subtitle">1. Présentation de la plateforme</h3>
                             <p>VillaNova est un service numérique innovant dédié à la promotion et à la centralisation des événements culturels, sportifs et sociaux. Notre mission est de renforcer le lien social en facilitant la découverte d'activités locales.</p>
                             
-                            <h3 style="color: var(--color-text); margin-top: 25px; font-size: 1.2rem;">2. Propriété Intellectuelle</h3>
+                            <h3 class="legal-subtitle">2. Propriété Intellectuelle</h3>
                             <p>L'ensemble du contenu présent sur VillaNova (logos, textes, charte graphique) est protégé par le droit d'auteur. Toute reproduction, même partielle, est soumise à autorisation préalable.</p>
                             
-                            <h3 style="color: var(--color-text); margin-top: 25px; font-size: 1.2rem;">3. Données de tiers (OpenAgenda)</h3>
+                            <h3 class="legal-subtitle">3. Données de tiers (OpenAgenda)</h3>
                             <p>VillaNova agrège des données issues de l'API OpenAgenda. Bien que nous nous efforcions de maintenir ces informations à jour, nous ne pouvons garantir l'exactitude des horaires ou des lieux fournis par les organisateurs tiers.</p>
                             
-                            <h3 style="color: var(--color-text); margin-top: 25px; font-size: 1.2rem;">4. Responsabilité de l'utilisateur</h3>
+                            <h3 class="legal-subtitle">4. Responsabilité de l'utilisateur</h3>
                             <p>L'utilisateur s'engage à utiliser le service de manière responsable. Toute utilisation abusive des formulaires de contact ou tentative de piratage de la plateforme entraînera des poursuites.</p>
                         </div>
                     </div>
@@ -191,21 +189,21 @@
             <!-- Vue : Politique de Confidentialité -->
             <section id="view-privacy" class="view-section hidden">
                 <div class="auth-container">
-                    <div class="auth-card" style="max-width: 900px; margin: 0 auto; text-align: left;">
+                    <div class="auth-card legal-card">
                         <h2 class="auth-title">Politique de Confidentialité</h2>
-                        <div class="legal-content" style="line-height: 1.8; color: var(--color-text-secondary); font-size: 0.95rem;">
+                        <div class="legal-content">
                             <p>VillaNova accorde une importance capitale à la protection de votre vie privée et de vos données personnelles.</p>
                             
-                            <h3 style="color: var(--color-text); margin-top: 25px; font-size: 1.2rem;">1. Collecte et finalité</h3>
+                            <h3 class="legal-subtitle">1. Collecte et finalité</h3>
                             <p>Nous collectons uniquement les informations strictement nécessaires à la fourniture de nos services. Les données transmises via le formulaire de contact (nom, email) ne sont utilisées que pour le traitement de votre demande spécifique.</p>
                             
-                            <h3 style="color: var(--color-text); margin-top: 25px; font-size: 1.2rem;">2. Conservation des données</h3>
+                            <h3 class="legal-subtitle">2. Conservation des données</h3>
                             <p>Vos données de contact sont conservées pour une durée maximale de 12 mois après le dernier échange, sauf demande explicite de suppression de votre part.</p>
                             
-                            <h3 style="color: var(--color-text); margin-top: 25px; font-size: 1.2rem;">3. Vos droits (RGPD)</h3>
+                            <h3 class="legal-subtitle">3. Vos droits (RGPD)</h3>
                             <p>Conformément au Règlement Général sur la Protection des Données, vous disposez d'un droit d'accès, de rectification, de portabilité et de suppression de vos données. Pour exercer ces droits, vous pouvez nous contacter via l'onglet dédié.</p>
                             
-                            <h3 style="color: var(--color-text); margin-top: 25px; font-size: 1.2rem;">4. Cookies techniques</h3>
+                            <h3 class="legal-subtitle">4. Cookies techniques</h3>
                             <p>VillaNova n'utilise pas de cookies publicitaires. Les seuls cookies présents sont techniques et servent à assurer la sécurité du site et la mémorisation de vos préférences de navigation (comme le mode sombre).</p>
                         </div>
                     </div>
@@ -215,23 +213,23 @@
             <!-- Vue : Accessibilité -->
             <section id="view-accessibility" class="view-section hidden">
                 <div class="auth-container">
-                    <div class="auth-card" style="max-width: 900px; margin: 0 auto; text-align: left;">
+                    <div class="auth-card legal-card">
                         <h2 class="auth-title">Déclaration d'Accessibilité</h2>
-                        <div class="legal-content" style="line-height: 1.8; color: var(--color-text-secondary); font-size: 0.95rem;">
+                        <div class="legal-content">
                             <p>VillaNova s'engage à rendre son service accessible, conformément à l'article 47 de la loi n° 2005-102 du 11 février 2005.</p>
                             
-                            <h3 style="color: var(--color-text); margin-top: 25px; font-size: 1.2rem;">État de conformité</h3>
+                            <h3 class="legal-subtitle">État de conformité</h3>
                             <p>VillaNova est en conformité partielle avec le RGAA (Référentiel Général d'Amélioration de l'Accessibilité). Nous travaillons continuellement à l'amélioration de l'expérience utilisateur.</p>
                             
-                            <h3 style="color: var(--color-text); margin-top: 25px; font-size: 1.2rem;">Mesures d'accessibilité</h3>
-                            <ul style="margin-left: 20px; margin-top: 15px; list-style-type: disc;">
+                            <h3 class="legal-subtitle">Mesures d'accessibilité</h3>
+                            <ul class="legal-list">
                                 <li>Contraste des couleurs optimisé pour les malvoyants.</li>
                                 <li>Structure sémantique HTML5 pour faciliter la lecture par les synthèses vocales.</li>
                                 <li>Navigation par tabulation entièrement fonctionnelle.</li>
                                 <li>Support des préférences système (réduction des animations).</li>
                             </ul>
                             
-                            <h3 style="color: var(--color-text); margin-top: 25px; font-size: 1.2rem;">Retours et contact</h3>
+                            <h3 class="legal-subtitle">Retours et contact</h3>
                             <p>Si vous n'arrivez pas à accéder à un contenu ou à un service, vous pouvez nous contacter pour être orienté vers une alternative accessible ou obtenir le contenu sous une autre forme.</p>
                         </div>
                     </div>

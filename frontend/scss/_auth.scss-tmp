@@ -1,0 +1,47 @@
+/* Utilitaires globaux essentiels */
+.hidden {
+    display: none !important;
+}
+
+/* Conteneur principal (Flexbox pour centrer) */
+.auth-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 150px);
+    width: 100%;
+    padding: $spacing-xl $spacing-md;
+    
+    /* Image de fond avec overlay assombri */
+    background-image: linear-gradient(rgba(18, 24, 38, 0.6), rgba(18, 24, 38, 0.8)), url('../images/video_poster.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Pages Légales (Extensions de cartes auth) */
+.legal-card {
+    max-width: 900px !important;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.legal-content {
+    line-height: 1.8;
+    color: var(--color-text-secondary);
+    font-size: 0.95rem;
+}
+
+.legal-subtitle {
+    color: var(--color-text);
+    margin-top: 25px;
+    font-size: 1.2rem;
+    font-weight: $font-weight-semibold;
+}
+
+.legal-list {
+    margin-left: $spacing-lg;
+    margin-top: $spacing-md;
+    list-style-type: disc;
+}

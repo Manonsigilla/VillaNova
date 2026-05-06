@@ -20,6 +20,32 @@
     background-repeat: no-repeat;
 }
 
+/* Pages Légales (Extensions de cartes auth) */
+.legal-card {
+    max-width: 900px !important;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.legal-content {
+    line-height: 1.8;
+    color: var(--color-text-secondary);
+    font-size: 0.95rem;
+}
+
+.legal-subtitle {
+    color: var(--color-text);
+    margin-top: 25px;
+    font-size: 1.2rem;
+    font-weight: $font-weight-semibold;
+}
+
+.legal-list {
+    margin-left: $spacing-lg;
+    margin-top: $spacing-md;
+    list-style-type: disc;
+}
+
 /* Nouvelle Carte d'authentification moderne (Glassmorphism / Soft shadow) */
 .auth-card {
     /* Glassmorphism */
@@ -31,27 +57,10 @@
     border-radius: 20px;
     padding: $spacing-2xl;
     width: 100%;
-    max-width: 480px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    max-width: 450px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
     position: relative;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    
-    /* Forcer le texte en blanc/clair pour le contraste sur le fond sombre */
-    color: #ffffff;
-}
-
-[data-theme="dark"] .auth-card {
-    background: rgba(18, 24, 38, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Redéfinir la couleur des titres pour le glassmorphism */
-.auth-form-container h2 {
-    color: #ffffff;
-    margin-bottom: $spacing-xs;
-    font-size: 1.75rem;
-    text-align: center;
+    z-index: 10;
 }
 
 .auth-subtitle {
