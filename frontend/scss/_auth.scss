@@ -14,64 +14,98 @@
     padding: $spacing-xl $spacing-md;
 }
 
-/* Carte contenant les formulaires */
-.auth-panel {
+/* Nouvelle Carte d'authentification moderne (Glassmorphism / Soft shadow) */
+.auth-card {
     background-color: var(--color-bg-secondary);
     border: 1px solid var(--color-border);
-    border-radius: $border-radius-lg;
+    border-radius: 20px;
     padding: $spacing-2xl;
     width: 100%;
-    max-width: 450px;
-    box-shadow: $shadow-md;
+    max-width: 480px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+/* Toggle Tabs - Container */
+.auth-tabs {
     display: flex;
+    position: relative;
+    background-color: var(--color-bg);
+    border-radius: 12px;
+    padding: 4px;
+    margin-bottom: $spacing-xl;
+}
+
+/* Tabs */
+.auth-tab {
+    flex: 1;
+    padding: $spacing-sm;
+    text-align: center;
+    border: none;
+    background: transparent;
+    color: var(--color-text-secondary);
+    font-weight: $font-weight-semibold;
+    font-size: $font-size-base;
+    cursor: pointer;
+    z-index: 2;
+    transition: color 0.3s ease;
+}
+
+.auth-tab.active {
+    color: #ffffff;
+}
+
+/* Background indicateur du tab actif */
+.auth-tab-indicator {
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    left: 4px;
+    width: calc(50% - 4px);
+    background-color: var(--color-primary);
+    border-radius: 8px;
+    transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    z-index: 1;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* Lorsque l'onglet Inscription est actif, on décale l'indicateur */
+.auth-tabs[data-active="register"] .auth-tab-indicator {
+    transform: translateX(100%);
+}
+
+/* Container de formulaire */
+.auth-form-container {
+    display: none;
     flex-direction: column;
-    gap: $spacing-md;
+    animation: fadeIn 0.4s ease-out;
+}
+
+.auth-form-container.active {
+    display: flex;
+}
+
+.auth-form-container h2 {
+    color: var(--color-text);
+    margin-bottom: $spacing-xs;
+    font-size: 1.75rem;
     text-align: center;
 }
 
-.auth-panel h1, 
-.auth-panel h2 {
-    color: var(--color-primary);
-    margin-bottom: $spacing-sm;
-}
-
-/* Boutons de choix */
-.auth-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-md;
-    margin-top: $spacing-md;
-}
-
-.btn-primary, 
-.btn-secondary {
-    width: 100%;
-    padding: $spacing-md;
-    border-radius: $border-radius-md;
-    font-weight: $font-weight-semibold;
-    cursor: pointer;
-    font-family: inherit;
-    font-size: $font-size-base;
-}
-
-.btn-primary {
-    background-color: var(--color-primary);
-    color: #ffffff;
-    border: none;
-}
-
-.btn-secondary {
-    background-color: transparent;
-    color: var(--color-primary);
-    border: 2px solid var(--color-primary);
+.auth-subtitle {
+    color: var(--color-text-secondary);
+    text-align: center;
+    margin-bottom: $spacing-xl;
+    font-size: $font-size-small;
 }
 
 /* Structure des formulaires */
 form {
     display: flex;
     flex-direction: column;
-    gap: $spacing-lg;
-    text-align: left;
+    gap: $spacing-md;
     width: 100%;
 }
 
@@ -84,26 +118,58 @@ form {
 .form-group label {
     font-size: $font-size-small;
     font-weight: $font-weight-medium;
-}
-
-.form-group input {
-    padding: $spacing-md;
-    border: 1px solid var(--color-border);
-    border-radius: $border-radius-sm;
-    background-color: var(--color-bg);
     color: var(--color-text);
 }
 
-.btn-link {
-    background: none;
-    border: none;
-    color: var(--color-text-secondary);
-    text-decoration: underline;
+.form-group input {
+    padding: 14px;
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-size: $font-size-base;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(55, 138, 221, 0.15);
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
+    font-weight: $font-weight-semibold;
     cursor: pointer;
+    font-family: inherit;
+    font-size: $font-size-base;
+    background-color: var(--color-primary);
+    color: #ffffff;
+    border: none;
     margin-top: $spacing-sm;
+    transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 15px rgba(55, 138, 221, 0.3);
+}
+
+.btn-primary:hover {
+    background-color: darken(#378ADD, 10%); /* Si $color-primary = #378ADD */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(55, 138, 221, 0.4);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
 }
 
 .error-message {
     color: var(--color-error);
     font-size: $font-size-xs;
+    margin-top: 4px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }

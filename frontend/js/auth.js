@@ -1,12 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Éléments du DOM
-    const authChoices = document.getElementById('auth-choices');
-    const loginPanel = document.getElementById('login-panel');
-    const registerPanel = document.getElementById('register-panel');
-    
-    const btnShowLogin = document.getElementById('btn-show-login');
-    const btnShowRegister = document.getElementById('btn-show-register');
-    const btnsBack = document.querySelectorAll('.btn-back');
+    // Éléments du DOM - Tabs
+    const tabLogin = document.getElementById('tab-login');
+    const tabRegister = document.getElementById('tab-register');
+    const loginContainer = document.getElementById('login-form-container');
+    const registerContainer = document.getElementById('register-form-container');
+    const authTabs = document.querySelector('.auth-tabs');
 
     const registerForm = document.getElementById('register-form');
     const regPasswordInput = document.getElementById('reg-password');
@@ -42,20 +40,37 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    // --- 2. Navigation entre les panneaux ---
-    const showPanel = (panelToShow) => {
-        authChoices.classList.add('hidden');
-        loginPanel.classList.add('hidden');
-        registerPanel.classList.add('hidden');
-        panelToShow.classList.remove('hidden');
+    // --- 2. Navigation entre les onglets ---
+    const switchTab = (tabToActivate) => {
+        if (tabToActivate === 'login') {
+            tabRegister.classList.remove('active');
+            tabRegister.setAttribute('aria-selected', 'false');
+            registerContainer.classList.remove('active');
+            registerContainer.classList.add('hidden');
+            
+            tabLogin.classList.add('active');
+            tabLogin.setAttribute('aria-selected', 'true');
+            loginContainer.classList.remove('hidden');
+            loginContainer.classList.add('active');
+            
+            authTabs.removeAttribute('data-active');
+        } else {
+            tabLogin.classList.remove('active');
+            tabLogin.setAttribute('aria-selected', 'false');
+            loginContainer.classList.remove('active');
+            loginContainer.classList.add('hidden');
+            
+            tabRegister.classList.add('active');
+            tabRegister.setAttribute('aria-selected', 'true');
+            registerContainer.classList.remove('hidden');
+            registerContainer.classList.add('active');
+            
+            authTabs.setAttribute('data-active', 'register');
+        }
     };
 
-    btnShowLogin.addEventListener('click', () => showPanel(loginPanel));
-    btnShowRegister.addEventListener('click', () => showPanel(registerPanel));
-    
-    btnsBack.forEach(btn => {
-        btn.addEventListener('click', () => showPanel(authChoices));
-    });
+    tabLogin.addEventListener('click', () => switchTab('login'));
+    tabRegister.addEventListener('click', () => switchTab('register'));
 
     // --- 3. Intégration de la validation du mot de passe ---
     
@@ -95,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         try {
-            const response = await fetch('http://localhost:5000/api/register', {
+            const response = await fetch('http://127.0.0.1:5000/api/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: email, password: password })
@@ -105,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (response.ok) {
                 alert("Inscription réussie ! Vous pouvez maintenant vous connecter.");
-                showPanel(loginPanel);
+                switchTab('login');
             } else {
                 alert("Erreur : " + data.error);
             }
@@ -121,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const password = document.getElementById('login-password').value;
 
         try {
-            const response = await fetch('http://localhost:5000/api/login', {
+            const response = await fetch('http://127.0.0.1:5000/api/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: email, password: password })

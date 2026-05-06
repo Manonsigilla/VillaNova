@@ -93,15 +93,15 @@
         </div>
         
         <!-- Section Vidéo de présentation éco-conçue -->
-        <section class="video-section" style="padding: 2rem 1rem;">
-            <div class="video-section__container" style="max-width: 800px; margin: 0 auto; text-align: center;">
-                <h2 style="margin-bottom: 1rem; font-size: 1.5rem;">Découvrez notre région</h2>
+        <section class="video-section">
+            <div class="video-section__container">
+                <h2 class="video-section__title">Découvrez notre région</h2>
                 <!-- Vidéo éco-conçue : pas d'autoplay, preload="metadata", poster présent -->
                 <video 
+                    class="video-section__video"
                     preload="metadata" 
                     poster="https://via.placeholder.com/800x450?text=Vid%C3%A9o+de+pr%C3%A9sentation" 
-                    controls 
-                    style="width: 100%; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                    controls>
                     <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
                     Votre navigateur ne supporte pas la balise vidéo.
                 </video>

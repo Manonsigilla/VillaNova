@@ -204,6 +204,28 @@ SECTIONS
     color: var(--color-text);
 }
 
+.video-section {
+    padding: $spacing-2xl $spacing-md;
+}
+
+.video-section__container {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.video-section__title {
+    margin-bottom: $spacing-lg;
+    font-size: $font-size-h2;
+    color: var(--color-text);
+}
+
+.video-section__video {
+    width: 100%;
+    border-radius: $border-radius-lg;
+    box-shadow: $shadow-md;
+}
+
 .events-section {
     padding: $spacing-xl $spacing-md;
     

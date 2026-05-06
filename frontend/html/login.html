@@ -24,49 +24,48 @@
     </header>
 
     <main class="auth-container">
-        <!-- Section de choix -->
-        <div id="auth-choices" class="auth-panel">
-            <h1>Bienvenue sur VillaNova</h1>
-            <p>Veuillez vous identifier pour accéder aux événements.</p>
-            <div class="auth-buttons">
-                <button id="btn-show-login" class="btn-primary">Se connecter</button>
-                <button id="btn-show-register" class="btn-secondary">S'inscrire</button>
+        <div class="auth-card">
+            <!-- Toggle Tabs -->
+            <div class="auth-tabs" role="tablist">
+                <button id="tab-login" class="auth-tab active" role="tab" aria-selected="true" aria-controls="login-form-container">Se connecter</button>
+                <button id="tab-register" class="auth-tab" role="tab" aria-selected="false" aria-controls="register-form-container">S'inscrire</button>
+                <div class="auth-tab-indicator"></div>
             </div>
-        </div>
 
-        <!-- Formulaire de connexion (masqué par défaut) -->
-        <div id="login-panel" class="auth-panel hidden">
-            <h2>Connexion</h2>
-            <form id="login-form" novalidate>
-                <div class="form-group">
-                    <label for="login-email">Adresse e-mail</label>
-                    <input type="email" id="login-email" required>
-                </div>
-                <div class="form-group">
-                    <label for="login-password">Mot de passe</label>
-                    <input type="password" id="login-password" required>
-                </div>
-                <button type="submit" class="btn-primary">Valider</button>
-                <button type="button" class="btn-link btn-back">Retour</button>
-            </form>
-        </div>
+            <!-- Formulaire de connexion -->
+            <div id="login-form-container" class="auth-form-container active" role="tabpanel" aria-labelledby="tab-login">
+                <h2>Content de vous revoir</h2>
+                <p class="auth-subtitle">Accédez à votre compte pour découvrir nos événements.</p>
+                <form id="login-form" novalidate>
+                    <div class="form-group">
+                        <label for="login-email">Adresse e-mail</label>
+                        <input type="email" id="login-email" placeholder="votre@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Mot de passe</label>
+                        <input type="password" id="login-password" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Se connecter</button>
+                </form>
+            </div>
 
-        <!-- Formulaire d'inscription (masqué par défaut) -->
-        <div id="register-panel" class="auth-panel hidden">
-            <h2>Inscription</h2>
-            <form id="register-form" novalidate>
-                <div class="form-group">
-                    <label for="reg-email">Adresse e-mail</label>
-                    <input type="email" id="reg-email" required>
-                </div>
-                <div class="form-group">
-                    <label for="reg-password">Mot de passe</label>
-                    <input type="password" id="reg-password" required aria-describedby="reg-password-error">
-                    <span id="reg-password-error" class="error-message" aria-live="polite"></span>
-                </div>
-                <button type="submit" class="btn-primary">Créer mon compte</button>
-                <button type="button" class="btn-link btn-back">Retour</button>
-            </form>
+            <!-- Formulaire d'inscription -->
+            <div id="register-form-container" class="auth-form-container hidden" role="tabpanel" aria-labelledby="tab-register">
+                <h2>Créer un compte</h2>
+                <p class="auth-subtitle">Rejoignez VillaNova pour participer à la vie locale.</p>
+                <form id="register-form" novalidate>
+                    <div class="form-group">
+                        <label for="reg-email">Adresse e-mail</label>
+                        <input type="email" id="reg-email" placeholder="votre@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-password">Mot de passe</label>
+                        <input type="password" id="reg-password" placeholder="8+ caractères, 1 chiffre, 1 majuscule" required aria-describedby="reg-password-error">
+                        <span id="reg-password-error" class="error-message" aria-live="polite"></span>
+                    </div>
+                    <button type="submit" class="btn-primary">S'inscrire</button>
+                </form>
+            </div>
         </div>
     </main>
 
