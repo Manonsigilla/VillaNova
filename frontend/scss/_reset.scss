@@ -99,7 +99,8 @@ a {
     }
     
     &:hover {
-        text-decoration: underline;
+        /* On enlève le soulignement natif comme demandé */
+        text-decoration: none;
     }
     
     /* Accessibilité : focus visible */
