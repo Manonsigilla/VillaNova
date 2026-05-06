@@ -224,11 +224,13 @@ export function initializeNavigation() {
         navMenu.setAttribute('aria-hidden', isExpanded);
     });
     
-    /* Fermer le menu au clic sur un lien */
+    /* Fermer le menu au clic sur un lien (sauf pour dérouler les catégories) */
     navMenu.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => {
-            navToggle.setAttribute('aria-expanded', 'false');
-            navMenu.setAttribute('aria-hidden', 'true');
+        link.addEventListener('click', (e) => {
+            if (link.id !== 'nav-categories-link') {
+                navToggle.setAttribute('aria-expanded', 'false');
+                navMenu.setAttribute('aria-hidden', 'true');
+            }
         });
     });
 }
