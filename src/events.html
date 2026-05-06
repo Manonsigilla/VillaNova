@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="VillaNova - Découvrez et gérez les événements locaux de votre région">
+    <title>VillaNova - Événements locaux</title>
+    
+    <!-- Lien vers le CSS compilé depuis SASS -->
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <!-- Conteneur principal avec skip link pour l'accessibilité -->
+    <a href="#main-content" class="skip-link">Aller au contenu principal</a>
+    
+    <!-- En-tête du site avec logo et thème toggle -->
+    <header class="header">
+        <div class="header__container">
+            <div class="header__top">
+                <!-- Logo / Titre du site -->
+                <h1 class="header__title">
+                    <a href="index.html" class="header__logo">VillaNova</a>
+                </h1>
+                
+                <!-- Toggle jour/nuit moderne et intuitif -->
+                <button class="header__theme-toggle" aria-label="Basculer le mode sombre" aria-pressed="false" id="theme-toggle">
+                    <svg class="theme-toggle__icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                    <svg class="theme-toggle__icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    <span class="theme-toggle__thumb" aria-hidden="true"></span>
+                </button>
+            </div>
+            
+            <!-- Barre de navigation principale -->
+            <nav class="nav" aria-label="Navigation principale">
+                <button class="nav__toggle" id="nav-toggle" aria-label="Ouvrir le menu" aria-expanded="false">
+                    <span class="nav__toggle-icon" aria-hidden="true"></span>
+                    <span class="nav__toggle-icon" aria-hidden="true"></span>
+                    <span class="nav__toggle-icon" aria-hidden="true"></span>
+                </button>
+                
+                <ul class="nav__list" id="nav-menu" aria-hidden="true">
+                    <li class="nav__item">
+                        <a href="#" class="nav__link nav__link--active">Événements</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="#" class="nav__link">Par catégories</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="#" class="nav__link">Mes réservations</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="#" class="nav__link">Contact</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Contenu principal -->
+    <main id="main-content" class="main">
+        <!-- Section des filtres et actions -->
+        <section class="filters-section">
+            <div class="filters-section__container">
+                <h2 class="filters-section__title">Explorez les événements</h2>
+                
+                <!-- Groupe de filtres -->
+                <div class="filters" role="region" aria-label="Filtres d'événements">
+                    <button class="filters__button filters__button--active" data-filter="all" aria-pressed="true">
+                        Voir tout
+                    </button>
+                    <button class="filters__button" data-filter="concert" aria-pressed="false">
+                        Concert
+                    </button>
+                    <button class="filters__button" data-filter="theatre" aria-pressed="false">
+                        Théâtre
+                    </button>
+                    <button class="filters__button" data-filter="cinema" aria-pressed="false">
+                        Cinéma
+                    </button>
+                    <button class="filters__button" data-filter="randonnee" aria-pressed="false">
+                        Randonnées
+                    </button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Indicateur de chargement et région live pour l'accessibilité -->
+        <div id="loading-status" class="sr-only" aria-live="polite" aria-atomic="true">
+            Chargement des événements...
+        </div>
+        
+        <!-- Conteneur principal des événements -->
+        <section class="events-section">
+            <div class="events-section__container">
+                <!-- Liste des événements (cartes) -->
+                <div class="events-grid" id="events-container" role="region" aria-label="Liste des événements">
+                    <!-- Les cartes d'événements seront insérées ici par JavaScript -->
+                    <p class="events-grid__empty">Chargement des événements...</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Pied de page -->
+    <footer class="footer">
+        <div class="footer__container">
+            <div class="footer__content">
+                <p class="footer__text">VillaNova - Plateforme de gestion d'événements locaux</p>
+                <ul class="footer__links">
+                    <li><a href="#" class="footer__link">Conditions d'utilisation</a></li>
+                    <li><a href="#" class="footer__link">Politique de confidentialité</a></li>
+                    <li><a href="#" class="footer__link">Accessibilité</a></li>
+                </ul>
+            </div>
+            <p class="footer__copyright">Copyright 2026 - VillaNova. Tous droits réservés.</p>
+        </div>
+    </footer>
+    
+    <!-- Script module principal -->
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

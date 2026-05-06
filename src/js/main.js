@@ -17,6 +17,19 @@ import {
     initializeFilters
 } from './ui.js';
 
+document.addEventListener('DOMContentLoaded', () => {
+    // Vérification basique de l'authentification via localStorage
+    const isAuthenticated = localStorage.getItem('vn_authenticated');
+    
+    if (!isAuthenticated) {
+        // Redirection vers la page de connexion si non authentifié
+        window.location.href = 'index.html';
+        return;
+    }
+
+    // Le reste de votre code d'initialisation des événements suit ici...
+});
+
 /* Stockage global des événements pour les filtres */
 let allEvents = [];
 
