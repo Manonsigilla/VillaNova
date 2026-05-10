@@ -1,8 +1,18 @@
-// src/js/api.js
+// api.js - VillaNova
+// Toutes les requêtes OpenAgenda passent par le proxy Flask (clé API invisible côté client)
 
-// Configuration
-const API_KEY = '7227dbebe6d841ebb4d7480902bb51e1';
-const API_BASE_URL = 'https://api.openagenda.com/v2';
+const API_BASE_URL = 'http://127.0.0.1:5000/api/oa';
+
+function getAuthHeaders() {
+    const token = localStorage.getItem('vn_user_token');
+    return token ? { 'Authorization': `Bearer ${token}` } : {};
+}
+
+function handleUnauthorized() {
+    localStorage.removeItem('vn_authenticated');
+    localStorage.removeItem('vn_user_token');
+    window.location.href = 'login.html';
+}
 
 /**
  * Recherche des agendas sur OpenAgenda
@@ -12,18 +22,20 @@ const API_BASE_URL = 'https://api.openagenda.com/v2';
  * @returns {Promise<Object>} Réponse avec agendas et total
  */
 export async function fetchAgendas(options = {}) {
-    const params = new URLSearchParams({
-        key: API_KEY
-    });
+    const params = new URLSearchParams();
 
     if (options.size) params.append('size', options.size);
     if (options.search) params.append('search', options.search);
 
     try {
-        const apiUrl = `${API_BASE_URL}/agendas?${params}`;
-        console.log('Appel API agendas:', apiUrl.replace(API_KEY, '***'));
+        const response = await fetch(`${API_BASE_URL}/agendas?${params}`, {
+            headers: getAuthHeaders()
+        });
 
-        const response = await fetch(apiUrl);
+        if (response.status === 401) {
+            handleUnauthorized();
+            return;
+        }
 
         if (!response.ok) {
             const errorBody = await response.text();
@@ -50,9 +62,7 @@ export async function fetchAgendas(options = {}) {
  * @returns {Promise<Object>} Réponse avec events et total
  */
 export async function fetchAgendaEvents(agendaUid, options = {}) {
-    const params = new URLSearchParams({
-        key: API_KEY
-    });
+    const params = new URLSearchParams();
 
     if (options.size) params.append('size', options.size);
     if (options.search) params.append('search', options.search);
@@ -61,10 +71,14 @@ export async function fetchAgendaEvents(agendaUid, options = {}) {
     relatives.forEach(r => params.append('relative[]', r));
 
     try {
-        const apiUrl = `${API_BASE_URL}/agendas/${agendaUid}/events?${params}`;
-        console.log('Appel API événements:', apiUrl.replace(API_KEY, '***'));
+        const response = await fetch(`${API_BASE_URL}/agendas/${agendaUid}/events?${params}`, {
+            headers: getAuthHeaders()
+        });
 
-        const response = await fetch(apiUrl);
+        if (response.status === 401) {
+            handleUnauthorized();
+            return;
+        }
 
         if (!response.ok) {
             const errorBody = await response.text();
@@ -89,8 +103,14 @@ export async function fetchAgendaEvents(agendaUid, options = {}) {
  */
 export async function fetchEventById(agendaUid, eventUid) {
     try {
-        const apiUrl = `${API_BASE_URL}/agendas/${agendaUid}/events/${eventUid}?key=${API_KEY}`;
-        const response = await fetch(apiUrl);
+        const response = await fetch(`${API_BASE_URL}/agendas/${agendaUid}/events/${eventUid}`, {
+            headers: getAuthHeaders()
+        });
+
+        if (response.status === 401) {
+            handleUnauthorized();
+            return;
+        }
 
         if (!response.ok) {
             const errorBody = await response.text();
@@ -115,47 +135,35 @@ export async function fetchEventById(agendaUid, eventUid) {
  * @returns {Promise<Object>} Événements agrégés et filtrés
  */
 export async function searchModernEvents(options = {}) {
-    // Villes avec plus d'événements culturels variés
     const cities = ['Lyon', 'Bordeaux', 'Toulouse', 'Marseille', 'Nantes'];
 
-    // Mots-clés religieux à filtrer
     const religiousKeywords = [
         'messe', 'prière', 'catholique', 'église', 'culte',
         'religieux', 'évêque', 'cardinal', 'paroisse', 'diocèse',
         'chapelet', 'sacrement', 'liturgie', 'eucharistie'
     ];
 
-    let allEvents = [];
+    const allEvents = [];
 
-    // Pour chaque ville, chercher des agendas puis récupérer leurs événements
     for (const city of cities) {
         try {
             console.log(`Recherche d'agendas dans ${city}...`);
 
-            // Étape 1 : Trouver des agendas pour cette ville
-            const agendasData = await fetchAgendas({
-                search: city,
-                size: 2
-            });
+            const agendasData = await fetchAgendas({ search: city, size: 2 });
 
-            if (!agendasData.agendas || agendasData.agendas.length === 0) {
+            if (!agendasData?.agendas || agendasData.agendas.length === 0) {
                 console.warn(`Aucun agenda trouvé pour ${city}`);
                 continue;
             }
 
-            // Étape 2 : Récupérer les événements de chaque agenda
             for (const agenda of agendasData.agendas) {
                 try {
-                    const eventsData = await fetchAgendaEvents(agenda.uid, {
-                        size: 5
-                    });
+                    const eventsData = await fetchAgendaEvents(agenda.uid, { size: 5 });
 
-                    if (eventsData.events && Array.isArray(eventsData.events)) {
-                        // Filtrer les événements religieux
+                    if (eventsData?.events && Array.isArray(eventsData.events)) {
                         const filtered = eventsData.events.filter(event => {
                             const title = (event.title?.fr || '').toLowerCase();
                             const description = (event.description?.fr || '').toLowerCase();
-
                             return !religiousKeywords.some(keyword =>
                                 title.includes(keyword) || description.includes(keyword)
                             );
@@ -163,7 +171,6 @@ export async function searchModernEvents(options = {}) {
 
                         console.log(`${city} / ${agenda.title}: ${eventsData.events.length} événements, ${filtered.length} après filtrage`);
 
-                        // Ajouter infos d'origine à chaque événement
                         filtered.forEach(event => {
                             event._sourceCity = city;
                             event._agendaTitle = agenda.title;

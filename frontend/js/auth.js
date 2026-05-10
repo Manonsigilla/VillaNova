@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const root = document.documentElement; // Cible le <html> pour le data-theme
 
     // --- 1. Gestion du thème (Clair / Sombre) ---
-    const savedTheme = localStorage.getItem('vn_theme');
+    const savedTheme = localStorage.getItem('theme');
     
     // Initialisation
     if (savedTheme === 'dark') {
@@ -31,11 +31,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isDark) {
             root.removeAttribute('data-theme');
             themeToggle.setAttribute('aria-pressed', 'false');
-            localStorage.setItem('vn_theme', 'light');
+            localStorage.setItem('theme', 'light');
         } else {
             root.setAttribute('data-theme', 'dark');
             themeToggle.setAttribute('aria-pressed', 'true');
-            localStorage.setItem('vn_theme', 'dark');
+            localStorage.setItem('theme', 'dark');
         }
     });
 

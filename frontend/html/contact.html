@@ -3,28 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Contactez l'équipe VillaNova pour toute question sur les événements locaux">
     <title>Contact - VillaNova</title>
+
+    <!-- Google Fonts optimisées -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="../css/main.css">
 </head>
 <body class="theme-light">
+    <!-- Skip link pour l'accessibilité -->
+    <a href="#main-content" class="skip-link">Aller au contenu principal</a>
+
     <!-- Le script de thème (auth.js ou un script global) devrait être chargé pour appliquer le thème stocké -->
     <header class="header">
-        <div class="header__container header__top">
-            <h1 class="header__title">
-                <a href="index.html" class="header__logo">VillaNova</a>
-            </h1>
-            
-            <!-- Structure conforme à votre _theme-toggle.scss -->
-            <button class="header__theme-toggle" id="theme-toggle" aria-pressed="false" aria-label="Basculer le thème clair/sombre">
-                <!-- Icônes SVG simulées ou réelles -->
-                <span class="theme-toggle__icon icon-sun">☀️</span>
-                <span class="theme-toggle__icon icon-moon">🌙</span>
-                <span class="theme-toggle__thumb"></span>
-            </button>
+        <div class="header__container">
+            <div class="header__top">
+                <p class="header__title">
+                    <a href="index.html" class="header__logo">
+                        <img src="../images/logo_villanova.png" alt="" class="header__logo-img" width="40" height="40" aria-hidden="true">
+                        VillaNova
+                    </a>
+                </p>
+
+                <button class="header__theme-toggle" id="theme-toggle" aria-pressed="false" aria-label="Basculer le thème clair/sombre">
+                    <span class="theme-toggle__thumb"></span>
+                </button>
+            </div>
+
+            <nav class="nav" aria-label="Navigation principale">
+                <button class="nav__toggle" id="nav-toggle" aria-label="Ouvrir le menu" aria-expanded="false">
+                    <span class="nav__toggle-icon" aria-hidden="true"></span>
+                    <span class="nav__toggle-icon" aria-hidden="true"></span>
+                    <span class="nav__toggle-icon" aria-hidden="true"></span>
+                </button>
+
+                <ul class="nav__list" id="nav-menu">
+                    <li class="nav__item"><a href="index.html" class="nav__link">Accueil</a></li>
+                    <li class="nav__item"><a href="contact.html" class="nav__link nav__link--active">Contact</a></li>
+                    <li class="nav__item"><a href="politique.html" class="nav__link">Politique &amp; Confidentialité</a></li>
+                </ul>
+            </nav>
         </div>
     </header>
 
-    <main class="static-content">
+    <main id="main-content" class="static-content">
         <h1>Nous contacter</h1>
         <p>Pour toute question concernant l'application VillaNova ou les événements, veuillez remplir le formulaire ci-dessous.</p>
         
@@ -41,7 +66,7 @@
                 <label for="contact-message">Message</label>
                 <textarea id="contact-message" rows="5" required></textarea>
             </div>
-            <button type="submit" class="btn-primary">Envoyer</button>
+            <button type="submit" class="btn-primary">Envoyer le message</button>
         </form>
     </main>
 
@@ -51,10 +76,52 @@
                 <p class="footer__text">© 2026 VillaNova. Tous droits réservés.</p>
                 <ul class="footer__links">
                     <li><a href="contact.html" class="footer__link">Contact</a></li>
-                    <li><a href="politique.html" class="footer__link">Politique & Confidentialité</a></li>
+                    <li><a href="politique.html" class="footer__link">Politique &amp; Confidentialité</a></li>
                 </ul>
             </div>
         </div>
     </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('theme-toggle');
+            const navToggle = document.getElementById('nav-toggle');
+            const navMenu = document.getElementById('nav-menu');
+
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeToggle.setAttribute('aria-pressed', 'true');
+            }
+
+            themeToggle.addEventListener('click', () => {
+                const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+                document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+                localStorage.setItem('theme', isDark ? 'light' : 'dark');
+                themeToggle.setAttribute('aria-pressed', String(!isDark));
+            });
+
+            const updateAriaHidden = () => {
+                if (window.innerWidth >= 768) {
+                    navMenu.removeAttribute('aria-hidden');
+                } else if (navToggle.getAttribute('aria-expanded') !== 'true') {
+                    navMenu.setAttribute('aria-hidden', 'true');
+                }
+            };
+
+            updateAriaHidden();
+            window.addEventListener('resize', updateAriaHidden);
+
+            navToggle.addEventListener('click', () => {
+                const isExpanded = navToggle.getAttribute('aria-expanded') === 'true';
+                navToggle.setAttribute('aria-expanded', String(!isExpanded));
+                navMenu.setAttribute('aria-hidden', String(isExpanded));
+            });
+        });
+    </script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('../sw.js');
+        }
+    </script>
 </body>
 </html>

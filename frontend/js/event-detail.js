@@ -72,21 +72,33 @@ function createEventDetailDOM(event) {
     const header = document.createElement('div');
     header.className = 'event-detail__header';
 
-    const imageUrl = event.image?.url || 'https://via.placeholder.com/600x400?text=Événement';
+    const rawImage = event.image;
+    const imageUrl = rawImage?.url
+        || (rawImage?.base && rawImage?.filename ? rawImage.base + rawImage.filename : null)
+        || rawImage?.sizes?.large?.url
+        || rawImage?.sizes?.medium?.url
+        || rawImage?.sizes?.thumb?.url
+        || '../images/event_placeholder.png';
+
     const picture = document.createElement('picture');
-    const sourceWebP = document.createElement('source');
-    sourceWebP.type = 'image/webp';
-    sourceWebP.srcset = imageUrl.replace(/\.(jpe?g|png)$/i, '.webp');
-    
+
     const img = document.createElement('img');
     img.className = 'event-detail__image';
-    img.src = imageUrl;
     img.alt = event.title?.fr || 'Image de l\'événement';
     img.loading = 'lazy';
     img.width = 600;
     img.height = 400;
 
-    picture.appendChild(sourceWebP);
+    if (imageUrl.startsWith('http')) {
+        img.src = `https://images.weserv.nl/?url=${encodeURIComponent(imageUrl)}&output=webp`;
+        img.onerror = () => {
+            img.onerror = null;
+            img.src = imageUrl;
+        };
+    } else {
+        img.src = imageUrl;
+    }
+
     picture.appendChild(img);
     header.appendChild(picture);
 
@@ -98,7 +110,7 @@ function createEventDetailDOM(event) {
     badge.textContent = event.category?.name || 'Événement';
     info.appendChild(badge);
 
-    const title = document.createElement('h1');
+    const title = document.createElement('h2');
     title.className = 'event-detail__title';
     title.textContent = event.title?.fr || 'Sans titre';
     info.appendChild(title);
@@ -203,18 +215,25 @@ async function loadEventDetail() {
     const { id, agenda } = getUrlParams();
     
     if (!id || !agenda) {
-        container.innerHTML = `
-            <div class="alert alert--error" role="alert">
-                <strong>Erreur :</strong> Événement non trouvé.
-            </div>
-        `;
+        container.innerHTML = '';
+        const alertDiv = document.createElement('div');
+        alertDiv.className = 'alert alert--error';
+        alertDiv.setAttribute('role', 'alert');
+        const strong = document.createElement('strong');
+        strong.textContent = 'Erreur : ';
+        alertDiv.appendChild(strong);
+        alertDiv.appendChild(document.createTextNode('Événement non trouvé.'));
+        container.appendChild(alertDiv);
         announceToScreenReader('Erreur : Événement non trouvé');
         return;
     }
     
     try {
         /* Afficher le chargement */
-        container.innerHTML = '<p>Chargement des détails...</p>';
+        container.innerHTML = '';
+        const loadingP = document.createElement('p');
+        loadingP.textContent = 'Chargement des détails...';
+        container.appendChild(loadingP);
         announceToScreenReader('Chargement des détails de l\'événement...');
         
         console.log(`Récupération de l'événement: ID=${id}, Agenda=${agenda}`);
@@ -234,18 +253,30 @@ async function loadEventDetail() {
         /* Mettre à jour le titre de la page */
         document.title = `${villanovaEvent.title?.fr || 'Événement'} - VillaNova`;
         
+        /* Gérer le focus pour l'accessibilité clavier */
+        const titleEl = container.querySelector('.event-detail__title');
+        if (titleEl) {
+            titleEl.setAttribute('tabindex', '-1');
+            titleEl.focus();
+        }
+        
         /* Annoncer aux lecteurs d'écran */
         announceToScreenReader(`Événement chargé : ${villanovaEvent.title?.fr}`);
         
     } catch (error) {
         console.error('Erreur lors du chargement du détail:', error);
-        container.innerHTML = `
-            <div class="alert alert--error" role="alert">
-                <strong>Erreur :</strong> Impossible de charger les détails de cet événement.
-                <br>
-                <small>${error.message}</small>
-            </div>
-        `;
+        container.innerHTML = '';
+        const alertDiv = document.createElement('div');
+        alertDiv.className = 'alert alert--error';
+        alertDiv.setAttribute('role', 'alert');
+        const strong = document.createElement('strong');
+        strong.textContent = 'Erreur : ';
+        alertDiv.appendChild(strong);
+        alertDiv.appendChild(document.createTextNode('Impossible de charger les détails de cet événement.'));
+        const small = document.createElement('small');
+        small.textContent = error.message;
+        alertDiv.appendChild(small);
+        container.appendChild(alertDiv);
         announceToScreenReader(`Erreur : ${error.message}`);
     }
 }

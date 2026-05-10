@@ -1,308 +1,106 @@
-VillaNova - Guide de Développement
-Vue d'ensemble du projet
+# VillaNova
 
-VillaNova est une plateforme web de gestion et consultation d'événements locaux. Le projet combine une interface utilisateur pour consulter les événements avec une interface administrateur pour les gérer. La plateforme intègre l'API OpenAgenda et respecte les normes d'accessibilité WCAG AA.
-Architecture technique recommandée
-Stack technologique
+Application web de découverte d'événements locaux construite autour de l'API OpenAgenda.
+Les événements réels issus de villes françaises sont retranscrits dans l'univers fictif de la ville de **VillaNova**.
 
-    HTML5 avec balisage sémantique strict
-    SASS/SCSS pour la stylisation modulaire
-    JavaScript vanilla (ES6+) pour les interactions
-    API OpenAgenda pour la source de données événementielle
-    LocalStorage pour la persistance de données côté client
-    Mobile First comme approche de responsive design
+## Stack technique
 
-Principes clés
+| Couche | Technologies |
+| -------- | ------------- |
+| Frontend | HTML5 sémantique, SCSS (BEM, Mobile First), JavaScript ES6+ modules |
+| Backend | Python 3, Flask, SQLite |
+| API externe | OpenAgenda v2 (accédée via proxy Flask sécurisé) |
+| Sécurité | PBKDF2 + sel + poivre, JWT signé (PyJWT), variables d'environnement (.env) |
+| Performance | Service Worker (Cache-First / Network-First), lazy loading images, conversion WebP à la volée |
+| Accessibilité | WCAG AA — navigation clavier, aria-live, aria-busy, aria-pressed, skip link |
 
-    Accessibilité WCAG AA (navigation clavier, lecteurs d'écran, contrastes)
-    Éco-conception avec optimisation des ressources
-    Sémantique HTML stricte
-    Modularité du code SASS
-    Pas de dépendances externes (vanilla JavaScript)
+## Prérequis
 
-Structure du répertoire
+- Python 3.8+
+- Node.js 16+ et npm (pour la compilation SASS)
+- VS Code avec l'extension **Live Server** (port 5501)
 
-VillaNova/
-├── README.md
-├── .gitignore
-├── package.json
-├── package-lock.json
-├── frontend/
-│   ├── html/
-│   │   ├── index.html
-│   │   ├── event-detail.html
-│   │   ├── login.html
-│   │   ├── contact.html
-│   │   └── politique.html
-│   ├── css/
-│   │   ├── main.css
-│   │   └── main.css.map
-│   ├── scss/
-│   │   ├── main.scss
-│   │   ├── _variables.scss
-│   │   ├── _mixins.scss
-│   │   ├── _reset.scss
-│   │   ├── _typography.scss
-│   │   ├── _accessibility.scss
-│   │   ├── _layout.scss
-│   │   ├── _components.scss
-│   │   ├── _responsive.scss
-│   │   └── _eco-design.scss
-│   ├── js/
-│   │   ├── main.js
-│   │   ├── api.js
-│   │   ├── auth.js
-│   │   ├── event-list.js
-│   │   ├── event-detail.js
-│   │   ├── ui.js
-│   │   ├── accessibility.js
-│   │   └── utils.js
-│   └── images/
-│       ├── logo/
-│       ├── icons/
-│       └── placeholders/
-├── backend/
-│   ├── backend.py
-│   ├── villanova.db
-│   └── data/
-│       └── categories.json
-├── docs/
-│   ├── API_OPENAGENDA.md
-│   ├── ACCESSIBILITY_CHECKLIST.md
-│   ├── TESTING.md
-│   └── DEPLOYMENT.md
-└── .editorconfig
+## Installation
 
-Installation et configuration
-Prérequis
-
-    Node.js 16+ et npm (pour le compilateur SASS)
-    Un navigateur moderne (Chrome, Firefox, Safari, Edge)
-    Git pour le versioning
-    Un éditeur de code (VS Code recommandé)
-
-Étapes d'installation
-
-    Cloner le repository
-
-git clone https://github.com/Manonsilgilla/VillaNova.git
-cd VillaNova
-
-Installer les dépendances
-
-npm install
-
-Compiler les fichiers SASS en CSS
-
-npm run sass
-
-Pour le développement avec compilation automatique :
-
-npm run sass:watch
-
-{
-  "name": "villanova",
-  "version": "1.0.0",
-  "description": "Plateforme de gestion et consultation d'événements locaux",
-  "main": "frontend/js/main.js",
-  "scripts": {
-    "sass": "sass frontend/scss:frontend/css",
-    "sass:watch": "sass --watch frontend/scss:frontend/css",
-    "dev": "npm run sass:watch",
-    "build": "sass frontend/scss:frontend/css --style=compressed",
-    "serve": "http-server frontend -p 8000",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": ["events", "openagenda", "accessibility"],
-  "author": "Manonsilgilla",
-  "license": "MIT",
-  "devDependencies": {
-    "sass": "^1.69.0"
-  }
-}
-
-Copilot said: # VillaNova - Guide de Développement ## Vue
-VillaNova - Guide de Développement
-Vue d'ensemble du projet
-
-VillaNova est une plateforme web de gestion et consultation d'événements locaux. Le projet combine une interface utilisateur pour consulter les événements avec une interface administrateur pour les gérer. La plateforme intègre l'API OpenAgenda et respecte les normes d'accessibilité WCAG AA.
-Architecture technique recommandée
-Stack technologique
-
-    HTML5 avec balisage sémantique strict
-    SASS/SCSS pour la stylisation modulaire
-    JavaScript vanilla (ES6+) pour les interactions
-    API OpenAgenda pour la source de données événementielle
-    LocalStorage pour la persistance de données côté client
-    Mobile First comme approche de responsive design
-
-Principes clés
-
-    Accessibilité WCAG AA (navigation clavier, lecteurs d'écran, contrastes)
-    Éco-conception avec optimisation des ressources
-    Sémantique HTML stricte
-    Modularité du code SASS
-    Pas de dépendances externes (vanilla JavaScript)
-
-Structure du répertoire
-Code
-
-VillaNova/
-├── README.md
-├── .gitignore
-├── package.json
-├── package-lock.json
-├── frontend/
-│   ├── html/
-│   │   ├── index.html
-│   │   ├── event-detail.html
-│   │   ├── login.html
-│   │   ├── contact.html
-│   │   └── politique.html
-│   ├── css/
-│   │   ├── main.css
-│   │   └── main.css.map
-│   ├── scss/
-│   │   ├── main.scss
-│   │   ├── _variables.scss
-│   │   ├── _mixins.scss
-│   │   ├── _reset.scss
-│   │   ├── _typography.scss
-│   │   ├── _accessibility.scss
-│   │   ├── _layout.scss
-│   │   ├── _components.scss
-│   │   ├── _responsive.scss
-│   │   └── _eco-design.scss
-│   ├── js/
-│   │   ├── main.js
-│   │   ├── api.js
-│   │   ├── auth.js
-│   │   ├── event-list.js
-│   │   ├── event-detail.js
-│   │   ├── ui.js
-│   │   ├── accessibility.js
-│   │   └── utils.js
-│   └── images/
-│       ├── logo/
-│       ├── icons/
-│       └── placeholders/
-├── backend/
-│   ├── backend.py
-│   ├── villanova.db
-│   └── data/
-│       └── categories.json
-├── docs/
-│   ├── API_OPENAGENDA.md
-│   ├── ACCESSIBILITY_CHECKLIST.md
-│   ├── TESTING.md
-│   └── DEPLOYMENT.md
-└── .editorconfig
-
-## Installation et configuration
-
-### Prérequis
-- **Node.js 16+** et npm (pour le frontend et la compilation SASS)
-- **Python 3.8+** (pour le serveur back-end API)
-- Un navigateur moderne (Chrome, Firefox, Safari, Edge)
-- Git pour le versioning
-
-### 1. Cloner le repository
+### 1. Backend Flask
 
 ```bash
-git clone https://github.com/Manonsigilla/VillaNova.git
-cd VillaNova
-```
-
-### 2. Configuration du Front-end (Client)
-
-Installer les dépendances NPM :
-```bash
-npm install
-```
-
-Compiler les fichiers SASS en CSS :
-```bash
-npm run sass
-```
-
-Pour le développement en direct :
-- Compiler SASS automatiquement : `npm run dev`
-- Lancer le serveur local (sur le port 8000) : `npm run serve`
-
-### 3. Configuration du Back-end (Serveur API)
-
-Créer un environnement virtuel Python pour isoler les dépendances :
-```bash
-python -m venv .venv
-```
-
-Activer l'environnement virtuel :
-- Sur **Windows** : `.\.venv\Scripts\Activate.ps1` (ou `.venv\Scripts\activate.bat` via l'invite de commande)
-- Sur **macOS / Linux** : `source .venv/bin/activate`
-
-Installer les librairies requises (Flask, etc.) :
-```bash
+cd backend
+cp .env.example .env        # Renseigner les valeurs dans .env
 pip install -r requirements.txt
+python backend.py           # Démarre sur http://localhost:5000
 ```
 
-Lancer l'API Back-end (sur le port 5000) :
+### 2. Frontend
+
+Ouvrir `frontend/html/index.html` avec **Live Server** (clic droit → "Open with Live Server") sur le port 5501.
+
+> Les deux serveurs doivent tourner simultanément : Flask sur le port 5000, Live Server sur le port 5501.
+
+### 3. Compilation SASS
+
 ```bash
-python backend/backend.py
+npm install
+npm run sass:watch   # Compilation automatique en développement
 ```
 
-Configuration du package.json
-JSON
+## Structure du projet
 
-{
-  "name": "villanova",
-  "version": "1.0.0",
-  "description": "Plateforme de gestion et consultation d'événements locaux",
-  "main": "frontend/js/main.js",
-  "scripts": {
-    "sass": "sass frontend/scss:frontend/css",
-    "sass:watch": "sass --watch frontend/scss:frontend/css",
-    "dev": "npm run sass:watch",
-    "build": "sass frontend/scss:frontend/css --style=compressed",
-    "serve": "http-server frontend -p 8000",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": ["events", "openagenda", "accessibility"],
-  "author": "Manonsilgilla",
-  "license": "MIT",
-  "devDependencies": {
-    "sass": "^1.69.0"
-  }
-}
+```text
+VillaNova/
+├── backend/
+│   ├── backend.py              # API Flask : auth + proxy OpenAgenda
+│   ├── requirements.txt        # Dépendances Python
+│   ├── .env                    # Variables secrètes (non versionné)
+│   └── .env.example            # Template à copier
+├── frontend/
+│   ├── html/                   # Pages HTML sémantiques
+│   │   ├── index.html          # Page principale (événements)
+│   │   ├── login.html          # Connexion / inscription
+│   │   ├── event-detail.html   # Détail d'un événement
+│   │   ├── contact.html
+│   │   └── politique.html
+│   ├── scss/                   # Sources SASS
+│   │   ├── main.scss
+│   │   ├── _variables.scss
+│   │   ├── _mixins.scss
+│   │   ├── _layout.scss
+│   │   └── ...
+│   ├── css/                    # CSS compilé (généré automatiquement, non versionné)
+│   ├── js/
+│   │   ├── api.js              # Appels vers le proxy Flask (clé API côté serveur)
+│   │   ├── main.js             # Point d'entrée de la page d'accueil
+│   │   ├── ui.js               # Rendu DOM, filtres, thème, vidéo
+│   │   ├── event-detail.js     # Page de détail
+│   │   ├── eventTransformer.js # Adaptation données OpenAgenda → VillaNova
+│   │   └── auth.js             # Authentification (login / register)
+│   ├── images/
+│   └── sw.js                   # Service Worker
+├── Readme.md
+└── .gitignore
+```
 
-Installation des dépendances npm
+## Variables d'environnement (`backend/.env`)
 
-npm install --save-dev sass http-server
+| Variable | Description |
+| ---------- | ----------- |
+| `PEPPER` | Poivre ajouté au hachage des mots de passe (PBKDF2) |
+| `SECRET_KEY` | Clé de signature des tokens JWT |
+| `OPENAGENDA_API_KEY` | Clé publique de l'API OpenAgenda (non exposée côté client) |
 
-Charte graphique et palette
-Couleurs
-Mode Clair
+## Fonctionnalités
 
-    Couleur primaire (Coral) : #F57B6F / #EF9F27
-    Couleur secondaire (Rose clair) : #F5C5BD
-    Neutres : #FFFFFF, #F5F5F5, #E8E8E8, #CCCCCC, #999999, #666666, #333333
+- **Authentification** : inscription / connexion, mots de passe hachés PBKDF2 (sel + poivre), session via JWT 24 h
+- **Événements** : chargement multi-villes depuis l'API OpenAgenda, filtrage, transformation vers VillaNova
+- **Recherche** : recherche temps réel, historique des filtres, menu catégories dynamique
+- **Images** : conversion WebP à la volée (`images.weserv.nl`), fallback automatique, lazy loading, `base+filename` OpenAgenda
+- **Vidéo** : patron facade YouTube (miniature seule au chargement, iframe uniquement au clic) — éco-conception
+- **Thème** : bascule clair / sombre persistée en `localStorage`
+- **Offline** : Service Worker enregistré sur toutes les pages
 
-Mode Sombre
+## Scripts npm
 
-    Fond principal : #2C2C2A
-    Fond secondaire : #3A3A38
-    Texte primaire : #F5F5F5
-    Accents : #F57B6F, #EF9F27
-
-Typographies
-
-    Titres : -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif
-    Textes courants : même famille
-    Tailles : Fluides (rem) avec adaptation responsive
-    Line-height minimal : 1.5 pour l'accessibilité
-
-Hiérarchie typographique
-
-    H1 : 32px (desktop), 24px (mobile)
-    H2 : 24px (desktop), 20px (mobile)
-    H3 : 20px (desktop), 18px (mobile)
-    Corps texte : 16px (desktop), 14px (mobile)
+```bash
+npm run sass          # Compilation SASS une fois
+npm run sass:watch    # Compilation automatique (développement)
+```

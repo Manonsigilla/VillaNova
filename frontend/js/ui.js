@@ -17,19 +17,32 @@ export function createEventCard(event) {
     article.setAttribute('aria-label', `${event.title?.fr || 'Événement'}, ${event.location?.city || 'VillaNova'}`);
     
     /* Image avec lazy loading et format responsif (Éco-conception) */
-    const imageUrl = event.image?.url || '../images/event_placeholder.png';
+    const rawImage = event.image;
+    const imageUrl = rawImage?.url
+        || (rawImage?.base && rawImage?.filename ? rawImage.base + rawImage.filename : null)
+        || rawImage?.sizes?.large?.url
+        || rawImage?.sizes?.medium?.url
+        || rawImage?.sizes?.thumb?.url
+        || '../images/event_placeholder.png';
     const picture = document.createElement('picture');
-    
+
     const img = document.createElement('img');
     img.className = 'event-card__image';
-    img.src = imageUrl;
     img.alt = event.title?.fr || 'Image de l\'événement';
     img.loading = 'lazy';
     img.width = 400;
     img.height = 250;
-    
-    // Pour respecter la consigne éco-conception tout en gardant l'image fonctionnelle
-    // On conserve la balise picture mais on y place directement l'image originale
+
+    if (imageUrl.startsWith('http')) {
+        img.src = `https://images.weserv.nl/?url=${encodeURIComponent(imageUrl)}&output=webp`;
+        img.onerror = () => {
+            img.onerror = null;
+            img.src = imageUrl;
+        };
+    } else {
+        img.src = imageUrl;
+    }
+
     picture.appendChild(img);
     article.appendChild(picture);
     
@@ -58,11 +71,9 @@ export function createEventCard(event) {
     
     const pricing = document.createElement('p');
     pricing.className = 'event-card__pricing';
-    if (event.pricing && event.pricing.length > 0) {
-        pricing.textContent = `À partir de ${event.pricing[0].price}€`;
-    } else {
-        pricing.textContent = 'Tarif à confirmer';
-    }
+    pricing.textContent = (event.pricing && event.pricing.length > 0)
+        ? `À partir de ${event.pricing[0].price}€`
+        : 'Tarif à confirmer';
     
     const button = document.createElement('button');
     button.className = 'button button--primary button--small event-card__button';
@@ -110,7 +121,6 @@ export function createEventCard(event) {
  */
 function navigateToEventDetail(eventId, agendaId) {
     const url = `event-detail.html?id=${eventId}&agenda=${agendaId}`;
-    console.log('Navigation vers:', url);
     window.location.href = url;
 }
 
@@ -121,16 +131,22 @@ function navigateToEventDetail(eventId, agendaId) {
  */
 export function renderEventCards(events, container) {
     if (!events || events.length === 0) {
-        container.innerHTML = '<p class="events-grid__empty">Aucun événement trouvé.</p>';
+        container.innerHTML = '';
+        const p = document.createElement('p');
+        p.className = 'events-grid__empty';
+        p.textContent = 'Aucun événement trouvé.';
+        container.appendChild(p);
         return;
     }
     
     /* Vider le conteneur */
     container.innerHTML = '';
     
+    /* Indiquer que le chargement est terminé */
+    container.setAttribute('aria-busy', 'false');
+    
     /* Créer et ajouter chaque carte */
     events.forEach((event) => {
-        console.log('Carte créée pour:', event.uid, 'Agenda:', event._agendaUid);
         const card = createEventCard(event);
         container.appendChild(card);
     });
@@ -155,11 +171,13 @@ export function announceToScreenReader(message) {
  * @param {HTMLElement} container - Conteneur
  */
 export function showLoadingState(container) {
-    container.innerHTML = `
-        <div class="skeleton skeleton-card"></div>
-        <div class="skeleton skeleton-card"></div>
-        <div class="skeleton skeleton-card"></div>
-    `;
+    container.setAttribute('aria-busy', 'true');
+    container.innerHTML = '';
+    for (let i = 0; i < 3; i++) {
+        const skeleton = document.createElement('div');
+        skeleton.className = 'skeleton skeleton-card';
+        container.appendChild(skeleton);
+    }
     announceToScreenReader('Chargement des événements en cours...');
 }
 
@@ -169,11 +187,16 @@ export function showLoadingState(container) {
  * @param {string} message - Message d'erreur
  */
 export function showErrorState(container, message) {
-    container.innerHTML = `
-        <div class="alert alert--error" role="alert">
-            <strong>Erreur :</strong> ${message}
-        </div>
-    `;
+    container.setAttribute('aria-busy', 'false');
+    container.innerHTML = '';
+    const alertDiv = document.createElement('div');
+    alertDiv.className = 'alert alert--error';
+    alertDiv.setAttribute('role', 'alert');
+    const strong = document.createElement('strong');
+    strong.textContent = 'Erreur : ';
+    alertDiv.appendChild(strong);
+    alertDiv.appendChild(document.createTextNode(message));
+    container.appendChild(alertDiv);
     announceToScreenReader(`Erreur : ${message}`);
 }
 
@@ -215,24 +238,52 @@ export function initializeTheme() {
 export function initializeNavigation() {
     const navToggle = document.getElementById('nav-toggle');
     const navMenu = document.getElementById('nav-menu');
-    
+
     if (!navToggle || !navMenu) return;
-    
+
+    const updateAriaHidden = () => {
+        if (window.innerWidth >= 768) {
+            navMenu.removeAttribute('aria-hidden');
+        } else if (navToggle.getAttribute('aria-expanded') !== 'true') {
+            navMenu.setAttribute('aria-hidden', 'true');
+        }
+    };
+
+    updateAriaHidden();
+
     navToggle.addEventListener('click', () => {
         const isExpanded = navToggle.getAttribute('aria-expanded') === 'true';
         navToggle.setAttribute('aria-expanded', !isExpanded);
         navMenu.setAttribute('aria-hidden', isExpanded);
     });
-    
-    /* Fermer le menu au clic sur un lien (sauf pour dérouler les catégories) */
+
+    window.addEventListener('resize', updateAriaHidden);
+
     navMenu.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', (e) => {
+        link.addEventListener('click', () => {
             if (link.id !== 'nav-categories-link') {
                 navToggle.setAttribute('aria-expanded', 'false');
-                navMenu.setAttribute('aria-hidden', 'true');
+                if (window.innerWidth < 768) {
+                    navMenu.setAttribute('aria-hidden', 'true');
+                }
             }
         });
     });
+}
+
+/**
+ * Normalise le champ keywords d'un événement OpenAgenda.
+ * L'API peut renvoyer un tableau, une chaîne "a,b,c", ou null.
+ * @param {*} keywords - Champ keywords brut de l'événement
+ * @returns {string[]} Tableau de mots-clés nettoyés
+ */
+function normalizeKeywords(keywords) {
+    if (!keywords?.fr) return [];
+    if (Array.isArray(keywords.fr)) return keywords.fr;
+    if (typeof keywords.fr === 'string') {
+        return keywords.fr.split(',').map(k => k.trim()).filter(Boolean);
+    }
+    return [];
 }
 
 /**
@@ -246,30 +297,35 @@ export function initializeFilters(events) {
     
     let recentSearches = JSON.parse(localStorage.getItem('vn_recent_searches') || '[]');
     
-    // Rendre les filtres récents
     const renderRecentFilters = () => {
         if (!recentFiltersContainer) return;
-        
-        // Toujours garder le bouton "Voir tout"
-        let html = `<button class="filters__button filters__button--active" data-filter="all" aria-pressed="true">Voir tout</button>`;
-        
+
+        recentFiltersContainer.innerHTML = '';
+
+        const createFilterButton = (filter, label, isActive) => {
+            const btn = document.createElement('button');
+            btn.className = `filters__button${isActive ? ' filters__button--active' : ''}`;
+            btn.dataset.filter = filter;
+            btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+            btn.textContent = label;
+            return btn;
+        };
+
+        recentFiltersContainer.appendChild(createFilterButton('all', 'Voir tout', true));
         recentSearches.forEach(term => {
-            html += `<button class="filters__button" data-filter="${term}" aria-pressed="false">${term}</button>`;
+            recentFiltersContainer.appendChild(createFilterButton(term, term, false));
         });
-        
-        recentFiltersContainer.innerHTML = html;
-        
-        // Réattacher les événements
-        const filterButtons = document.querySelectorAll('.filters__button');
+
+        const filterButtons = recentFiltersContainer.querySelectorAll('.filters__button');
         filterButtons.forEach(button => {
             button.addEventListener('click', () => {
                 filterButtons.forEach(btn => btn.setAttribute('aria-pressed', 'false'));
                 button.setAttribute('aria-pressed', 'true');
-                
-                if (button.getAttribute('data-filter') !== 'all') {
-                    if (searchInput) searchInput.value = button.getAttribute('data-filter');
-                } else {
+
+                if (button.dataset.filter === 'all') {
                     if (searchInput) searchInput.value = '';
+                } else if (searchInput) {
+                    searchInput.value = button.dataset.filter;
                 }
                 applyFilters();
             });
@@ -306,15 +362,12 @@ export function initializeFilters(events) {
         const filteredEvents = events.filter(event => {
             const titleFr = (event.title?.fr || '').toLowerCase();
             const descFr = (event.description?.fr || '').toLowerCase();
-            const keywords = Array.isArray(event.keywords?.fr) ? event.keywords.fr.join(' ').toLowerCase() : '';
-            
-            const searchString = `${titleFr} ${descFr} ${keywords}`;
+            const keywords = normalizeKeywords(event.keywords).join(' ').toLowerCase();
+            const catName = (event.category?.name || '').toLowerCase();
+            const searchString = `${titleFr} ${descFr} ${keywords} ${catName}`;
             const matchesSearch = searchTerm === '' || searchString.includes(searchTerm);
             
-            let matchesTag = true;
-            if (activeFilter !== 'all') {
-                matchesTag = searchString.includes(activeFilter.toLowerCase());
-            }
+            const matchesTag = activeFilter === 'all' || searchString.includes(activeFilter.toLowerCase());
             
             return matchesSearch && matchesTag;
         });
@@ -326,25 +379,23 @@ export function initializeFilters(events) {
     renderRecentFilters();
 
     // Écouteur pour la recherche en temps réel
-    if (searchInput) {
-        searchInput.addEventListener('input', applyFilters);
-        
-        // Sauvegarder la recherche quand l'utilisateur appuie sur Entrée ou quitte le champ
-        searchInput.addEventListener('change', () => {
-            saveSearch(searchInput.value);
-            // Remettre le bouton actif sur "Voir tout" car on fait une recherche manuelle
-            const filterButtons = document.querySelectorAll('.filters__button');
-            filterButtons.forEach(btn => btn.setAttribute('aria-pressed', 'false'));
-            const allBtn = document.querySelector('.filters__button[data-filter="all"]');
-            if (allBtn) allBtn.setAttribute('aria-pressed', 'true');
-        });
-        
-        searchInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                searchInput.blur(); // Déclenche l'événement change
-            }
-        });
-    }
+    if (!searchInput) return;
+
+    searchInput.addEventListener('input', applyFilters);
+
+    searchInput.addEventListener('change', () => {
+        saveSearch(searchInput.value);
+        const filterButtons = document.querySelectorAll('.filters__button');
+        filterButtons.forEach(btn => btn.setAttribute('aria-pressed', 'false'));
+        const allBtn = document.querySelector('.filters__button[data-filter="all"]');
+        if (allBtn) allBtn.setAttribute('aria-pressed', 'true');
+    });
+
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            searchInput.blur();
+        }
+    });
 }
 
 /**
@@ -359,23 +410,32 @@ export function initializeDynamicCategories(events) {
     // Extraire les mots-clés uniques
     const allKeywords = new Set();
     events.forEach(e => {
-        if (Array.isArray(e.keywords?.fr)) {
-            e.keywords.fr.forEach(k => {
-                if (k && k.trim() !== '') {
-                    // Capitaliser
+        const kws = normalizeKeywords(e.keywords);
+        if (kws.length > 0) {
+            kws.forEach(k => {
+                if (k.trim()) {
                     allKeywords.add(k.trim().charAt(0).toUpperCase() + k.trim().slice(1).toLowerCase());
                 }
             });
+        } else if (e.category?.name) {
+            const cat = e.category.name.trim();
+            if (cat) allKeywords.add(cat.charAt(0).toUpperCase() + cat.slice(1).toLowerCase());
         }
     });
     
     const sortedCategories = Array.from(allKeywords).sort().slice(0, 15); // Limiter pour l'affichage
     
-    let html = '';
+    dropdownList.innerHTML = '';
     sortedCategories.forEach(cat => {
-        html += `<li><a href="#filters" class="nav__dropdown-link" data-category="${cat}">${cat}</a></li>`;
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = '#filters';
+        a.className = 'nav__dropdown-link';
+        a.dataset.category = cat;
+        a.textContent = cat;
+        li.appendChild(a);
+        dropdownList.appendChild(li);
     });
-    dropdownList.innerHTML = html;
     
     // Événements sur les liens du dropdown
     dropdownList.querySelectorAll('.nav__dropdown-link').forEach(link => {
@@ -397,12 +457,10 @@ export function initializeDynamicCategories(events) {
     // Gestion du menu sur mobile (clic)
     if (dropdownToggle) {
         dropdownToggle.addEventListener('click', (e) => {
-            // Uniquement si on est sur mobile (sinon c'est géré par CSS hover)
-            if (window.innerWidth < 768) {
-                e.preventDefault();
-                dropdownList.classList.toggle('active');
-                dropdownToggle.classList.toggle('expanded');
-            }
+            if (window.innerWidth >= 768) return;
+            e.preventDefault();
+            dropdownList.classList.toggle('active');
+            dropdownToggle.classList.toggle('expanded');
         });
     }
 }
@@ -426,6 +484,178 @@ export function initializeContactForm() {
             contactForm.reset();
         });
     }
+}
+
+/**
+ * Crée la facade YouTube : miniature cliquable + bouton play.
+ * L'iframe ne se charge qu'au clic de l'utilisateur (éco-conception).
+ */
+function createYouTubeFacade(videoId, title) {
+    const embedUrl = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0`;
+    const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+
+    const facade = document.createElement('div');
+    facade.className = 'video-facade';
+    facade.setAttribute('role', 'button');
+    facade.setAttribute('tabindex', '0');
+    facade.setAttribute('aria-label', `Lire la vidéo : ${title || 'Vidéo de l\'événement'}`);
+
+    const thumbnail = document.createElement('img');
+    thumbnail.className = 'video-facade__thumbnail';
+    thumbnail.src = thumbnailUrl;
+    thumbnail.alt = title || 'Miniature de la vidéo';
+    thumbnail.width = 800;
+    thumbnail.height = 450;
+    thumbnail.loading = 'lazy';
+    thumbnail.onerror = () => {
+        thumbnail.onerror = null;
+        thumbnail.src = thumbnailUrl.replace('maxresdefault', 'hqdefault');
+    };
+
+    const playBtn = document.createElement('div');
+    playBtn.className = 'video-facade__play';
+    playBtn.setAttribute('aria-hidden', 'true');
+
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNS, 'svg');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('width', '44');
+    svg.setAttribute('height', '44');
+    svg.setAttribute('aria-hidden', 'true');
+    const polygon = document.createElementNS(svgNS, 'polygon');
+    polygon.setAttribute('points', '8,5 19,12 8,19');
+    polygon.setAttribute('fill', 'white');
+    svg.appendChild(polygon);
+    playBtn.appendChild(svg);
+
+    facade.appendChild(thumbnail);
+    facade.appendChild(playBtn);
+
+    const loadIframe = () => {
+        const iframe = document.createElement('iframe');
+        iframe.className = 'video-section__video';
+        iframe.src = embedUrl;
+        iframe.width = '800';
+        iframe.height = '450';
+        iframe.setAttribute('allowfullscreen', '');
+        iframe.setAttribute('allow', 'autoplay; fullscreen');
+        iframe.setAttribute('title', title || 'Vidéo de l\'événement');
+        iframe.setAttribute('frameborder', '0');
+        facade.replaceWith(iframe);
+    };
+
+    facade.addEventListener('click', loadIframe);
+    facade.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            loadIframe();
+        }
+    });
+
+    return facade;
+}
+
+/**
+ * Affiche un court extrait de la description transformée sous la vidéo.
+ */
+function appendVideoDescription(container, event) {
+    if (!event.description?.fr) return;
+    const desc = document.createElement('p');
+    desc.className = 'video-section__description';
+    const fullText = event.description.fr.replace(/\n/g, ' ');
+    desc.textContent = fullText.length > 180 ? `${fullText.slice(0, 180).trim()}…` : fullText;
+    container.appendChild(desc);
+}
+
+/**
+ * Met à jour la section vidéo avec la première vidéo trouvée dans les événements API.
+ * Utilise le patron facade pour YouTube (aucun chargement avant le clic).
+ * Si aucun événement n'a de vidéo, la vidéo de secours reste visible.
+ * @param {Array} events - Événements déjà transformés par eventTransformer
+ */
+export function initializeVideoSection(events) {
+    const container = document.getElementById('video-section-container');
+    const mediaDiv = document.getElementById('video-section-media');
+    if (!container || !mediaDiv) return;
+
+    /* Cherche la première URL vidéo dans les événements.
+       OpenAgenda peut utiliser event.videos (tableau) ou event.video (chaîne). */
+    let videoUrl = null;
+    let videoEvent = null;
+    for (const event of events) {
+        if (Array.isArray(event.videos) && event.videos.length > 0 && event.videos[0]?.url) {
+            videoUrl = event.videos[0].url;
+            videoEvent = event;
+            break;
+        }
+        if (typeof event.video === 'string' && event.video.startsWith('http')) {
+            videoUrl = event.video;
+            videoEvent = event;
+            break;
+        }
+    }
+
+    if (!videoUrl) return;
+
+    /* Révéler la section (masquée par défaut) */
+    const section = document.getElementById('video-section');
+    if (section) section.removeAttribute('hidden');
+
+    /* Titre transformé par eventTransformer */
+    const titleEl = container.querySelector('.video-section__title');
+    if (titleEl && videoEvent.title?.fr) {
+        titleEl.textContent = videoEvent.title.fr;
+    }
+
+    /* Vidéo directe (mp4 / webm) */
+    const isDirectVideo = /\.(mp4|webm|ogg)(\?.*)?$/i.test(videoUrl);
+    if (isDirectVideo) {
+        const video = document.createElement('video');
+        video.className = 'video-section__video';
+        video.controls = true;
+        video.preload = 'metadata';
+        video.width = 800;
+        video.height = 450;
+        const source = document.createElement('source');
+        source.src = videoUrl;
+        source.type = videoUrl.toLowerCase().endsWith('.webm') ? 'video/webm' : 'video/mp4';
+        video.appendChild(source);
+        const fallbackP = document.createElement('p');
+        const fallbackA = document.createElement('a');
+        fallbackA.href = videoUrl;
+        fallbackA.textContent = 'Télécharger la vidéo';
+        fallbackP.appendChild(document.createTextNode('Votre navigateur ne supporte pas la lecture vidéo. '));
+        fallbackP.appendChild(fallbackA);
+        video.appendChild(fallbackP);
+        mediaDiv.appendChild(video);
+        appendVideoDescription(container, videoEvent);
+        return;
+    }
+
+    /* YouTube — facade (miniature + bouton play, iframe chargé au clic) */
+    const ytMatch = videoUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&?/]+)/);
+    if (ytMatch) {
+        mediaDiv.appendChild(createYouTubeFacade(ytMatch[1], videoEvent.title?.fr));
+        appendVideoDescription(container, videoEvent);
+        return;
+    }
+
+    /* Vimeo — iframe direct avec loading lazy */
+    const vimeoMatch = videoUrl.match(/vimeo\.com\/(\d+)/);
+    if (!vimeoMatch) return;
+
+    const iframe = document.createElement('iframe');
+    iframe.className = 'video-section__video';
+    iframe.src = `https://player.vimeo.com/video/${vimeoMatch[1]}?autoplay=0`;
+    iframe.width = '800';
+    iframe.height = '450';
+    iframe.setAttribute('loading', 'lazy');
+    iframe.setAttribute('allowfullscreen', '');
+    iframe.setAttribute('allow', 'fullscreen');
+    iframe.setAttribute('title', videoEvent.title?.fr || 'Vidéo de l\'événement');
+    iframe.setAttribute('frameborder', '0');
+    mediaDiv.appendChild(iframe);
+    appendVideoDescription(container, videoEvent);
 }
 
 /**

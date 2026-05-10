@@ -38,6 +38,9 @@ EN-TÊTE
     color: var(--color-primary);
     font-weight: $font-weight-bold;
     transition: color $transition-fast;
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-sm;
     
     &:hover {
         text-decoration: none;
@@ -45,6 +48,19 @@ EN-TÊTE
     }
     
     @include focus-visible;
+}
+
+/* Logo image dans le header */
+.header__logo-img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    border-radius: $border-radius-sm;
+    transition: transform $transition-fast;
+    
+    .header__logo:hover & {
+        transform: scale(1.05);
+    }
 }
 
 .header__theme-toggle {
@@ -319,6 +335,62 @@ CONTENU PRINCIPAL
     width: 100%;
     border-radius: $border-radius-lg;
     box-shadow: $shadow-md;
+}
+
+.video-section__description {
+    margin-top: $spacing-lg;
+    color: var(--color-text-secondary);
+    font-size: $font-size-small;
+    line-height: $line-height-relaxed;
+    text-align: left;
+}
+
+.video-facade {
+    position: relative;
+    width: 100%;
+    border-radius: $border-radius-lg;
+    box-shadow: $shadow-md;
+    overflow: hidden;
+    cursor: pointer;
+    display: block;
+    background-color: #000;
+
+    @include focus-visible;
+
+    &:hover .video-facade__play {
+        background-color: var(--color-primary);
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+}
+
+.video-facade__thumbnail {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+    opacity: 0.9;
+    transition: opacity $transition-fast;
+
+    .video-facade:hover & {
+        opacity: 0.75;
+    }
+}
+
+.video-facade__play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color $transition-fast, transform $transition-fast;
+    pointer-events: none;
 }
 
 .events-section {

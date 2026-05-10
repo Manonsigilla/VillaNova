@@ -126,6 +126,7 @@ export function transformEventToVillaNova(event, index) {
         title: transformedTitle,
         description: transformedDescription,
         image: event.image,
+        videos: event.videos,
         dates: event.dates,
         location: getRandomLocation(),
         category: event.category,

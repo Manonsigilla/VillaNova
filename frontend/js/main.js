@@ -17,7 +17,8 @@ import {
     initializeFilters,
     initializeSPATabs,
     initializeDynamicCategories,
-    initializeContactForm
+    initializeContactForm,
+    initializeVideoSection
 } from './ui.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -67,6 +68,9 @@ async function loadEvents() {
         /* Transformer les événements pour VillaNova */
         const villanovaEvents = transformEventsToVillaNova(data.events);
         console.log('Événements transformés pour VillaNova:', villanovaEvents);
+        console.log('Exemple event brut:', data.events[0]);
+        console.log('Exemple event transformé:', villanovaEvents[0]);
+
         
         /* Stocker globalement pour les filtres */
         allEvents = villanovaEvents;
@@ -76,9 +80,12 @@ async function loadEvents() {
         
         /* Initialiser le menu des catégories dynamiques */
         initializeDynamicCategories(allEvents);
-        
+
         /* Initialiser les filtres */
         initializeFilters(allEvents);
+
+        /* Mettre à jour la section vidéo avec une vidéo issue de l'API */
+        initializeVideoSection(allEvents);
         
     } catch (error) {
         console.error('Erreur lors du chargement:', error);
@@ -110,6 +117,15 @@ function initializeUI() {
     
     /* Initialiser le formulaire de contact */
     initializeContactForm();
+    
+    /* Bouton "Découvrir les événements" dans la vue réservations */
+    const btnDiscover = document.getElementById('btn-discover-events');
+    if (btnDiscover) {
+        btnDiscover.addEventListener('click', () => {
+            const eventsLink = document.querySelector('[data-target="view-events"]');
+            if (eventsLink) eventsLink.click();
+        });
+    }
 }
 
 /**

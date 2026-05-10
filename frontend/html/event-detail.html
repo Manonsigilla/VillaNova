@@ -7,6 +7,11 @@
     <meta name="theme-color" content="#F57B6F">
     <title>Détail de l'événement - VillaNova</title>
     
+    <!-- Google Fonts optimisées -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="../css/main.css">
 </head>
 <body>
@@ -18,7 +23,10 @@
         <div class="header__container">
             <div class="header__top">
                 <h1 class="header__title">
-                    <a href="index.html" class="header__logo">VillaNova</a>
+                    <a href="index.html" class="header__logo">
+                        <img src="../images/logo_villanova.png" alt="" class="header__logo-img" width="40" height="40" aria-hidden="true">
+                        VillaNova
+                    </a>
                 </h1>
                 
                 <button class="header__theme-toggle" aria-label="Basculer le mode sombre" aria-pressed="false" id="theme-toggle">
@@ -33,7 +41,7 @@
                     <span class="nav__toggle-icon" aria-hidden="true"></span>
                 </button>
                 
-                <ul class="nav__list" id="nav-menu" aria-hidden="true">
+                <ul class="nav__list" id="nav-menu">
                     <li class="nav__item">
                         <a href="index.html" class="nav__link">Retour aux événements</a>
                     </li>
@@ -88,5 +96,10 @@
     </footer>
     
     <script type="module" src="../js/event-detail.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('../sw.js');
+        }
+    </script>
 </body>
 </html>
