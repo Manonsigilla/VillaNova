@@ -18,7 +18,8 @@ import {
     initializeSPATabs,
     initializeDynamicCategories,
     initializeContactForm,
-    initializeVideoSection
+    initializeVideoSection,
+    renderReservations
 } from './ui.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -62,14 +63,9 @@ async function loadEvents() {
         const data = await searchModernEvents({
             size: 15
         });
-        
-        console.log('Événements bruts OpenAgenda:', data);
-        
+
         /* Transformer les événements pour VillaNova */
         const villanovaEvents = transformEventsToVillaNova(data.events);
-        console.log('Événements transformés pour VillaNova:', villanovaEvents);
-        console.log('Exemple event brut:', data.events[0]);
-        console.log('Exemple event transformé:', villanovaEvents[0]);
 
         
         /* Stocker globalement pour les filtres */
@@ -117,22 +113,15 @@ function initializeUI() {
     
     /* Initialiser le formulaire de contact */
     initializeContactForm();
-    
-    /* Bouton "Découvrir les événements" dans la vue réservations */
-    const btnDiscover = document.getElementById('btn-discover-events');
-    if (btnDiscover) {
-        btnDiscover.addEventListener('click', () => {
-            const eventsLink = document.querySelector('[data-target="view-events"]');
-            if (eventsLink) eventsLink.click();
-        });
-    }
+
+    /* Afficher les réservations existantes */
+    renderReservations();
 }
 
 /**
  * Lance l'application au chargement du DOM
  */
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('VillaNova - Application démarrée');
     initializeUI();
     loadEvents();
 });

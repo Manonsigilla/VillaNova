@@ -199,8 +199,34 @@ function createEventDetailDOM(event) {
     const ctaSection = document.createElement('section');
     ctaSection.className = 'event-detail__cta-section';
     const ctaBtn = document.createElement('button');
+    ctaBtn.type = 'button';
     ctaBtn.className = 'button button--primary button--large';
-    ctaBtn.textContent = 'Réserver maintenant';
+
+    const existing = JSON.parse(localStorage.getItem('vn_reservations') || '[]');
+    const alreadyReserved = existing.some(r => r.uid === event.uid);
+
+    if (alreadyReserved) {
+        ctaBtn.textContent = 'Déjà réservé';
+        ctaBtn.disabled = true;
+    } else {
+        ctaBtn.textContent = 'Réserver maintenant';
+        ctaBtn.addEventListener('click', () => {
+            const reservation = {
+                uid: event.uid,
+                agendaUid: event._agendaUid,
+                title: event.title,
+                date: event.dates?.[0]?.start || null,
+                location: event.location,
+                image: event.image
+            };
+            const current = JSON.parse(localStorage.getItem('vn_reservations') || '[]');
+            current.push(reservation);
+            localStorage.setItem('vn_reservations', JSON.stringify(current));
+            ctaBtn.textContent = 'Réservé !';
+            ctaBtn.disabled = true;
+        });
+    }
+
     ctaSection.appendChild(ctaBtn);
     fragment.appendChild(ctaSection);
 
@@ -236,15 +262,11 @@ async function loadEventDetail() {
         container.appendChild(loadingP);
         announceToScreenReader('Chargement des détails de l\'événement...');
         
-        console.log(`Récupération de l'événement: ID=${id}, Agenda=${agenda}`);
-        
         /* Récupérer l'événement via l'API */
         const event = await fetchEventById(agenda, id);
-        console.log('Événement brut reçu:', event);
-        
+
         /* Transformer pour VillaNova */
         const villanovaEvent = transformEventToVillaNova(event);
-        console.log('Événement transformé:', villanovaEvent);
         
         /* Afficher les détails */
         container.innerHTML = '';
@@ -285,7 +307,6 @@ async function loadEventDetail() {
  * Initialise la page
  */
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('VillaNova - Page détail démarrée');
     initializeTheme();
     
     /* Ajouter le gestionnaire du bouton toggle thème */

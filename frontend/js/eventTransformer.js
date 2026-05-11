@@ -121,13 +121,23 @@ export function transformEventToVillaNova(event, index) {
         };
     }
 
+    // Normalize timing data: detail endpoint uses timings[], list endpoint uses firstTiming
+    let dates;
+    if (Array.isArray(event.timings) && event.timings.length > 0) {
+        dates = event.timings.map(t => ({ start: t.begin, end: t.end }));
+    } else if (event.firstTiming?.begin) {
+        dates = [{ start: event.firstTiming.begin, end: event.firstTiming.end }];
+    } else {
+        dates = event.dates || null;
+    }
+
     return {
         uid: event.uid || index,
         title: transformedTitle,
         description: transformedDescription,
         image: event.image,
         videos: event.videos,
-        dates: event.dates,
+        dates,
         location: getRandomLocation(),
         category: event.category,
         keywords: event.keywords, // Ajout crucial pour les filtres et le dropdown

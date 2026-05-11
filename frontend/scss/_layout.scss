@@ -591,3 +591,71 @@ PIED DE PAGE
     padding-top: $spacing-lg;
     border-top: 1px solid var(--color-border);
 }
+
+/* ===============================
+   RÉSERVATIONS
+   ============================== */
+
+.reservations-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+}
+
+.reservation-card {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    background-color: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: $border-radius-lg;
+    padding: $spacing-md;
+    transition: box-shadow $transition-fast;
+
+    &:hover {
+        box-shadow: $shadow-md;
+    }
+}
+
+.reservation-card__image {
+    width: 120px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: $border-radius-md;
+    flex-shrink: 0;
+}
+
+.reservation-card__info {
+    flex: 1;
+    min-width: 0;
+}
+
+.reservation-card__title {
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    color: var(--color-text);
+    margin: 0 0 $spacing-xs;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.reservation-card__date {
+    font-size: $font-size-small;
+    color: var(--color-primary);
+    margin: 0 0 $spacing-xs;
+}
+
+.reservation-card__location {
+    font-size: $font-size-small;
+    color: var(--color-text-secondary);
+    margin: 0;
+}
+
+.reservation-card__cancel {
+    flex-shrink: 0;
+    align-self: center;
+}

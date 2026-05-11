@@ -16,6 +16,7 @@ PEPPER = os.environ.get('PEPPER', '').encode('utf-8')
 SECRET_KEY = os.environ.get('SECRET_KEY', 'dev_fallback_key')
 OPENAGENDA_API_KEY = os.environ.get('OPENAGENDA_API_KEY', '')
 OPENAGENDA_BASE = 'https://api.openagenda.com/v2'
+DB_PATH = Path(__file__).parent / 'villanova.db'
 
 app = Flask(__name__)
 CORS(app)
@@ -23,7 +24,7 @@ CORS(app)
 
 def init_db():
     """Initialise la base de données SQLite."""
-    conn = sqlite3.connect('villanova.db')
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS users (
@@ -68,7 +69,7 @@ def register():
     password_hash = hash_password(password, salt)
 
     try:
-        conn = sqlite3.connect('villanova.db')
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
         cursor.execute(
             "INSERT INTO users (email, password_hash, salt) VALUES (?, ?, ?)",
@@ -87,7 +88,7 @@ def login():
     email = data.get('email')
     password = data.get('password')
 
-    conn = sqlite3.connect('villanova.db')
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute("SELECT id, password_hash, salt FROM users WHERE email = ?", (email,))
     user = cursor.fetchone()

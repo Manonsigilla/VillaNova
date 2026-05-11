@@ -659,6 +659,137 @@ export function initializeVideoSection(events) {
 }
 
 /**
+ * Affiche les réservations sauvegardées en localStorage dans la vue "Mes réservations".
+ * Gère aussi l'état vide et l'annulation.
+ */
+export function renderReservations() {
+    const sectionContainer = document.querySelector('#view-reservations .page-section__container');
+    if (!sectionContainer) return;
+
+    const reservations = JSON.parse(localStorage.getItem('vn_reservations') || '[]');
+    sectionContainer.innerHTML = '';
+
+    const h2 = document.createElement('h2');
+    h2.className = 'page-section__title';
+    h2.textContent = 'Mes Réservations';
+    sectionContainer.appendChild(h2);
+
+    if (reservations.length === 0) {
+        const emptyState = document.createElement('div');
+        emptyState.className = 'empty-state';
+
+        const svgNS = 'http://www.w3.org/2000/svg';
+        const svg = document.createElementNS(svgNS, 'svg');
+        svg.setAttribute('class', 'empty-state__icon');
+        svg.setAttribute('viewBox', '0 0 24 24');
+        svg.setAttribute('fill', 'none');
+        svg.setAttribute('stroke', 'currentColor');
+        svg.setAttribute('stroke-width', '2');
+        ['rect x="3" y="4" width="18" height="18" rx="2" ry="2"',
+            'line x1="16" y1="2" x2="16" y2="6"',
+            'line x1="8" y1="2" x2="8" y2="6"',
+            'line x1="3" y1="10" x2="21" y2="10"'
+        ].forEach(attr => {
+            const [tag, ...rest] = attr.split(' ');
+            const el = document.createElementNS(svgNS, tag);
+            rest.join(' ').split('" ').forEach(pair => {
+                const [k, v] = pair.replace(/"/g, '').split('=');
+                if (k && v) el.setAttribute(k, v);
+            });
+            svg.appendChild(el);
+        });
+        emptyState.appendChild(svg);
+
+        const emptyTitle = document.createElement('h3');
+        emptyTitle.className = 'empty-state__title';
+        emptyTitle.textContent = 'Aucune réservation';
+        emptyState.appendChild(emptyTitle);
+
+        const emptyText = document.createElement('p');
+        emptyText.className = 'empty-state__text';
+        emptyText.textContent = 'Vous n\'avez pas encore réservé d\'événement. Explorez notre catalogue pour trouver votre prochaine sortie !';
+        emptyState.appendChild(emptyText);
+
+        const discoverBtn = document.createElement('button');
+        discoverBtn.type = 'button';
+        discoverBtn.className = 'btn-primary';
+        discoverBtn.textContent = 'Découvrir les événements';
+        discoverBtn.addEventListener('click', () => {
+            const eventsLink = document.querySelector('[data-target="view-events"]');
+            if (eventsLink) eventsLink.click();
+        });
+        emptyState.appendChild(discoverBtn);
+        sectionContainer.appendChild(emptyState);
+        return;
+    }
+
+    const list = document.createElement('ul');
+    list.className = 'reservations-list';
+
+    reservations.forEach(res => {
+        const li = document.createElement('li');
+        li.className = 'reservation-card';
+
+        const rawImage = res.image;
+        const imageUrl = rawImage?.url
+            || (rawImage?.base && rawImage?.filename ? rawImage.base + rawImage.filename : null)
+            || '../images/event_placeholder.png';
+
+        const img = document.createElement('img');
+        img.className = 'reservation-card__image';
+        img.alt = res.title?.fr || 'Image de l\'événement';
+        img.width = 120;
+        img.height = 80;
+        img.loading = 'lazy';
+        if (imageUrl.startsWith('http')) {
+            img.src = `https://images.weserv.nl/?url=${encodeURIComponent(imageUrl)}&output=webp&w=120`;
+            img.onerror = () => { img.onerror = null; img.src = imageUrl; };
+        } else {
+            img.src = imageUrl;
+        }
+        li.appendChild(img);
+
+        const info = document.createElement('div');
+        info.className = 'reservation-card__info';
+
+        const cardTitle = document.createElement('h3');
+        cardTitle.className = 'reservation-card__title';
+        cardTitle.textContent = res.title?.fr || 'Événement';
+        info.appendChild(cardTitle);
+
+        const cardDate = document.createElement('p');
+        cardDate.className = 'reservation-card__date';
+        cardDate.textContent = res.date
+            ? new Date(res.date).toLocaleDateString('fr-FR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
+            : 'Date non disponible';
+        info.appendChild(cardDate);
+
+        const cardLocation = document.createElement('p');
+        cardLocation.className = 'reservation-card__location';
+        cardLocation.textContent = res.location?.name || 'VillaNova';
+        info.appendChild(cardLocation);
+
+        li.appendChild(info);
+
+        const cancelBtn = document.createElement('button');
+        cancelBtn.type = 'button';
+        cancelBtn.className = 'button button--secondary button--small reservation-card__cancel';
+        cancelBtn.textContent = 'Annuler';
+        cancelBtn.addEventListener('click', () => {
+            const updated = JSON.parse(localStorage.getItem('vn_reservations') || '[]')
+                .filter(r => r.uid !== res.uid);
+            localStorage.setItem('vn_reservations', JSON.stringify(updated));
+            renderReservations();
+        });
+        li.appendChild(cancelBtn);
+
+        list.appendChild(li);
+    });
+
+    sectionContainer.appendChild(list);
+}
+
+/**
  * Gère la navigation SPA (Single Page Application)
  */
 export function initializeSPATabs() {
